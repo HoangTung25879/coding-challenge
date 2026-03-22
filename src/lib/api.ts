@@ -1,5 +1,5 @@
 // src/lib/api.ts
-import type { CollectionResponse, Lead, LeadSummary, Activity } from '@/types'
+import type { CollectionResponse, Lead, LeadSummary, Activity, PaginationMeta } from '@/types'
 
 const BASE_URL = (import.meta.env?.VITE_API_URL as string) ?? ''
 
@@ -20,12 +20,7 @@ export type LeadsParams = {
 }
 
 export type LeadsResponse = CollectionResponse<LeadSummary> & {
-  pagination: {
-    page: number
-    limit: number
-    total: number
-    totalPages: number
-  }
+  pagination: PaginationMeta
 }
 
 export function fetchLeads(params: LeadsParams = {}): Promise<LeadsResponse> {

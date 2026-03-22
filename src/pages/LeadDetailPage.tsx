@@ -14,9 +14,17 @@ import { Link } from 'react-router-dom'
 export default function LeadDetailPage() {
   const { id } = useParams<{ id: string }>()
 
+  if (!id) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-red-800">
+        <p className="font-medium">Invalid lead ID</p>
+      </div>
+    )
+  }
+
   // Parallel queries — both fire simultaneously, no waterfall
-  const leadQuery = useLead(id!)
-  const activitiesQuery = useActivities(id!)
+  const leadQuery = useLead(id)
+  const activitiesQuery = useActivities(id)
 
   if (leadQuery.isLoading) {
     return <DetailSkeleton />
