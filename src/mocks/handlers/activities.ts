@@ -1,3 +1,68 @@
 // src/mocks/handlers/activities.ts
-// Placeholder — full implementation in Task 5
-export const activityHandlers = []
+import { http, HttpResponse } from 'msw'
+import { z } from 'zod'
+import { activitiesStore } from '@/mocks/data/activities'
+import { leadsStore } from '@/mocks/data/leads'
+import { logger } from '@/lib/logger'
+
+const MOCK_DELAY_MS = 60
+
+const ActivityBodySchema = z.object({
+  type: z.enum(['call', 'email', 'text', 'appointment', 'note', 'walk-in']),
+  subject: z.string().min(1),
+  note: z.string().min(1),
+  createdBy: z.string().min(1),
+})
+
+export const activityHandlers = [
+  http.get('*/api/leads/:id/activities', async ({ params }) => {
+    await delay(MOCK_DELAY_MS)
+    const activities = activitiesStore
+      .filter(a => a.leadId === params.id)
+      .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+
+    logger.info({ method: 'GET', path: '/api/leads/:id/activities', leadId: params.id, count: activities.length }, 'activities fetched')
+    return HttpResponse.json({ data: activities })
+  }),
+
+  http.post('*/api/leads/:id/activities', async ({ request, params }) => {
+    await delay(MOCK_DELAY_MS)
+    const leadId = params.id as string
+
+    const leadExists = leadsStore.some(l => l.id === leadId)
+    if (!leadExists) {
+      return HttpResponse.json({ error: 'Lead not found' }, { status: 404 })
+    }
+
+    let body: unknown
+    try {
+      body = await request.json()
+    } catch {
+      return HttpResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+    }
+
+    const parsed = ActivityBodySchema.safeParse(body)
+    if (!parsed.success) {
+      return HttpResponse.json(
+        { error: 'Validation failed', details: parsed.error.issues },
+        { status: 400 }
+      )
+    }
+
+    const activity = {
+      id: crypto.randomUUID(),
+      leadId,                          // injected from URL — not from body
+      ...parsed.data,
+      createdAt: new Date().toISOString(),
+    }
+
+    activitiesStore.push(activity)
+
+    logger.info({ method: 'POST', path: '/api/leads/:id/activities', leadId, type: parsed.data.type, status: 201 }, 'activity created')
+    return HttpResponse.json(activity, { status: 201 })
+  }),
+]
+
+function delay(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
