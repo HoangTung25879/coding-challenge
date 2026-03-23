@@ -1,0 +1,389 @@
+[
+  {
+    "id": "act-001",
+    "leadId": "lead-016",
+    "type": "walk-in",
+    "subject": "Showroom walk-in",
+    "note": "Crux apostolus uredo ars collum clam ut. Theca casso quibusdam mollitia tristis ventus abundans sperno.",
+    "createdAt": "2026-01-24T13:16:08.439Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-002",
+    "leadId": "lead-017",
+    "type": "email",
+    "subject": "Pricing details",
+    "note": "Vindico amiculum arma vinco tabgo vacuus balbus ocer substantia. Cumque accendo nostrum casus defaeco vita cubitum tumultus.",
+    "createdAt": "2026-01-29T14:56:10.825Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-003",
+    "leadId": "lead-012",
+    "type": "email",
+    "subject": "Pricing details",
+    "note": "Aequitas aegrotatio vilicus dignissimos. Tondeo truculenter conatus suadeo tepidus solium.",
+    "createdAt": "2026-02-05T23:49:20.890Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-004",
+    "leadId": "lead-002",
+    "type": "walk-in",
+    "subject": "Walked in to browse",
+    "note": "Desino thalassinus suffragium.",
+    "createdAt": "2026-02-06T10:09:25.581Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-005",
+    "leadId": "lead-013",
+    "type": "email",
+    "subject": "Follow-up email",
+    "note": "Teneo a cur enim.",
+    "createdAt": "2026-02-08T12:52:00.191Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-006",
+    "leadId": "lead-005",
+    "type": "appointment",
+    "subject": "Site visit",
+    "note": "Spiritus pecus clementia approbo. Taceo comedo similique crur summisse aveho validus civis.",
+    "createdAt": "2026-02-08T17:35:53.549Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-007",
+    "leadId": "lead-012",
+    "type": "call",
+    "subject": "Initial outreach",
+    "note": "Virga non debilito nisi ea. Cimentarius conservo varius vindico vapulus curia termes demonstro deripio.",
+    "createdAt": "2026-02-08T17:54:28.444Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-008",
+    "leadId": "lead-012",
+    "type": "walk-in",
+    "subject": "Walked in to browse",
+    "note": "Casso magni contego sollicito caput aureus versus ambitus dicta.",
+    "createdAt": "2026-02-09T14:02:28.406Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-009",
+    "leadId": "lead-018",
+    "type": "note",
+    "subject": "Internal note",
+    "note": "Reprehenderit carbo summopere aliqua aveho utpote taceo. Carpo bestia cerno.",
+    "createdAt": "2026-02-10T23:06:23.302Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-010",
+    "leadId": "lead-018",
+    "type": "call",
+    "subject": "Initial outreach",
+    "note": "Tamisium vergo damno.",
+    "createdAt": "2026-02-11T12:59:31.603Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-011",
+    "leadId": "lead-016",
+    "type": "call",
+    "subject": "Follow-up call",
+    "note": "Speciosus ratione avarus cura tantillus ambitus chirographum charisma. Vomer aegre earum attero voluntarius amplitudo.",
+    "createdAt": "2026-02-14T11:52:07.667Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-012",
+    "leadId": "lead-007",
+    "type": "text",
+    "subject": "Follow-up text",
+    "note": "Color teres terebro eligendi voluptatibus antea acceptus tepesco. Animi cena accommodo claudeo terebro eaque conqueror corrigo ab.",
+    "createdAt": "2026-02-16T12:05:12.308Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-013",
+    "leadId": "lead-003",
+    "type": "email",
+    "subject": "Pricing details",
+    "note": "Vetus cultellus ventus comminor demonstro caelum rerum volva pax.",
+    "createdAt": "2026-02-19T17:13:15.889Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-014",
+    "leadId": "lead-008",
+    "type": "text",
+    "subject": "Availability update",
+    "note": "Vero clamo delinquo validus suggero.",
+    "createdAt": "2026-02-23T02:52:48.048Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-015",
+    "leadId": "lead-018",
+    "type": "text",
+    "subject": "Availability update",
+    "note": "Aggredior virgo tum tibi trans vicissitudo illum averto. Talus taceo eligendi aegrotatio correptius verumtamen nulla.",
+    "createdAt": "2026-02-26T01:09:30.483Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-016",
+    "leadId": "lead-020",
+    "type": "text",
+    "subject": "Availability update",
+    "note": "Attero suasoria calculus angulus asperiores ab super synagoga.",
+    "createdAt": "2026-02-26T16:17:58.419Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-017",
+    "leadId": "lead-015",
+    "type": "note",
+    "subject": "Requirements documented",
+    "note": "Sufficio totidem in volaticus.",
+    "createdAt": "2026-02-26T21:56:06.709Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-018",
+    "leadId": "lead-010",
+    "type": "email",
+    "subject": "Sent brochure",
+    "note": "Textus ultio carbo vitium auxilium virgo vulgus summa vomica modi. Debilito optio aer quasi vomica.",
+    "createdAt": "2026-02-27T11:35:59.191Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-019",
+    "leadId": "lead-009",
+    "type": "appointment",
+    "subject": "Site visit",
+    "note": "Ex carbo desino spoliatio aestus cervus timor degero incidunt damnatio.",
+    "createdAt": "2026-02-28T00:15:31.729Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-020",
+    "leadId": "lead-010",
+    "type": "walk-in",
+    "subject": "Office visit",
+    "note": "Voluptatum templum arx demoror supellex carmen rerum. Ascisco maiores tepidus deserunt abundans absque consuasor vester.",
+    "createdAt": "2026-02-28T13:20:05.973Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-021",
+    "leadId": "lead-021",
+    "type": "call",
+    "subject": "Initial outreach",
+    "note": "Considero amiculum cado earum. Cariosus adsuesco crinis canis bonus vitiosus praesentium.",
+    "createdAt": "2026-03-01T12:39:54.395Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-022",
+    "leadId": "lead-014",
+    "type": "call",
+    "subject": "Pricing discussion",
+    "note": "Termes nulla viridis adicio. Paulatim clibanus summopere tempore ambulo.",
+    "createdAt": "2026-03-02T11:43:29.298Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-023",
+    "leadId": "lead-016",
+    "type": "email",
+    "subject": "Pricing details",
+    "note": "Concido synagoga cultellus aegrotatio terra circumvenio damnatio.",
+    "createdAt": "2026-03-03T06:33:50.516Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-024",
+    "leadId": "lead-017",
+    "type": "call",
+    "subject": "Initial outreach",
+    "note": "Aliqua patruus quia socius ceno. Vociferor casso spes.",
+    "createdAt": "2026-03-03T10:12:19.555Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-025",
+    "leadId": "lead-003",
+    "type": "call",
+    "subject": "Post-event call",
+    "note": "Occaecati quibusdam aequitas statim carbo summopere. Thymum ipsam eius aranea terga cernuus derideo ciminatio appello.",
+    "createdAt": "2026-03-04T12:45:37.632Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-026",
+    "leadId": "lead-014",
+    "type": "text",
+    "subject": "Sent specs link",
+    "note": "Totam attonbitus correptius veniam timidus vorax tego crudelis.",
+    "createdAt": "2026-03-05T13:41:08.277Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-027",
+    "leadId": "lead-011",
+    "type": "email",
+    "subject": "Options emailed",
+    "note": "Curto adamo denique. Angustus civitas cubicularis verto vulgo adinventitias temptatio corrigo.",
+    "createdAt": "2026-03-07T03:53:37.187Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-028",
+    "leadId": "lead-013",
+    "type": "email",
+    "subject": "Pricing details",
+    "note": "Ab suspendo voco caelestis.",
+    "createdAt": "2026-03-07T05:18:30.651Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-029",
+    "leadId": "lead-006",
+    "type": "appointment",
+    "subject": "Showroom visit",
+    "note": "Cras confero accusantium. Cupio depromo culpo.",
+    "createdAt": "2026-03-09T05:44:30.011Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-030",
+    "leadId": "lead-014",
+    "type": "text",
+    "subject": "Follow-up text",
+    "note": "Summopere deinde verus suasoria suspendo universe certus timor. Conitor condico volutabrum umerus.",
+    "createdAt": "2026-03-10T00:09:16.285Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-031",
+    "leadId": "lead-005",
+    "type": "text",
+    "subject": "Sent specs link",
+    "note": "Corpus admoveo tenetur cur traho.",
+    "createdAt": "2026-03-12T05:33:38.911Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-032",
+    "leadId": "lead-020",
+    "type": "call",
+    "subject": "Follow-up call",
+    "note": "Dolorum facilis consuasor considero.",
+    "createdAt": "2026-03-13T18:10:35.313Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-033",
+    "leadId": "lead-004",
+    "type": "walk-in",
+    "subject": "Office visit",
+    "note": "Tero sequi administratio.",
+    "createdAt": "2026-03-14T20:13:01.992Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-034",
+    "leadId": "lead-020",
+    "type": "email",
+    "subject": "Options emailed",
+    "note": "Conspergo dicta vilis utor ambulo. Ipsum desolo aut una spiculum tum.",
+    "createdAt": "2026-03-15T05:01:59.293Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-035",
+    "leadId": "lead-019",
+    "type": "walk-in",
+    "subject": "Walked in to browse",
+    "note": "Quod carpo sufficio cursus decipio sodalitas. Adversus tredecim clarus decor acer coerceo desolo adstringo deprecator vestigium.",
+    "createdAt": "2026-03-15T08:22:57.894Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-036",
+    "leadId": "lead-008",
+    "type": "text",
+    "subject": "Quick follow-up",
+    "note": "Quasi terminatio nesciunt arca.",
+    "createdAt": "2026-03-16T14:04:11.600Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-037",
+    "leadId": "lead-001",
+    "type": "call",
+    "subject": "Availability check",
+    "note": "Aranea tardus tenus solus tener tyrannus placeat alienus. Aetas cumque cum aedificium conscendo amor.",
+    "createdAt": "2026-03-16T16:34:46.683Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-038",
+    "leadId": "lead-015",
+    "type": "walk-in",
+    "subject": "Walked in to browse",
+    "note": "Terror tabernus credo acies.",
+    "createdAt": "2026-03-18T01:56:00.872Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-039",
+    "leadId": "lead-004",
+    "type": "email",
+    "subject": "Sent brochure",
+    "note": "Cetera suffragium advenio. Abduco caritas talio comedo ambitus contigo cerno turbo combibo.",
+    "createdAt": "2026-03-19T15:20:33.309Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-040",
+    "leadId": "lead-017",
+    "type": "text",
+    "subject": "Sent specs link",
+    "note": "Basium denuncio censura civis solum.",
+    "createdAt": "2026-03-20T00:11:24.817Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-041",
+    "leadId": "lead-008",
+    "type": "walk-in",
+    "subject": "Showroom walk-in",
+    "note": "Termes defungo cubicularis cognatus aedificium calco caritas denuo tametsi. Adsuesco vita vilitas territo vulgaris illum.",
+    "createdAt": "2026-03-20T22:23:15.723Z",
+    "createdBy": "salesperson-1"
+  },
+  {
+    "id": "act-042",
+    "leadId": "lead-019",
+    "type": "text",
+    "subject": "Availability update",
+    "note": "Arto aeneus audax sonitus.",
+    "createdAt": "2026-03-21T02:53:26.874Z",
+    "createdBy": "salesperson-2"
+  },
+  {
+    "id": "act-043",
+    "leadId": "lead-004",
+    "type": "text",
+    "subject": "Follow-up text",
+    "note": "Alii stips depulso cresco recusandae succurro abeo aspernatur summisse sophismata.",
+    "createdAt": "2026-03-21T14:53:08.913Z",
+    "createdBy": "salesperson-2"
+  }
+]

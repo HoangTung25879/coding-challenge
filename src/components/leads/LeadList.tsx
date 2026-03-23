@@ -1,8 +1,8 @@
 // src/components/leads/LeadList.tsx
-import type { LeadSummary } from '@/types'
+import type { Lead } from '@/types'
 import { LeadCard } from './LeadCard'
 
-type Props = { leads: LeadSummary[] }
+type Props = { leads: Lead[] }
 
 export function LeadList({ leads }: Props) {
   if (leads.length === 0) {

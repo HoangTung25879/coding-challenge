@@ -1,5 +1,5 @@
 // src/lib/api.ts
-import type { CollectionResponse, Lead, LeadSummary, Activity, PaginationMeta } from '@/types'
+import type { CollectionResponse, Lead, Activity, PaginationMeta } from '@/types'
 
 const BASE_URL = (import.meta.env?.VITE_API_URL as string) ?? ''
 
@@ -15,11 +15,19 @@ async function fetchJSON<T>(path: string, init?: RequestInit): Promise<T> {
 export type LeadsParams = {
   page?: number
   limit?: number
+  search?: string
   status?: string
   source?: string
+  budgetMin?: number
+  budgetMax?: number
+  timeline?: string
+  financing?: string
+  leadType?: string
+  sort?: string
+  order?: 'asc' | 'desc'
 }
 
-export type LeadsResponse = CollectionResponse<LeadSummary> & {
+export type LeadsResponse = CollectionResponse<Lead> & {
   pagination: PaginationMeta
 }
 
@@ -27,8 +35,16 @@ export function fetchLeads(params: LeadsParams = {}): Promise<LeadsResponse> {
   const qs = new URLSearchParams()
   if (params.page) qs.set('page', String(params.page))
   if (params.limit) qs.set('limit', String(params.limit))
+  if (params.search) qs.set('search', params.search)
   if (params.status) qs.set('status', params.status)
   if (params.source) qs.set('source', params.source)
+  if (params.budgetMin != null) qs.set('budgetMin', String(params.budgetMin))
+  if (params.budgetMax != null) qs.set('budgetMax', String(params.budgetMax))
+  if (params.timeline) qs.set('timeline', params.timeline)
+  if (params.financing) qs.set('financing', params.financing)
+  if (params.leadType) qs.set('leadType', params.leadType)
+  if (params.sort) qs.set('sort', params.sort)
+  if (params.order) qs.set('order', params.order)
   const query = qs.toString()
   return fetchJSON(`/api/leads${query ? `?${query}` : ''}`)
 }

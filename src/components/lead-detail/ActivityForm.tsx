@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react'
 import { useLogActivity } from '@/hooks/useLogActivity'
 import type { ActivityType } from '@/types'
+import { Input } from '@/components/ui/Input'
+import { Button } from '@/components/ui/Button'
 
 const ACTIVITY_TYPES: { value: ActivityType; label: string }[] = [
   { value: 'call', label: '📞 Call' },
@@ -57,7 +59,7 @@ export function ActivityForm({ leadId }: Props) {
 
         <div>
           <label htmlFor="activity-subject" className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-          <input
+          <Input
             id="activity-subject"
             aria-label="Subject"
             type="text"
@@ -65,7 +67,6 @@ export function ActivityForm({ leadId }: Props) {
             onChange={e => setSubject(e.target.value)}
             placeholder="Brief summary"
             required
-            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
@@ -88,14 +89,17 @@ export function ActivityForm({ leadId }: Props) {
         <p className="text-sm text-red-600">{(error as Error).message}</p>
       )}
 
-      <button
+      <Button
         type="submit"
+        variant="primary"
+        size="lg"
         disabled={isPending || !subject.trim() || !note.trim()}
+        loading={isPending}
         aria-label="Log Activity"
-        className="w-full bg-blue-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="w-full"
       >
-        {isPending ? 'Logging...' : 'Log Activity'}
-      </button>
+        Log Activity
+      </Button>
     </form>
   )
 }

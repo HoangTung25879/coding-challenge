@@ -9,7 +9,7 @@ export type LeadSource =
   | 'social-media'
   | 'dealer-event'
   | 'other'
-export type RelationshipStrength = 'cold' | 'warm' | 'hot' | 'champion'
+export type LeadType = 'cold' | 'warm' | 'hot'
 export type ActivityType = 'call' | 'email' | 'text' | 'appointment' | 'note' | 'walk-in'
 export type PurchaseTimeline =
   | 'immediate'
@@ -66,7 +66,7 @@ export type Lead = {
   phone: string
   bestTimeToContact: string
   address: Address
-  relationshipStrength: RelationshipStrength
+  leadType: LeadType
   clientProfile: IndividualContact | OrganizationContact
   source: LeadSource
   salesModel: 'direct' | 'indirect'
@@ -94,7 +94,7 @@ export type LeadSummary = {
   status: LeadStatus
   source: LeadSource
   primaryVehicleInterest: string
-  relationshipStrength: RelationshipStrength
+  leadType: LeadType
   createdAt: string
   updatedAt: string
 }

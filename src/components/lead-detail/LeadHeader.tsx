@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom'
 import type { Lead } from '@/types'
 import { StatusBadge } from '@/components/ui/StatusBadge'
 
-const STRENGTH_LABEL: Record<string, string> = {
+const TYPE_LABEL: Record<string, string> = {
   cold: '🧊 Cold',
   warm: '☀️ Warm',
   hot: '🔥 Hot',
-  champion: '⭐ Champion',
 }
 
 const COMM_ICON: Record<string, string> = {
@@ -30,7 +29,7 @@ export function LeadHeader({ lead }: Props) {
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           <StatusBadge status={lead.status} />
-          <span className="text-sm font-medium text-gray-600">{STRENGTH_LABEL[lead.relationshipStrength]}</span>
+          <span className="text-sm font-medium text-gray-600">{TYPE_LABEL[lead.leadType]}</span>
         </div>
       </div>
 

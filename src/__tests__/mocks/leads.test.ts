@@ -37,16 +37,19 @@ describe('GET /api/leads', () => {
     expect(body.data.every((l: { source: string }) => l.source === 'website')).toBe(true)
   })
 
-  it('returns correct LeadSummary shape (no vehiclesOfInterest or budget)', async () => {
+  it('returns full Lead shape (includes vehiclesOfInterest and budget)', async () => {
     const res = await fetch(`${BASE}/api/leads?limit=1`)
     const body = await res.json()
     const lead = body.data[0]
     expect(lead).toHaveProperty('id')
     expect(lead).toHaveProperty('fullName')
     expect(lead).toHaveProperty('status')
-    expect(lead).toHaveProperty('primaryVehicleInterest')
-    expect(lead).not.toHaveProperty('vehiclesOfInterest')
-    expect(lead).not.toHaveProperty('budget')
+    expect(lead).toHaveProperty('vehiclesOfInterest')
+    expect(lead).toHaveProperty('budget')
+    expect(lead).toHaveProperty('email')
+    expect(lead).toHaveProperty('phone')
+    expect(lead).toHaveProperty('address')
+    expect(lead).toHaveProperty('leadType')
   })
 
   it('paginates correctly', async () => {

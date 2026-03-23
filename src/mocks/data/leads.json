@@ -1,0 +1,1451 @@
+[
+  {
+    "id": "lead-001",
+    "fullName": "Andrea Gerlach",
+    "email": "conrad59@gmail.com",
+    "phone": "+12104328325",
+    "bestTimeToContact": "Weekday afternoons",
+    "address": {
+      "street": "197 Abner Square",
+      "city": "Rempelfort",
+      "state": "AR",
+      "country": "GS",
+      "postalCode": "86303"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "Product Security Developer"
+    },
+    "source": "dealer-event",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "text",
+      "in-person"
+    ],
+    "notes": "Summisse temptatio laudantium.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-011",
+        "name": "2024 Tesla Model Y",
+        "brand": "Tesla",
+        "model": "Model Y",
+        "vin": "P0ZU766AHEGL12347",
+        "condition": "certified-pre-owned",
+        "year": 2024,
+        "odometer": 19975,
+        "odometerUnit": "miles",
+        "color": "pink",
+        "imageUrl": "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800",
+        "fuelType": "electric",
+        "transmission": "automatic",
+        "interestLevel": 4,
+        "notes": "Advoco vinum vociferor titulus."
+      }
+    ],
+    "budget": {
+      "max": 445897,
+      "monthlyPaymentTarget": 6967,
+      "currency": "ZAR"
+    },
+    "financingPreference": "lease",
+    "purchaseTimeline": "within-3-months",
+    "status": "qualified",
+    "assignedSalesRepId": "salesperson-1",
+    "createdAt": "2026-02-22T07:32:21.954Z",
+    "updatedAt": "2026-02-26T15:12:27.442Z",
+    "leadType": "warm"
+  },
+  {
+    "id": "lead-002",
+    "fullName": "Brenda Terry",
+    "email": "justen_treutel@hotmail.com",
+    "phone": "+14789760186",
+    "bestTimeToContact": "Weekday mornings",
+    "address": {
+      "street": "60156 Fahey Rapid",
+      "city": "West Neal",
+      "state": "NC",
+      "country": "SY",
+      "postalCode": "50322-9386"
+    },
+    "clientProfile": {
+      "type": "organization",
+      "companyName": "Langworth - Farrell",
+      "industry": "Retail",
+      "numberOfEmployees": 95,
+      "annualRevenue": 34701418,
+      "currency": "USD",
+      "companyRegion": "Maryland"
+    },
+    "source": "phone",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "in-person",
+      "call",
+      "text"
+    ],
+    "notes": "Acidus similique atqui vilicus viriliter.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-021",
+        "name": "2024 Mercedes-Benz Sprinter",
+        "brand": "Mercedes-Benz",
+        "model": "Sprinter",
+        "vin": "7295XTLVT6XH88312",
+        "condition": "used",
+        "year": 2024,
+        "odometer": 37033,
+        "odometerUnit": "miles",
+        "color": "teal",
+        "imageUrl": "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800",
+        "fuelType": "diesel",
+        "transmission": "automatic",
+        "interestLevel": 3,
+        "notes": "Brevis animadverto confero vilitas commodi earum."
+      },
+      {
+        "id": "v-022",
+        "name": "2025 Range Rover Sport",
+        "brand": "Range Rover",
+        "model": "Sport",
+        "vin": "Y8G991LG19X714926",
+        "condition": "used",
+        "year": 2025,
+        "odometer": 62122,
+        "odometerUnit": "km",
+        "color": "salmon",
+        "imageUrl": "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800",
+        "fuelType": "hybrid",
+        "transmission": "automatic",
+        "interestLevel": 4,
+        "notes": "Facilis alioqui truculenter commemoro audentia adhaero officiis spiculum."
+      }
+    ],
+    "budget": {
+      "max": 390936,
+      "monthlyPaymentTarget": 5666,
+      "currency": "USD"
+    },
+    "financingPreference": "lease",
+    "purchaseTimeline": "immediate",
+    "status": "won",
+    "assignedSalesRepId": "salesperson-1",
+    "createdAt": "2026-02-04T02:51:02.833Z",
+    "updatedAt": "2026-02-27T10:51:46.303Z",
+    "leadType": "hot"
+  },
+  {
+    "id": "lead-003",
+    "fullName": "Dr. Lawrence Bashirian",
+    "email": "louis63@hotmail.com",
+    "phone": "+19538240098",
+    "bestTimeToContact": "Mornings before 10am",
+    "address": {
+      "street": "2125 Riverside Drive",
+      "city": "Fort Myrna",
+      "state": "NV",
+      "country": "MT",
+      "postalCode": "23701"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "Senior Intranet Supervisor"
+    },
+    "source": "website",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "text",
+      "email"
+    ],
+    "notes": "Deprimo demergo atavus.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-031",
+        "name": "2023 Porsche Taycan",
+        "brand": "Porsche",
+        "model": "Taycan",
+        "condition": "new",
+        "year": 2023,
+        "odometerUnit": "miles",
+        "color": "red",
+        "imageUrl": "https://images.unsplash.com/photo-1559416523-140ddc3d238c?w=800",
+        "fuelType": "electric",
+        "transmission": "automatic",
+        "interestLevel": 1,
+        "notes": "Vulariter apud eaque utpote talio subiungo subvenio."
+      },
+      {
+        "id": "v-032",
+        "name": "2025 Toyota Corolla",
+        "brand": "Toyota",
+        "model": "Corolla",
+        "condition": "new",
+        "year": 2025,
+        "odometerUnit": "miles",
+        "color": "teal",
+        "imageUrl": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800",
+        "fuelType": "hybrid",
+        "transmission": "cvt",
+        "interestLevel": 3,
+        "notes": "Theologus sol subvenio theatrum validus confero coruscus."
+      }
+    ],
+    "budget": {
+      "max": 515481,
+      "monthlyPaymentTarget": 9913,
+      "currency": "ZAR"
+    },
+    "financingPreference": "lease",
+    "purchaseTimeline": "within-6-months",
+    "status": "lost",
+    "assignedSalesRepId": "salesperson-1",
+    "createdAt": "2026-02-02T20:16:24.593Z",
+    "updatedAt": "2026-02-21T00:05:55.307Z",
+    "leadType": "cold"
+  },
+  {
+    "id": "lead-004",
+    "fullName": "Harley Sanford",
+    "email": "pete_turcotte82@yahoo.com",
+    "phone": "+19309039956",
+    "bestTimeToContact": "Afternoons after 2pm",
+    "address": {
+      "street": "36777 Jermaine Cape",
+      "city": "Ileneside",
+      "state": "LA",
+      "country": "BQ",
+      "postalCode": "76107"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "Forward Response Officer"
+    },
+    "source": "dealer-event",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "text",
+      "in-person",
+      "call"
+    ],
+    "notes": "Correptius tonsor vinitor vos tardus.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-041",
+        "name": "2021 Tesla Model Y",
+        "brand": "Tesla",
+        "model": "Model Y",
+        "vin": "KYJCMFJYCYX601006",
+        "condition": "used",
+        "year": 2021,
+        "odometer": 10339,
+        "odometerUnit": "km",
+        "color": "teal",
+        "imageUrl": "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800",
+        "fuelType": "electric",
+        "transmission": "automatic",
+        "interestLevel": 5,
+        "notes": "Angustus subiungo quo utpote tabesco."
+      }
+    ],
+    "budget": {
+      "max": 314303,
+      "monthlyPaymentTarget": 6414,
+      "currency": "JPY"
+    },
+    "financingPreference": "cash",
+    "purchaseTimeline": "within-6-months",
+    "status": "qualified",
+    "assignedSalesRepId": "salesperson-1",
+    "createdAt": "2026-03-10T19:34:06.226Z",
+    "updatedAt": "2026-03-18T04:22:56.644Z",
+    "leadType": "cold"
+  },
+  {
+    "id": "lead-005",
+    "fullName": "Vladimir Murphy",
+    "email": "stephanie_wiegand@hotmail.com",
+    "phone": "+14144509965",
+    "bestTimeToContact": "Weekday evenings",
+    "address": {
+      "street": "719 Wellington Road",
+      "city": "Morarview",
+      "state": "WA",
+      "country": "TF",
+      "postalCode": "03891"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "Lead Accountability Designer"
+    },
+    "source": "walk-in",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "call",
+      "email",
+      "in-person"
+    ],
+    "notes": "Certus adstringo urbs torqueo xiphias vulnus.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-051",
+        "name": "2024 BMW X5",
+        "brand": "BMW",
+        "model": "X5",
+        "condition": "new",
+        "year": 2024,
+        "odometerUnit": "miles",
+        "color": "pink",
+        "imageUrl": "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=800",
+        "fuelType": "hybrid",
+        "transmission": "automatic",
+        "interestLevel": 2,
+        "notes": "Ustilo caecus vix abundans volubilis."
+      }
+    ],
+    "budget": {
+      "max": 308259,
+      "monthlyPaymentTarget": 5505,
+      "currency": "EUR"
+    },
+    "financingPreference": "undecided",
+    "purchaseTimeline": "exploring",
+    "status": "won",
+    "assignedSalesRepId": "salesperson-1",
+    "createdAt": "2026-01-15T17:26:21.114Z",
+    "updatedAt": "2026-02-15T07:37:28.053Z",
+    "leadType": "hot"
+  },
+  {
+    "id": "lead-006",
+    "fullName": "Jarod Dach",
+    "email": "claudia.koelpin@gmail.com",
+    "phone": "+17077089028",
+    "bestTimeToContact": "Mornings before 10am",
+    "address": {
+      "street": "23463 Rogahn Burgs",
+      "city": "Lake Sonia",
+      "state": "MT",
+      "country": "LT",
+      "postalCode": "45223"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "Corporate Marketing Technician"
+    },
+    "source": "walk-in",
+    "salesModel": "direct",
+    "preferredCommunication": [
+      "text"
+    ],
+    "notes": "Validus optio spoliatio.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-061",
+        "name": "2021 Hyundai Ioniq 5",
+        "brand": "Hyundai",
+        "model": "Ioniq 5",
+        "vin": "NHSHVJJVD4AR67210",
+        "condition": "used",
+        "year": 2021,
+        "odometer": 31294,
+        "odometerUnit": "miles",
+        "color": "magenta",
+        "imageUrl": "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800",
+        "fuelType": "electric",
+        "transmission": "automatic",
+        "interestLevel": 5,
+        "notes": "Doloribus terra crux quasi unus."
+      },
+      {
+        "id": "v-062",
+        "name": "2025 Honda CR-V",
+        "brand": "Honda",
+        "model": "CR-V",
+        "condition": "new",
+        "year": 2025,
+        "odometerUnit": "km",
+        "color": "indigo",
+        "imageUrl": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800",
+        "fuelType": "hybrid",
+        "transmission": "cvt",
+        "interestLevel": 5,
+        "notes": "Compono recusandae capto aestivus aperiam antiquus."
+      }
+    ],
+    "budget": {
+      "max": 573580,
+      "monthlyPaymentTarget": 8824,
+      "currency": "EUR"
+    },
+    "financingPreference": "lease",
+    "purchaseTimeline": "immediate",
+    "status": "qualified",
+    "assignedSalesRepId": "salesperson-2",
+    "createdAt": "2026-02-22T19:05:03.259Z",
+    "updatedAt": "2026-03-01T00:22:07.199Z",
+    "leadType": "cold"
+  },
+  {
+    "id": "lead-007",
+    "fullName": "Grace Simonis Sr.",
+    "email": "arturo.spinka79@yahoo.com",
+    "phone": "+13187538384",
+    "bestTimeToContact": "Afternoons after 2pm",
+    "address": {
+      "street": "3752 Jubilee Close",
+      "city": "Suzannefurt",
+      "state": "CO",
+      "country": "UZ",
+      "postalCode": "31765-8713"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "Future Quality Consultant"
+    },
+    "source": "dealer-event",
+    "salesModel": "direct",
+    "preferredCommunication": [
+      "in-person",
+      "email"
+    ],
+    "notes": "Congregatio trado amor tyrannus antiquus crux thema architecto calculus suppono.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-071",
+        "name": "2025 Audi Q7",
+        "brand": "Audi",
+        "model": "Q7",
+        "vin": "K73585695WBH49139",
+        "condition": "used",
+        "year": 2025,
+        "odometer": 69913,
+        "odometerUnit": "miles",
+        "color": "grey",
+        "imageUrl": "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800",
+        "fuelType": "diesel",
+        "transmission": "automatic",
+        "interestLevel": 4,
+        "notes": "Iusto mollitia cibus tenus audentia commodo cursim distinctio carcer amplus."
+      },
+      {
+        "id": "v-072",
+        "name": "2023 Hyundai Ioniq 5",
+        "brand": "Hyundai",
+        "model": "Ioniq 5",
+        "condition": "new",
+        "year": 2023,
+        "odometerUnit": "km",
+        "color": "mint green",
+        "imageUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
+        "fuelType": "electric",
+        "transmission": "automatic",
+        "interestLevel": 1,
+        "notes": "Appono adversus vox commodi tollo."
+      }
+    ],
+    "budget": {
+      "max": 98358,
+      "monthlyPaymentTarget": 1586,
+      "currency": "SGD"
+    },
+    "financingPreference": "loan",
+    "purchaseTimeline": "within-6-months",
+    "status": "qualified",
+    "assignedSalesRepId": "salesperson-1",
+    "createdAt": "2026-02-02T03:52:47.248Z",
+    "updatedAt": "2026-02-19T12:44:30.524Z",
+    "leadType": "cold"
+  },
+  {
+    "id": "lead-008",
+    "fullName": "Anthony Schmitt",
+    "email": "tammy.rippin@hotmail.com",
+    "phone": "+13145935606",
+    "bestTimeToContact": "Weekday afternoons",
+    "address": {
+      "street": "240 N 7th Street",
+      "city": "Annalisefort",
+      "state": "HI",
+      "country": "TO",
+      "postalCode": "10450"
+    },
+    "clientProfile": {
+      "type": "organization",
+      "companyName": "Klein, Bruen and Wyman",
+      "industry": "Education",
+      "numberOfEmployees": 71,
+      "annualRevenue": 46081674,
+      "currency": "EUR",
+      "companyRegion": "Utah"
+    },
+    "source": "phone",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "in-person",
+      "text"
+    ],
+    "notes": "Armarium attonbitus universe vindico corroboro cerno sequi.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-081",
+        "name": "2023 Honda CR-V",
+        "brand": "Honda",
+        "model": "CR-V",
+        "condition": "new",
+        "year": 2023,
+        "odometerUnit": "miles",
+        "color": "pink",
+        "imageUrl": "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800",
+        "fuelType": "hybrid",
+        "transmission": "cvt",
+        "interestLevel": 5,
+        "notes": "Maiores subito vesco suffragium argumentum nemo pectus curriculum tabgo victus."
+      }
+    ],
+    "budget": {
+      "max": 547359,
+      "monthlyPaymentTarget": 10733,
+      "currency": "EUR"
+    },
+    "financingPreference": "cash",
+    "purchaseTimeline": "immediate",
+    "status": "lost",
+    "assignedSalesRepId": "salesperson-2",
+    "createdAt": "2026-02-21T08:05:23.268Z",
+    "updatedAt": "2026-03-04T19:50:22.074Z",
+    "leadType": "hot"
+  },
+  {
+    "id": "lead-009",
+    "fullName": "Domenic Jast",
+    "email": "norene_kuhlman@hotmail.com",
+    "phone": "+12257218951",
+    "bestTimeToContact": "Weekday evenings",
+    "address": {
+      "street": "91525 Simonis Estates",
+      "city": "East Stellaside",
+      "state": "NJ",
+      "country": "MQ",
+      "postalCode": "19435-0170"
+    },
+    "clientProfile": {
+      "type": "organization",
+      "companyName": "Davis - McCullough",
+      "industry": "Healthcare",
+      "numberOfEmployees": 448,
+      "annualRevenue": 40963457,
+      "currency": "GBP",
+      "companyRegion": "Louisiana"
+    },
+    "source": "referral",
+    "salesModel": "direct",
+    "preferredCommunication": [
+      "text"
+    ],
+    "notes": "Super clibanus maxime demonstro sonitus.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-091",
+        "name": "2024 Jeep Wrangler",
+        "brand": "Jeep",
+        "model": "Wrangler",
+        "condition": "new",
+        "year": 2024,
+        "odometerUnit": "km",
+        "color": "cyan",
+        "imageUrl": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800",
+        "fuelType": "petrol",
+        "transmission": "manual",
+        "interestLevel": 4,
+        "notes": "Triduana crux sordeo bardus clarus vel abundans ait beatus."
+      }
+    ],
+    "budget": {
+      "max": 157868,
+      "monthlyPaymentTarget": 2255,
+      "currency": "GBP"
+    },
+    "financingPreference": "loan",
+    "purchaseTimeline": "within-1-month",
+    "status": "new",
+    "assignedSalesRepId": "salesperson-1",
+    "createdAt": "2026-02-27T00:01:38.115Z",
+    "updatedAt": "2026-02-27T10:54:24.942Z",
+    "leadType": "hot"
+  },
+  {
+    "id": "lead-010",
+    "fullName": "Elfrieda Witting IV",
+    "email": "roosevelt7@yahoo.com",
+    "phone": "+14704573686",
+    "bestTimeToContact": "Weekday afternoons",
+    "address": {
+      "street": "80859 York Road",
+      "city": "Port Greyson",
+      "state": "MS",
+      "country": "MX",
+      "postalCode": "97447-2132"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "Chief Directives Planner"
+    },
+    "source": "referral",
+    "salesModel": "direct",
+    "preferredCommunication": [
+      "in-person",
+      "email",
+      "call"
+    ],
+    "notes": "Spoliatio blanditiis virga terror alii cura.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-101",
+        "name": "2024 BMW X5",
+        "brand": "BMW",
+        "model": "X5",
+        "condition": "new",
+        "year": 2024,
+        "odometerUnit": "km",
+        "color": "red",
+        "imageUrl": "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800",
+        "fuelType": "hybrid",
+        "transmission": "automatic",
+        "interestLevel": 2,
+        "notes": "Thermae sub cernuus officia contra aliqua vero approbo virga."
+      },
+      {
+        "id": "v-102",
+        "name": "2023 Ford Transit",
+        "brand": "Ford",
+        "model": "Transit",
+        "condition": "new",
+        "year": 2023,
+        "odometerUnit": "miles",
+        "color": "salmon",
+        "imageUrl": "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800",
+        "fuelType": "diesel",
+        "transmission": "automatic",
+        "interestLevel": 4,
+        "notes": "Ulciscor carus deporto bos votum vinco adflicto sufficio."
+      }
+    ],
+    "budget": {
+      "max": 310411,
+      "monthlyPaymentTarget": 4565,
+      "currency": "USD"
+    },
+    "financingPreference": "undecided",
+    "purchaseTimeline": "within-3-months",
+    "status": "lost",
+    "assignedSalesRepId": "salesperson-1",
+    "createdAt": "2026-02-22T04:45:02.217Z",
+    "updatedAt": "2026-03-03T11:46:28.392Z",
+    "leadType": "warm"
+  },
+  {
+    "id": "lead-011",
+    "fullName": "Mellie Predovic",
+    "email": "sherman33@hotmail.com",
+    "phone": "+13886026962",
+    "bestTimeToContact": "Mornings before 10am",
+    "address": {
+      "street": "8175 Hawthorn Avenue",
+      "city": "Watersland",
+      "state": "WA",
+      "country": "OM",
+      "postalCode": "37053"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "Future Accountability Consultant"
+    },
+    "source": "website",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "email",
+      "in-person"
+    ],
+    "notes": "Aperio tempora acidus acerbitas commodo deporto tepesco statua.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-111",
+        "name": "2022 Mercedes-Benz Sprinter",
+        "brand": "Mercedes-Benz",
+        "model": "Sprinter",
+        "condition": "new",
+        "year": 2022,
+        "odometerUnit": "km",
+        "color": "sky blue",
+        "imageUrl": "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800",
+        "fuelType": "diesel",
+        "transmission": "automatic",
+        "interestLevel": 1,
+        "notes": "Vacuus vestigium vulgus atavus crustulum tempora subito arguo totam caelestis."
+      },
+      {
+        "id": "v-112",
+        "name": "2023 Mercedes-Benz E-Class",
+        "brand": "Mercedes-Benz",
+        "model": "E-Class",
+        "vin": "K3V84WYVTMN243274",
+        "condition": "used",
+        "year": 2023,
+        "odometer": 11078,
+        "odometerUnit": "km",
+        "color": "red",
+        "imageUrl": "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800",
+        "fuelType": "hybrid",
+        "transmission": "automatic",
+        "interestLevel": 5,
+        "notes": "Denique omnis tredecim conqueror spiritus maxime."
+      }
+    ],
+    "budget": {
+      "max": 567071,
+      "monthlyPaymentTarget": 10905,
+      "currency": "GBP"
+    },
+    "financingPreference": "lease",
+    "purchaseTimeline": "exploring",
+    "status": "qualified",
+    "assignedSalesRepId": "salesperson-1",
+    "createdAt": "2026-02-25T13:51:26.110Z",
+    "updatedAt": "2026-03-12T10:04:39.355Z",
+    "leadType": "hot"
+  },
+  {
+    "id": "lead-012",
+    "fullName": "Whitney Kuphal",
+    "email": "eugene.heller@yahoo.com",
+    "phone": "+13568211670",
+    "bestTimeToContact": "Any time",
+    "address": {
+      "street": "57878 Schultz Circle",
+      "city": "Mesquite",
+      "state": "SD",
+      "country": "JO",
+      "postalCode": "57002-1829"
+    },
+    "clientProfile": {
+      "type": "organization",
+      "companyName": "Miller Inc",
+      "industry": "Retail",
+      "numberOfEmployees": 432,
+      "annualRevenue": 39102624,
+      "currency": "BRL",
+      "companyRegion": "Alaska"
+    },
+    "source": "referral",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "text",
+      "email"
+    ],
+    "notes": "Super calco vulnus voluptatem sol aveho sponte.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-121",
+        "name": "2025 Kia EV6",
+        "brand": "Kia",
+        "model": "EV6",
+        "condition": "new",
+        "year": 2025,
+        "odometerUnit": "km",
+        "color": "maroon",
+        "imageUrl": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800",
+        "fuelType": "electric",
+        "transmission": "automatic",
+        "interestLevel": 3,
+        "notes": "Cubicularis certus vorago cunabula varius calculus benevolentia addo."
+      },
+      {
+        "id": "v-122",
+        "name": "2025 Kia EV6",
+        "brand": "Kia",
+        "model": "EV6",
+        "vin": "FY6VSSUSL4AX67411",
+        "condition": "used",
+        "year": 2025,
+        "odometer": 56418,
+        "odometerUnit": "km",
+        "color": "green",
+        "imageUrl": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800",
+        "fuelType": "electric",
+        "transmission": "automatic",
+        "interestLevel": 1,
+        "notes": "Censura thema colo deficio absum aequus crudelis."
+      }
+    ],
+    "budget": {
+      "max": 423867,
+      "monthlyPaymentTarget": 11154,
+      "currency": "BRL"
+    },
+    "financingPreference": "cash",
+    "purchaseTimeline": "within-1-month",
+    "status": "qualified",
+    "assignedSalesRepId": "salesperson-2",
+    "createdAt": "2026-01-29T03:06:07.651Z",
+    "updatedAt": "2026-02-02T09:39:29.127Z",
+    "leadType": "warm"
+  },
+  {
+    "id": "lead-013",
+    "fullName": "Angel Olson",
+    "email": "santa53@yahoo.com",
+    "phone": "+12149350199",
+    "bestTimeToContact": "Weekday mornings",
+    "address": {
+      "street": "684 Kuhn Point",
+      "city": "North Eloisecester",
+      "state": "HI",
+      "country": "NP",
+      "postalCode": "06481-6896"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "District Functionality Orchestrator"
+    },
+    "source": "social-media",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "text",
+      "call",
+      "email"
+    ],
+    "notes": "Spes bibo soluta cruentus soleo amissio solus xiphias.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-131",
+        "name": "2023 Tesla Model 3",
+        "brand": "Tesla",
+        "model": "Model 3",
+        "vin": "EPGVWD9KX6RL71791",
+        "condition": "certified-pre-owned",
+        "year": 2023,
+        "odometer": 22815,
+        "odometerUnit": "miles",
+        "color": "gold",
+        "imageUrl": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800",
+        "fuelType": "electric",
+        "transmission": "automatic",
+        "interestLevel": 3,
+        "notes": "Usus decretum dolorum contego."
+      },
+      {
+        "id": "v-132",
+        "name": "2022 Hyundai Ioniq 5",
+        "brand": "Hyundai",
+        "model": "Ioniq 5",
+        "condition": "new",
+        "year": 2022,
+        "odometerUnit": "miles",
+        "color": "indigo",
+        "imageUrl": "https://images.unsplash.com/photo-1600661653561-629509216228?w=800",
+        "fuelType": "electric",
+        "transmission": "automatic",
+        "interestLevel": 2,
+        "notes": "Aperte volubilis defetiscor canto aer assentator eius conduco tricesimus."
+      }
+    ],
+    "budget": {
+      "max": 269659,
+      "monthlyPaymentTarget": 7288,
+      "currency": "BRL"
+    },
+    "financingPreference": "undecided",
+    "purchaseTimeline": "within-3-months",
+    "status": "won",
+    "assignedSalesRepId": "salesperson-2",
+    "createdAt": "2026-02-06T03:21:22.135Z",
+    "updatedAt": "2026-02-22T09:55:39.785Z",
+    "leadType": "warm"
+  },
+  {
+    "id": "lead-014",
+    "fullName": "Jayson Lubowitz",
+    "email": "reece41@hotmail.com",
+    "phone": "+19328284606",
+    "bestTimeToContact": "Afternoons after 2pm",
+    "address": {
+      "street": "2782 Alberta Pines",
+      "city": "Lockmanburgh",
+      "state": "MD",
+      "country": "MP",
+      "postalCode": "91644"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "Global Assurance Executive"
+    },
+    "source": "social-media",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "in-person",
+      "call"
+    ],
+    "notes": "Nesciunt certus ager ait varius aureus commodo calamitas.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-141",
+        "name": "2024 Jeep Wrangler",
+        "brand": "Jeep",
+        "model": "Wrangler",
+        "vin": "ET3H0ACDNCL732066",
+        "condition": "certified-pre-owned",
+        "year": 2024,
+        "odometer": 51462,
+        "odometerUnit": "km",
+        "color": "lime",
+        "imageUrl": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800",
+        "fuelType": "petrol",
+        "transmission": "manual",
+        "interestLevel": 3,
+        "notes": "Acies confugo crastinus cubitum nisi explicabo."
+      },
+      {
+        "id": "v-142",
+        "name": "2025 Hyundai Ioniq 5",
+        "brand": "Hyundai",
+        "model": "Ioniq 5",
+        "vin": "PY060MW8X1YB14223",
+        "condition": "certified-pre-owned",
+        "year": 2025,
+        "odometer": 65227,
+        "odometerUnit": "miles",
+        "color": "ivory",
+        "imageUrl": "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800",
+        "fuelType": "electric",
+        "transmission": "automatic",
+        "interestLevel": 4,
+        "notes": "Cupio animus attollo stabilis attonbitus."
+      }
+    ],
+    "budget": {
+      "max": 530147,
+      "monthlyPaymentTarget": 10819,
+      "currency": "BRL"
+    },
+    "financingPreference": "cash",
+    "purchaseTimeline": "within-3-months",
+    "status": "new",
+    "assignedSalesRepId": "salesperson-2",
+    "createdAt": "2026-02-09T20:45:34.323Z",
+    "updatedAt": "2026-02-22T23:46:15.665Z",
+    "leadType": "hot"
+  },
+  {
+    "id": "lead-015",
+    "fullName": "Louise VonRueden",
+    "email": "tom86@yahoo.com",
+    "phone": "+18305163968",
+    "bestTimeToContact": "Weekday afternoons",
+    "address": {
+      "street": "946 College Avenue",
+      "city": "Grayceville",
+      "state": "ME",
+      "country": "BA",
+      "postalCode": "19594"
+    },
+    "clientProfile": {
+      "type": "organization",
+      "companyName": "Gutmann - Gislason",
+      "industry": "Hospitality",
+      "numberOfEmployees": 53,
+      "annualRevenue": 46879413,
+      "currency": "AUD",
+      "companyRegion": "Nevada"
+    },
+    "source": "phone",
+    "salesModel": "direct",
+    "preferredCommunication": [
+      "call"
+    ],
+    "notes": "Bibo quaerat sol argentum aduro termes degero adsum.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-151",
+        "name": "2025 Toyota Corolla",
+        "brand": "Toyota",
+        "model": "Corolla",
+        "vin": "MJRF1JY5N6N347367",
+        "condition": "certified-pre-owned",
+        "year": 2025,
+        "odometer": 74539,
+        "odometerUnit": "km",
+        "color": "magenta",
+        "imageUrl": "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800",
+        "fuelType": "hybrid",
+        "transmission": "cvt",
+        "interestLevel": 5,
+        "notes": "Harum turbo eligendi qui alii temeritas antiquus trepide tero sui."
+      }
+    ],
+    "budget": {
+      "max": 531046,
+      "monthlyPaymentTarget": 7376,
+      "currency": "AUD"
+    },
+    "financingPreference": "cash",
+    "purchaseTimeline": "within-6-months",
+    "status": "won",
+    "assignedSalesRepId": "salesperson-1",
+    "createdAt": "2026-02-25T15:44:51.500Z",
+    "updatedAt": "2026-03-10T15:07:45.610Z",
+    "leadType": "warm"
+  },
+  {
+    "id": "lead-016",
+    "fullName": "Jarrod Huels",
+    "email": "pansy.kertzmann84@yahoo.com",
+    "phone": "+19467866051",
+    "bestTimeToContact": "Mornings before 10am",
+    "address": {
+      "street": "7007 Antonette Branch",
+      "city": "Reno",
+      "state": "LA",
+      "country": "FO",
+      "postalCode": "76110"
+    },
+    "clientProfile": {
+      "type": "organization",
+      "companyName": "Kuhlman, Brekke and Lowe",
+      "industry": "Healthcare",
+      "numberOfEmployees": 424,
+      "annualRevenue": 5355087,
+      "currency": "EUR",
+      "companyRegion": "Missouri"
+    },
+    "source": "dealer-event",
+    "salesModel": "direct",
+    "preferredCommunication": [
+      "call"
+    ],
+    "notes": "Volaticus clementia tenus.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-161",
+        "name": "2025 Volvo XC90",
+        "brand": "Volvo",
+        "model": "XC90",
+        "vin": "LALHE4WE6CKU77044",
+        "condition": "certified-pre-owned",
+        "year": 2025,
+        "odometer": 6439,
+        "odometerUnit": "km",
+        "color": "silver",
+        "imageUrl": "https://images.unsplash.com/photo-1583267746897-2cf415887172?w=800",
+        "fuelType": "hybrid",
+        "transmission": "automatic",
+        "interestLevel": 3,
+        "notes": "Abundans caput voluptates thesis."
+      }
+    ],
+    "budget": {
+      "max": 199383,
+      "monthlyPaymentTarget": 3379,
+      "currency": "EUR"
+    },
+    "financingPreference": "lease",
+    "purchaseTimeline": "within-1-month",
+    "status": "new",
+    "assignedSalesRepId": "salesperson-2",
+    "createdAt": "2026-01-21T11:12:22.916Z",
+    "updatedAt": "2026-03-03T16:09:42.813Z",
+    "leadType": "hot"
+  },
+  {
+    "id": "lead-017",
+    "fullName": "Miss Alexandra Reinger DDS",
+    "email": "lewis0@gmail.com",
+    "phone": "+12729331389",
+    "bestTimeToContact": "Weekday evenings",
+    "address": {
+      "street": "7853 Predovic Alley",
+      "city": "Hermistonfield",
+      "state": "CA",
+      "country": "MN",
+      "postalCode": "60555"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "International Accountability Orchestrator"
+    },
+    "source": "social-media",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "call",
+      "email",
+      "text"
+    ],
+    "notes": "Adsum concido territo.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-171",
+        "name": "2024 Porsche Taycan",
+        "brand": "Porsche",
+        "model": "Taycan",
+        "vin": "KRTM4BX7CELL92118",
+        "condition": "certified-pre-owned",
+        "year": 2024,
+        "odometer": 53436,
+        "odometerUnit": "km",
+        "color": "tan",
+        "imageUrl": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800",
+        "fuelType": "electric",
+        "transmission": "automatic",
+        "interestLevel": 5,
+        "notes": "Caste temeritas degusto turbo suscipit tergeo sollicito atrocitas impedit vorax."
+      },
+      {
+        "id": "v-172",
+        "name": "2021 Honda CR-V",
+        "brand": "Honda",
+        "model": "CR-V",
+        "condition": "new",
+        "year": 2021,
+        "odometerUnit": "km",
+        "color": "salmon",
+        "imageUrl": "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800",
+        "fuelType": "hybrid",
+        "transmission": "cvt",
+        "interestLevel": 2,
+        "notes": "Tunc tabella id officia distinctio coadunatio maiores."
+      }
+    ],
+    "budget": {
+      "max": 329924,
+      "monthlyPaymentTarget": 5321,
+      "currency": "INR"
+    },
+    "financingPreference": "undecided",
+    "purchaseTimeline": "within-3-months",
+    "status": "qualified",
+    "assignedSalesRepId": "salesperson-1",
+    "createdAt": "2026-01-17T16:26:13.485Z",
+    "updatedAt": "2026-03-20T00:06:59.205Z",
+    "leadType": "hot"
+  },
+  {
+    "id": "lead-018",
+    "fullName": "Wendell Heller",
+    "email": "sandy_buckridge72@gmail.com",
+    "phone": "+17505419864",
+    "bestTimeToContact": "Afternoons after 2pm",
+    "address": {
+      "street": "5058 Bechtelar Shores",
+      "city": "West Casimer",
+      "state": "KY",
+      "country": "RO",
+      "postalCode": "28882-4970"
+    },
+    "clientProfile": {
+      "type": "organization",
+      "companyName": "Bechtelar, Johnston and Gibson",
+      "industry": "Manufacturing",
+      "numberOfEmployees": 491,
+      "annualRevenue": 13198238,
+      "currency": "SGD",
+      "companyRegion": "North Carolina"
+    },
+    "source": "phone",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "email"
+    ],
+    "notes": "Amiculum solum traho creator terga vobis.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-181",
+        "name": "2024 Nissan Leaf",
+        "brand": "Nissan",
+        "model": "Leaf",
+        "vin": "DLS3DUCJK6JB00825",
+        "condition": "certified-pre-owned",
+        "year": 2024,
+        "odometer": 27404,
+        "odometerUnit": "miles",
+        "color": "indigo",
+        "imageUrl": "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800",
+        "fuelType": "electric",
+        "transmission": "automatic",
+        "interestLevel": 5,
+        "notes": "Audax thorax defungo denuncio appello aggero suscipit derelinquo debilito."
+      },
+      {
+        "id": "v-182",
+        "name": "2021 Chevrolet Silverado",
+        "brand": "Chevrolet",
+        "model": "Silverado",
+        "vin": "L4RMY21988X827470",
+        "condition": "certified-pre-owned",
+        "year": 2021,
+        "odometer": 41568,
+        "odometerUnit": "km",
+        "color": "black",
+        "imageUrl": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800",
+        "fuelType": "petrol",
+        "transmission": "automatic",
+        "interestLevel": 1,
+        "notes": "Cunctatio conor velum acer sonitus vix laborum."
+      }
+    ],
+    "budget": {
+      "max": 75945,
+      "monthlyPaymentTarget": 1766,
+      "currency": "SGD"
+    },
+    "financingPreference": "loan",
+    "purchaseTimeline": "within-1-month",
+    "status": "lost",
+    "assignedSalesRepId": "salesperson-2",
+    "createdAt": "2026-01-29T02:51:35.853Z",
+    "updatedAt": "2026-03-01T03:44:02.616Z",
+    "leadType": "cold"
+  },
+  {
+    "id": "lead-019",
+    "fullName": "Rochelle Herzog",
+    "email": "miriam.fisher@yahoo.com",
+    "phone": "+17664849616",
+    "bestTimeToContact": "Weekday evenings",
+    "address": {
+      "street": "118 Rodger Forge",
+      "city": "Powlowskimouth",
+      "state": "KS",
+      "country": "CW",
+      "postalCode": "36987"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "Human Creative Designer"
+    },
+    "source": "social-media",
+    "salesModel": "direct",
+    "preferredCommunication": [
+      "text",
+      "email",
+      "in-person"
+    ],
+    "notes": "Dedecor degero urbs.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-191",
+        "name": "2022 Range Rover Sport",
+        "brand": "Range Rover",
+        "model": "Sport",
+        "vin": "VW9Z466WM5LL08859",
+        "condition": "certified-pre-owned",
+        "year": 2022,
+        "odometer": 36332,
+        "odometerUnit": "miles",
+        "color": "purple",
+        "imageUrl": "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800",
+        "fuelType": "hybrid",
+        "transmission": "automatic",
+        "interestLevel": 1,
+        "notes": "Cursus ascisco abundans laborum et super validus ager suus audeo."
+      }
+    ],
+    "budget": {
+      "max": 252683,
+      "monthlyPaymentTarget": 4512,
+      "currency": "BRL"
+    },
+    "financingPreference": "lease",
+    "purchaseTimeline": "exploring",
+    "status": "new",
+    "assignedSalesRepId": "salesperson-1",
+    "createdAt": "2026-03-14T13:34:42.043Z",
+    "updatedAt": "2026-03-18T12:40:55.523Z",
+    "leadType": "hot"
+  },
+  {
+    "id": "lead-020",
+    "fullName": "Shana Larson",
+    "email": "leanna59@gmail.com",
+    "phone": "+13515469675",
+    "bestTimeToContact": "Mornings before 10am",
+    "address": {
+      "street": "33401 Walton Glens",
+      "city": "Clevefurt",
+      "state": "IA",
+      "country": "CV",
+      "postalCode": "00201-3855"
+    },
+    "clientProfile": {
+      "type": "organization",
+      "companyName": "Steuber, Lebsack and Bergnaum",
+      "industry": "Education",
+      "numberOfEmployees": 304,
+      "annualRevenue": 6189183,
+      "currency": "BRL",
+      "companyRegion": "California"
+    },
+    "source": "other",
+    "salesModel": "direct",
+    "preferredCommunication": [
+      "in-person",
+      "text",
+      "call"
+    ],
+    "notes": "Dignissimos utilis depulso subvenio vulgivagus.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-201",
+        "name": "2025 Honda CR-V",
+        "brand": "Honda",
+        "model": "CR-V",
+        "vin": "0YPAU9V3PHC704352",
+        "condition": "certified-pre-owned",
+        "year": 2025,
+        "odometer": 27494,
+        "odometerUnit": "miles",
+        "color": "black",
+        "imageUrl": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800",
+        "fuelType": "hybrid",
+        "transmission": "cvt",
+        "interestLevel": 5,
+        "notes": "Optio vapulus audax aeternus capto thalassinus adeo nostrum."
+      }
+    ],
+    "budget": {
+      "max": 552894,
+      "monthlyPaymentTarget": 13822,
+      "currency": "BRL"
+    },
+    "financingPreference": "lease",
+    "purchaseTimeline": "within-1-month",
+    "status": "qualified",
+    "assignedSalesRepId": "salesperson-1",
+    "createdAt": "2026-02-01T22:08:14.417Z",
+    "updatedAt": "2026-03-15T04:32:43.842Z",
+    "leadType": "warm"
+  },
+  {
+    "id": "lead-021",
+    "fullName": "Ruthe Keeling",
+    "email": "megane14@hotmail.com",
+    "phone": "+14107630436",
+    "bestTimeToContact": "Evenings after 6pm",
+    "address": {
+      "street": "2946 Jeanette Brooks",
+      "city": "Vinniebury",
+      "state": "AK",
+      "country": "AO",
+      "postalCode": "10742"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "Future Paradigm Consultant"
+    },
+    "source": "website",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "email",
+      "text"
+    ],
+    "notes": "Trepide vorax civitas vito cribro creptio confugo.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-211",
+        "name": "2024 Mazda CX-5",
+        "brand": "Mazda",
+        "model": "CX-5",
+        "condition": "new",
+        "year": 2024,
+        "odometerUnit": "km",
+        "color": "grey",
+        "imageUrl": "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800",
+        "fuelType": "petrol",
+        "transmission": "automatic",
+        "interestLevel": 4,
+        "notes": "Amplus credo defleo corporis animi curatio tantillus aeneus."
+      },
+      {
+        "id": "v-212",
+        "name": "2025 Tesla Model Y",
+        "brand": "Tesla",
+        "model": "Model Y",
+        "vin": "NNBK0LXLVPCW05104",
+        "condition": "used",
+        "year": 2025,
+        "odometer": 27128,
+        "odometerUnit": "km",
+        "color": "orchid",
+        "imageUrl": "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800",
+        "fuelType": "electric",
+        "transmission": "automatic",
+        "interestLevel": 1,
+        "notes": "Conicio suspendo solio tutis stultus curtus speculum."
+      }
+    ],
+    "budget": {
+      "max": 374546,
+      "monthlyPaymentTarget": 6688,
+      "currency": "INR"
+    },
+    "financingPreference": "cash",
+    "purchaseTimeline": "within-3-months",
+    "status": "qualified",
+    "assignedSalesRepId": "salesperson-2",
+    "createdAt": "2026-02-03T19:11:47.381Z",
+    "updatedAt": "2026-03-13T20:37:04.554Z",
+    "leadType": "hot"
+  },
+  {
+    "id": "lead-022",
+    "fullName": "Lana Windler MD",
+    "email": "ricardo_gorczany94@hotmail.com",
+    "phone": "+15948532273",
+    "bestTimeToContact": "Evenings after 6pm",
+    "address": {
+      "street": "6894 St George's Road",
+      "city": "Verlaberg",
+      "state": "CO",
+      "country": "SZ",
+      "postalCode": "88084"
+    },
+    "clientProfile": {
+      "type": "individual",
+      "jobTitle": "Global Communications Manager"
+    },
+    "source": "social-media",
+    "salesModel": "indirect",
+    "preferredCommunication": [
+      "text",
+      "call"
+    ],
+    "notes": "Suppono stultus appono coepi contego thymum cibo bene.",
+    "vehiclesOfInterest": [
+      {
+        "id": "v-221",
+        "name": "2025 Toyota Corolla",
+        "brand": "Toyota",
+        "model": "Corolla",
+        "condition": "new",
+        "year": 2025,
+        "odometerUnit": "miles",
+        "color": "lavender",
+        "imageUrl": "https://images.unsplash.com/photo-1559416523-140ddc3d238c?w=800",
+        "fuelType": "hybrid",
+        "transmission": "cvt",
+        "interestLevel": 1,
+        "notes": "Quidem deporto cuius vulgo utrum qui."
+      }
+    ],
+    "budget": {
+      "max": 198841,
+      "monthlyPaymentTarget": 2801,
+      "currency": "SGD"
+    },
+    "financingPreference": "cash",
+    "purchaseTimeline": "exploring",
+    "status": "lost",
+    "assignedSalesRepId": "salesperson-2",
+    "createdAt": "2026-01-31T14:20:18.248Z",
+    "updatedAt": "2026-02-10T05:05:46.886Z",
+    "leadType": "hot"
+  }
+]
