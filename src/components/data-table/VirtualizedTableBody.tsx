@@ -1,24 +1,24 @@
-import { useVirtualizer } from '@tanstack/react-virtual'
-import type { Table } from '@tanstack/react-table'
-import type { Lead } from '@/types'
-import { TableRow } from './TableRow'
-import { Skeleton } from '@/components/ui/Skeleton'
-import { Button } from '@/components/ui/Button'
+import { useVirtualizer } from '@tanstack/react-virtual';
+import type { Table } from '@tanstack/react-table';
+import type { Lead } from '@/types';
+import { TableRow } from './TableRow';
+import { Skeleton } from '@/components/ui/Skeleton';
+import { Button } from '@/components/ui/Button';
 
-const ROW_HEIGHT = 44
-const OVERSCAN = 5
+const ROW_HEIGHT = 44;
+const OVERSCAN = 5;
 
 type Props = {
-  table: Table<Lead>
-  stickyColumns: string[]
-  isLoading: boolean
-  isError: boolean
-  error: Error | null
-  pageSize: number
-  parentRef: React.RefObject<HTMLDivElement | null>
-  onRetry?: () => void
-  onClearFilters?: () => void
-}
+  table: Table<Lead>;
+  stickyColumns: string[];
+  isLoading: boolean;
+  isError: boolean;
+  error: Error | null;
+  pageSize: number;
+  parentRef: React.RefObject<HTMLDivElement | null>;
+  onRetry?: () => void;
+  onClearFilters?: () => void;
+};
 
 export function VirtualizedTableBody({
   table,
@@ -31,14 +31,14 @@ export function VirtualizedTableBody({
   onRetry,
   onClearFilters,
 }: Props) {
-  const rows = table.getRowModel().rows
+  const rows = table.getRowModel().rows;
 
   const virtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => ROW_HEIGHT,
     overscan: OVERSCAN,
-  })
+  });
 
   if (isLoading) {
     return (
@@ -53,57 +53,55 @@ export function VirtualizedTableBody({
           </tr>
         ))}
       </tbody>
-    )
+    );
   }
 
   if (isError) {
     return (
       <tbody>
         <tr>
-          <td
-            colSpan={table.getVisibleLeafColumns().length}
-            className="px-6 py-16 text-center"
-          >
+          <td colSpan={table.getVisibleLeafColumns().length} className="px-6 py-16 text-center">
             <div className="space-y-3">
-              <p className="text-red-600 font-medium">Failed to load leads</p>
+              <p className="font-medium text-red-600">Failed to load leads</p>
               <p className="text-sm text-gray-500">{error?.message}</p>
               {onRetry && (
-                <Button variant="primary" size="md" onClick={onRetry}>Retry</Button>
+                <Button variant="default" size="default" onClick={onRetry}>
+                  Retry
+                </Button>
               )}
             </div>
           </td>
         </tr>
       </tbody>
-    )
+    );
   }
 
   if (rows.length === 0) {
     return (
       <tbody>
         <tr>
-          <td
-            colSpan={table.getVisibleLeafColumns().length}
-            className="px-6 py-16 text-center"
-          >
+          <td colSpan={table.getVisibleLeafColumns().length} className="px-6 py-16 text-center">
             <div className="space-y-3">
-              <p className="text-gray-500 font-medium">No leads match your filters</p>
+              <p className="font-medium text-gray-500">No leads match your filters</p>
               {onClearFilters && (
-                <Button variant="secondary" size="md" onClick={onClearFilters}>Clear filters</Button>
+                <Button variant="secondary" size="default" onClick={onClearFilters}>
+                  Clear filters
+                </Button>
               )}
             </div>
           </td>
         </tr>
       </tbody>
-    )
+    );
   }
 
-  const virtualRows = virtualizer.getVirtualItems()
-  const totalSize = virtualizer.getTotalSize()
+  const virtualRows = virtualizer.getVirtualItems();
+  const totalSize = virtualizer.getTotalSize();
 
   return (
     <tbody style={{ height: totalSize, position: 'relative' }}>
       {virtualRows.map((virtualRow) => {
-        const row = rows[virtualRow.index]
+        const row = rows[virtualRow.index];
         return (
           <TableRow
             key={row.id}
@@ -117,8 +115,8 @@ export function VirtualizedTableBody({
               height: `${virtualRow.size}px`,
             }}
           />
-        )
+        );
       })}
     </tbody>
-  )
+  );
 }

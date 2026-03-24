@@ -1,8 +1,8 @@
-import { StatusBadge } from '@/components/ui/StatusBadge'
-import type { LeadStatus } from '@/types'
+import { StatusBadge } from '@/components/ui/StatusBadge';
+import type { LeadStatus } from '@/types';
 
-type Props = { status: LeadStatus }
+type Props = { status: LeadStatus };
 
 export function StatusCell({ status }: Props) {
-  return <StatusBadge status={status} />
+  return <StatusBadge status={status} />;
 }

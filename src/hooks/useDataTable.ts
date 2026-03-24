@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -6,9 +6,9 @@ import {
   type SortingState,
   type VisibilityState,
   type Table,
-} from "@tanstack/react-table";
-import type { Lead, PaginationMeta } from "@/types";
-import type { LeadsParams } from "@/lib/api";
+} from '@tanstack/react-table';
+import type { Lead, PaginationMeta } from '@/types';
+import type { LeadsParams } from '@/lib/api';
 
 export type FilterState = {
   search: string;
@@ -23,15 +23,15 @@ export type FilterState = {
 };
 
 const INITIAL_FILTERS: FilterState = {
-  search: "",
-  source: "",
+  search: '',
+  source: '',
   budgetMin: undefined,
   budgetMax: undefined,
-  currency: "",
-  timeline: "",
-  financing: "",
-  leadType: "",
-  status: "",
+  currency: '',
+  timeline: '',
+  financing: '',
+  leadType: '',
+  status: '',
 };
 
 type UseDataTableInput = {
@@ -78,18 +78,12 @@ export function useDataTable({
   const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [pageSize, setPageSizeState] = useState(pagination.limit || 10);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-    initialColumnVisibility
-  );
-  const [stickyColumns, setStickyColumns] = useState<string[]>(["actions"]);
+  const [columnVisibility, setColumnVisibility] =
+    useState<VisibilityState>(initialColumnVisibility);
+  const [stickyColumns, setStickyColumns] = useState<string[]>(['actions']);
 
   const buildParams = useCallback(
-    (
-      f: FilterState,
-      s: SortingState,
-      pSize: number,
-      page?: number
-    ): LeadsParams => {
+    (f: FilterState, s: SortingState, pSize: number, page?: number): LeadsParams => {
       const params: LeadsParams = { page: page ?? 1, limit: pSize };
       if (f.search) params.search = f.search;
       if (f.source) params.source = f.source;
@@ -101,7 +95,7 @@ export function useDataTable({
       if (f.leadType) params.leadType = f.leadType;
       if (s.length > 0) {
         params.sort = s[0].id;
-        params.order = s[0].desc ? "desc" : "asc";
+        params.order = s[0].desc ? 'desc' : 'asc';
       }
       return params;
     },
@@ -127,7 +121,7 @@ export function useDataTable({
   const handleSortingChange = useCallback(
     (updater: SortingState | ((prev: SortingState) => SortingState)) => {
       setSorting((prev) => {
-        const next = typeof updater === "function" ? updater(prev) : updater;
+        const next = typeof updater === 'function' ? updater(prev) : updater;
         onStateChange(buildParams(filters, next, pageSize));
         return next;
       });
@@ -162,15 +156,13 @@ export function useDataTable({
     },
     onSortingChange: handleSortingChange,
     onColumnVisibilityChange: (updater) => {
-      setColumnVisibility((prev) =>
-        typeof updater === "function" ? updater(prev) : updater
-      );
+      setColumnVisibility((prev) => (typeof updater === 'function' ? updater(prev) : updater));
     },
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
     manualFiltering: true,
     manualPagination: true,
-    columnResizeMode: "onChange",
+    columnResizeMode: 'onChange',
   });
 
   return {

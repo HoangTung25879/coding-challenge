@@ -1,45 +1,41 @@
-import { useState } from 'react'
-import type { Table } from '@tanstack/react-table'
-import type { Lead } from '@/types'
-import { Dropdown } from '@/components/ui/Dropdown'
-import { Button } from '@/components/ui/Button'
-import { Settings } from 'lucide-react'
+import type { Table } from '@tanstack/react-table';
+import type { Lead } from '@/types';
+import { Button } from '@/components/ui/Button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import { Settings } from 'lucide-react';
 
 type Props = {
-  table: Table<Lead>
-}
+  table: Table<Lead>;
+};
 
 export function ColumnVisibilityToggle({ table }: Props) {
-  const [open, setOpen] = useState(false)
-  const allColumns = table.getAllLeafColumns().filter(col => col.getCanHide())
+  const allColumns = table.getAllLeafColumns().filter((col) => col.getCanHide());
 
   return (
-    <Dropdown
-      trigger={
-        <Button variant="secondary" size="md" leftIcon={<Settings className="h-4 w-4" />} aria-expanded={open} aria-haspopup="true">
-          Columns
-        </Button>
-      }
-      align="right"
-      open={open}
-      onOpenChange={setOpen}
-    >
-      <div className="w-56">
+    <Popover>
+      <PopoverTrigger
+        render={
+          <Button variant="outline" size="default">
+            <Settings className="h-4 w-4" />
+            Columns
+          </Button>
+        }
+      />
+      <PopoverContent align="end" className="w-56 p-1">
         {allColumns.map((column) => (
           <label
             key={column.id}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm hover:bg-gray-50 cursor-pointer"
+            className="flex cursor-pointer items-center gap-2 rounded px-3 py-1.5 text-sm hover:bg-gray-50"
           >
-            <input
-              type="checkbox"
+            <Checkbox
               checked={column.getIsVisible()}
-              onChange={column.getToggleVisibilityHandler()}
-              className="rounded border-gray-300"
+              onCheckedChange={(checked) => column.toggleVisibility(Boolean(checked))}
             />
             {String(column.columnDef.header ?? column.id)}
           </label>
         ))}
-      </div>
-    </Dropdown>
-  )
+      </PopoverContent>
+    </Popover>
+  );
 }

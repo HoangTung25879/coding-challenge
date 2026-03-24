@@ -1,12 +1,12 @@
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 
-export type BadgeVariant = 'blue' | 'yellow' | 'purple' | 'red' | 'emerald' | 'gray'
+export type BadgeVariant = 'blue' | 'yellow' | 'purple' | 'red' | 'emerald' | 'gray';
 
 type BadgeProps = {
-  variant?: BadgeVariant
-  children: ReactNode
-  className?: string
-}
+  variant?: BadgeVariant;
+  children: ReactNode;
+  className?: string;
+};
 
 const variantClasses: Record<BadgeVariant, string> = {
   blue: 'bg-blue-100 text-blue-800',
@@ -15,12 +15,14 @@ const variantClasses: Record<BadgeVariant, string> = {
   red: 'bg-red-100 text-red-800',
   emerald: 'bg-emerald-100 text-emerald-800',
   gray: 'bg-gray-100 text-gray-800',
-}
+};
 
 export function Badge({ variant = 'gray', children, className = '' }: BadgeProps) {
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${variantClasses[variant]} ${className}`}>
+    <span
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${variantClasses[variant]} ${className}`}
+    >
       {children}
     </span>
-  )
+  );
 }

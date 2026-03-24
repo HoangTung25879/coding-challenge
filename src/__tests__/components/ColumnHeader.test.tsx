@@ -1,18 +1,14 @@
-import { render, screen } from '@testing-library/react'
-import { describe, it, expect } from 'vitest'
-import {
-  createColumnHelper,
-  useReactTable,
-  getCoreRowModel,
-} from '@tanstack/react-table'
-import type { Lead } from '@/types'
-import { ColumnHeader } from '@/components/data-table/ColumnHeader'
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { createColumnHelper, useReactTable, getCoreRowModel } from '@tanstack/react-table';
+import type { Lead } from '@/types';
+import { ColumnHeader } from '@/components/data-table/ColumnHeader';
 
-const col = createColumnHelper<Lead>()
+const col = createColumnHelper<Lead>();
 const columns = [
   col.accessor('fullName', { header: 'Name', enableSorting: true, enableResizing: true }),
   col.accessor('status', { header: 'Status', enableSorting: true }),
-]
+];
 
 const mockLead: Lead = {
   id: 'lead-001',
@@ -35,7 +31,7 @@ const mockLead: Lead = {
   assignedSalesRepId: 'rep-001',
   createdAt: '2026-01-01T00:00:00Z',
   updatedAt: '2026-01-01T00:00:00Z',
-}
+};
 
 function TestTable() {
   const table = useReactTable({
@@ -44,9 +40,9 @@ function TestTable() {
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
     columnResizeMode: 'onChange',
-  })
+  });
 
-  const headerGroup = table.getHeaderGroups()[0]
+  const headerGroup = table.getHeaderGroups()[0];
   return (
     <table>
       <thead>
@@ -61,32 +57,32 @@ function TestTable() {
         </tr>
       </thead>
     </table>
-  )
+  );
 }
 
 describe('ColumnHeader', () => {
   it('renders column header text', () => {
-    render(<TestTable />)
-    expect(screen.getByText('Name')).toBeInTheDocument()
-    expect(screen.getByText('Status')).toBeInTheDocument()
-  })
+    render(<TestTable />);
+    expect(screen.getByText('Name')).toBeInTheDocument();
+    expect(screen.getByText('Status')).toBeInTheDocument();
+  });
 
   it('has aria-sort="none" by default for sortable columns', () => {
-    render(<TestTable />)
-    const nameTh = screen.getByText('Name').closest('th')
-    expect(nameTh).toHaveAttribute('aria-sort', 'none')
-  })
+    render(<TestTable />);
+    const nameTh = screen.getByText('Name').closest('th');
+    expect(nameTh).toHaveAttribute('aria-sort', 'none');
+  });
 
   it('renders resize separator on resizable columns', () => {
-    render(<TestTable />)
-    const separators = screen.getAllByRole('separator')
-    expect(separators.length).toBeGreaterThan(0)
-    expect(separators[0]).toHaveAttribute('aria-orientation', 'vertical')
-  })
+    render(<TestTable />);
+    const separators = screen.getAllByRole('separator');
+    expect(separators.length).toBeGreaterThan(0);
+    expect(separators[0]).toHaveAttribute('aria-orientation', 'vertical');
+  });
 
   it('applies sticky positioning to sticky column', () => {
-    render(<TestTable />)
-    const nameTh = screen.getByText('Name').closest('th')
-    expect(nameTh?.style.position).toBe('sticky')
-  })
-})
+    render(<TestTable />);
+    const nameTh = screen.getByText('Name').closest('th');
+    expect(nameTh?.style.position).toBe('sticky');
+  });
+});

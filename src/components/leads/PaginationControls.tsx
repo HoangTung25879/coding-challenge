@@ -1,35 +1,35 @@
 // src/components/leads/PaginationControls.tsx
-import { useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
-import { fetchLeads, type LeadsParams } from '@/lib/api'
-import { Button } from '@/components/ui/Button'
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { fetchLeads, type LeadsParams } from '@/lib/api';
+import { Button } from '@/components/ui/Button';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
 type Props = {
-  page: number
-  totalPages: number
-  params: LeadsParams
-  onPageChange: (page: number) => void
-}
+  page: number;
+  totalPages: number;
+  params: LeadsParams;
+  onPageChange: (page: number) => void;
+};
 
 export function PaginationControls({ page, totalPages, params, onPageChange }: Props) {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   // Prefetch adjacent pages using same query key shape as useLeads
   useEffect(() => {
     function prefetch(targetPage: number) {
-      const p: LeadsParams = { ...params, page: targetPage }
+      const p: LeadsParams = { ...params, page: targetPage };
       void queryClient.prefetchQuery({
         queryKey: ['leads', p],
         queryFn: () => fetchLeads(p),
-      })
+      });
     }
-    if (page > 1) prefetch(page - 1)
-    if (page < totalPages) prefetch(page + 1)
-  }, [page, totalPages, params, queryClient])
+    if (page > 1) prefetch(page - 1);
+    if (page < totalPages) prefetch(page + 1);
+  }, [page, totalPages, params, queryClient]);
 
   return (
-    <nav aria-label="Pagination" className="flex items-center gap-3 justify-center">
+    <nav aria-label="Pagination" className="flex items-center justify-center gap-3">
       <Button
         variant="secondary"
         size="lg"
@@ -37,10 +37,14 @@ export function PaginationControls({ page, totalPages, params, onPageChange }: P
         disabled={page <= 1}
         aria-label="Previous page"
       >
-        <ChevronLeftIcon className="w-4 h-4" />
+        <ChevronLeftIcon className="h-4 w-4" />
       </Button>
       <span className="text-sm text-gray-600">
-        Page <span aria-current="page" className="font-medium">{page}</span> of {totalPages}
+        Page{' '}
+        <span aria-current="page" className="font-medium">
+          {page}
+        </span>{' '}
+        of {totalPages}
       </span>
       <Button
         variant="secondary"
@@ -49,8 +53,8 @@ export function PaginationControls({ page, totalPages, params, onPageChange }: P
         disabled={page >= totalPages}
         aria-label="Next page"
       >
-        <ChevronRightIcon className="w-4 h-4" />
+        <ChevronRightIcon className="h-4 w-4" />
       </Button>
     </nav>
-  )
+  );
 }

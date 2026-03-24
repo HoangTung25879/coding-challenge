@@ -1,23 +1,31 @@
-const PAGE_SIZES = [10, 25, 50, 100]
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
+const PAGE_SIZES = [10, 25, 50, 100];
 
 type Props = {
-  pageSize: number
-  onChange: (size: number) => void
-}
+  pageSize: number;
+  onChange: (size: number) => void;
+};
 
 export function PageSizeSelector({ pageSize, onChange }: Props) {
   return (
-    <select
-      aria-label="Rows per page"
-      value={pageSize}
-      onChange={(e) => onChange(Number(e.target.value))}
-      className="rounded-md border border-gray-300 px-2 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-    >
-      {PAGE_SIZES.map((size) => (
-        <option key={size} value={size}>
-          {size} rows
-        </option>
-      ))}
-    </select>
-  )
+    <Select value={String(pageSize)} onValueChange={(v) => onChange(Number(v))}>
+      <SelectTrigger aria-label="Rows per page" size="sm" className="text-sm">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {PAGE_SIZES.map((size) => (
+          <SelectItem key={size} value={String(size)}>
+            {size} rows
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
 }

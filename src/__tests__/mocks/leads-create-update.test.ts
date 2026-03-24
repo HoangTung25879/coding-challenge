@@ -1,26 +1,26 @@
-import { setupServer } from 'msw/node'
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
-import { leadHandlers } from '@/mocks/handlers/leads'
-import { leadsStore } from '@/mocks/data/leads'
+import { setupServer } from 'msw/node';
+import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { leadHandlers } from '@/mocks/handlers/leads';
+import { leadsStore } from '@/mocks/data/leads';
 
-const server = setupServer(...leadHandlers)
+const server = setupServer(...leadHandlers);
 // Deep-clone store state at module load so we can fully restore after each test
-const initialSnapshots = leadsStore.map(l => ({ ...l }))
-const initialLength = leadsStore.length
+const initialSnapshots = leadsStore.map((l) => ({ ...l }));
+const initialLength = leadsStore.length;
 
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 afterEach(() => {
-  server.resetHandlers()
+  server.resetHandlers();
   // Remove any leads added by POST tests
-  leadsStore.splice(initialLength)
+  leadsStore.splice(initialLength);
   // Restore any fields mutated by PATCH tests
   initialSnapshots.forEach((snapshot, i) => {
-    Object.assign(leadsStore[i], snapshot)
-  })
-})
-afterAll(() => server.close())
+    Object.assign(leadsStore[i], snapshot);
+  });
+});
+afterAll(() => server.close());
 
-const BASE = 'http://localhost'
+const BASE = 'http://localhost';
 
 describe('POST /api/leads', () => {
   it('creates a lead and returns a full Lead object', async () => {
@@ -34,25 +34,25 @@ describe('POST /api/leads', () => {
         leadType: 'cold',
         status: 'new',
       }),
-    })
-    expect(res.status).toBe(201)
-    const lead = await res.json()
-    expect(lead.fullName).toBe('Test User')
-    expect(lead.email).toBe('test@example.com')
-    expect(lead.id).toBeTruthy()
-    expect(lead.clientProfile).toBeNull()
-    expect(lead.vehiclesOfInterest).toEqual([])
-    expect(lead.budget).toEqual({ max: 0, monthlyPaymentTarget: 0, currency: 'USD' })
-  })
+    });
+    expect(res.status).toBe(201);
+    const lead = await res.json();
+    expect(lead.fullName).toBe('Test User');
+    expect(lead.email).toBe('test@example.com');
+    expect(lead.id).toBeTruthy();
+    expect(lead.clientProfile).toBeNull();
+    expect(lead.vehiclesOfInterest).toEqual([]);
+    expect(lead.budget).toEqual({ max: 0, monthlyPaymentTarget: 0, currency: 'USD' });
+  });
 
   it('returns 400 when required fields are missing', async () => {
     const res = await fetch(`${BASE}/api/leads`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ fullName: 'No Email' }),
-    })
-    expect(res.status).toBe(400)
-  })
+    });
+    expect(res.status).toBe(400);
+  });
 
   it('persists the lead so it appears in GET /api/leads', async () => {
     await fetch(`${BASE}/api/leads`, {
@@ -65,53 +65,55 @@ describe('POST /api/leads', () => {
         leadType: 'warm',
         status: 'contacted',
       }),
-    })
-    const listRes = await fetch(`${BASE}/api/leads?search=Persisted+Lead`)
-    const body = await listRes.json()
-    expect(body.data.some((l: { fullName: string }) => l.fullName === 'Persisted Lead')).toBe(true)
-  })
-})
+    });
+    const listRes = await fetch(`${BASE}/api/leads?search=Persisted+Lead`);
+    const body = await listRes.json();
+    expect(body.data.some((l: { fullName: string }) => l.fullName === 'Persisted Lead')).toBe(true);
+  });
+});
 
 describe('PATCH /api/leads/:id', () => {
   it('updates a single field and returns the updated lead', async () => {
-    const id = leadsStore[0].id
+    const id = leadsStore[0].id;
     const res = await fetch(`${BASE}/api/leads/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ source: 'referral' }),
-    })
-    expect(res.status).toBe(200)
-    const lead = await res.json()
-    expect(lead.id).toBe(id)
-    expect(lead.source).toBe('referral')
-  })
+    });
+    expect(res.status).toBe(200);
+    const lead = await res.json();
+    expect(lead.id).toBe(id);
+    expect(lead.source).toBe('referral');
+  });
 
   it('returns 404 for unknown id', async () => {
     const res = await fetch(`${BASE}/api/leads/nonexistent`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ source: 'website' }),
-    })
-    expect(res.status).toBe(404)
-  })
+    });
+    expect(res.status).toBe(404);
+  });
 
   it('silently ignores read-only fields (id, createdAt, vehiclesOfInterest)', async () => {
-    const original = leadsStore[0]
-    const originalId = original.id
-    const originalCreatedAt = original.createdAt
-    const originalVehicles = [...original.vehiclesOfInterest]
+    const original = leadsStore[0];
+    const originalId = original.id;
+    const originalCreatedAt = original.createdAt;
+    const originalVehicles = [...original.vehiclesOfInterest];
     const res = await fetch(`${BASE}/api/leads/${originalId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id: 'hacked',
         createdAt: '1970-01-01',
-        vehiclesOfInterest: [{ id: 'injected', name: 'Fake', brand: 'X', model: 'Y', condition: 'new' }],
+        vehiclesOfInterest: [
+          { id: 'injected', name: 'Fake', brand: 'X', model: 'Y', condition: 'new' },
+        ],
       }),
-    })
-    const lead = await res.json()
-    expect(lead.id).toBe(originalId)
-    expect(lead.createdAt).toBe(originalCreatedAt)
-    expect(lead.vehiclesOfInterest).toEqual(originalVehicles)
-  })
-})
+    });
+    const lead = await res.json();
+    expect(lead.id).toBe(originalId);
+    expect(lead.createdAt).toBe(originalCreatedAt);
+    expect(lead.vehiclesOfInterest).toEqual(originalVehicles);
+  });
+});
