@@ -1,14 +1,19 @@
-import { useCallback, useRef, useEffect } from 'react'
+import { useCallback, useRef, useEffect, useState, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useLeads } from '@/hooks/useLeads'
 import { useDataTable } from '@/hooks/useDataTable'
 import { useSavedView, type TableStateSnapshot } from '@/hooks/useSavedView'
-import { allColumns, defaultColumnVisibility } from './lead-columns'
+import { allColumns, defaultColumnVisibility, createActionsColumn } from './lead-columns'
+import { useDeleteLead } from '@/hooks/useDeleteLead'
 import { TableToolbar } from '@/components/data-table/TableToolbar'
 import { TableContainer } from '@/components/data-table/TableContainer'
 import { TableHeader } from '@/components/data-table/TableHeader'
 import { VirtualizedTableBody } from '@/components/data-table/VirtualizedTableBody'
 import { PaginationControls } from '@/components/leads/PaginationControls'
+import { ActiveFilterChips } from '@/components/data-table/ActiveFilterChips'
+import { CreateLeadModal } from '@/components/leads/CreateLeadModal'
+import { Button } from '@/components/ui/Button'
+import { LeadDetailDrawer } from '@/components/leads/LeadDetailDrawer'
 import type { LeadsParams } from '@/lib/api'
 
 const DEFAULT_PAGINATION = { page: 1, limit: 10, total: 0, totalPages: 0 }
@@ -16,6 +21,27 @@ const DEFAULT_PAGINATION = { page: 1, limit: 10, total: 0, totalPages: 0 }
 export default function LeadsPage() {
   const tableContainerRef = useRef<HTMLDivElement>(null)
   const [searchParams, setSearchParams] = useSearchParams()
+  const [createOpen, setCreateOpen] = useState(false)
+  const leadId = searchParams.get('leadId')
+
+  const { mutate: deleteLead } = useDeleteLead()
+
+  const columns = useMemo(() => [
+    ...allColumns,
+    createActionsColumn(
+      (id) => setSearchParams(prev => { prev.set('leadId', id); return prev }),
+      (id) => {
+        deleteLead(id, {
+          onSuccess: () => {
+            const current = new URLSearchParams(window.location.search)
+            if (current.get('leadId') === id) {
+              setSearchParams(prev => { prev.delete('leadId'); return prev })
+            }
+          },
+        })
+      },
+    ),
+  ], [setSearchParams, deleteLead])
 
   const currentParams: LeadsParams = {
     page: Math.max(1, Number(searchParams.get('page') ?? 1)),
@@ -25,6 +51,7 @@ export default function LeadsPage() {
     source: searchParams.get('source') ?? undefined,
     budgetMin: searchParams.get('budgetMin') ? Number(searchParams.get('budgetMin')) : undefined,
     budgetMax: searchParams.get('budgetMax') ? Number(searchParams.get('budgetMax')) : undefined,
+    currency: searchParams.get('currency') ?? undefined,
     timeline: searchParams.get('timeline') ?? undefined,
     financing: searchParams.get('financing') ?? undefined,
     leadType: searchParams.get('leadType') ?? undefined,
@@ -45,11 +72,15 @@ export default function LeadsPage() {
         if (params.source) qs.set('source', params.source)
         if (params.budgetMin != null) qs.set('budgetMin', String(params.budgetMin))
         if (params.budgetMax != null) qs.set('budgetMax', String(params.budgetMax))
+        if (params.currency) qs.set('currency', params.currency)
         if (params.timeline) qs.set('timeline', params.timeline)
         if (params.financing) qs.set('financing', params.financing)
         if (params.leadType) qs.set('leadType', params.leadType)
         if (params.sort) qs.set('sort', params.sort)
         if (params.order) qs.set('order', params.order)
+        // Preserve leadId across table state changes (filter/sort/page)
+        const currentLeadId = new URLSearchParams(window.location.search).get('leadId')
+        if (currentLeadId) qs.set('leadId', currentLeadId)
         return qs
       })
     },
@@ -57,18 +88,15 @@ export default function LeadsPage() {
   )
 
   const dt = useDataTable({
-    columns: allColumns,
+    columns,
     data: data?.data ?? [],
     pagination: data?.pagination ?? DEFAULT_PAGINATION,
     isLoading,
     isError,
     error: error as Error | null,
     onStateChange,
+    initialColumnVisibility: defaultColumnVisibility,
   })
-
-  if (Object.keys(dt.columnVisibility).length === 0 && Object.keys(defaultColumnVisibility).length > 0) {
-    dt.setColumnVisibility(defaultColumnVisibility)
-  }
 
   const currentSnapshot: TableStateSnapshot = {
     filters: dt.filters,
@@ -93,7 +121,7 @@ export default function LeadsPage() {
       dt.setStickyColumns(s.stickyColumns)
       dt.setPageSize(s.pageSize)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function handleSave() {
@@ -122,8 +150,20 @@ export default function LeadsPage() {
   const pagination = data?.pagination ?? DEFAULT_PAGINATION
 
   return (
+    <>
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-gray-900">Lead Inbox</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-gray-900">Leads Inbox</h2>
+        <Button
+          variant="primary"
+          size="md"
+          onClick={() => setCreateOpen(true)}
+          disabled={!!leadId}
+          aria-label="Create Lead"
+        >
+          + Create Lead
+        </Button>
+      </div>
 
       <TableToolbar
         table={dt.table}
@@ -135,6 +175,11 @@ export default function LeadsPage() {
         hasSavedView={savedView.hasSavedView}
         onSave={handleSave}
         onReset={handleReset}
+      />
+
+      <ActiveFilterChips
+        filters={dt.filters}
+        onRemove={(key) => dt.setFilter(key, key === 'budgetMin' || key === 'budgetMax' ? undefined : '')}
       />
 
       <TableContainer ref={tableContainerRef} isRefetching={isFetching && !isLoading}>
@@ -158,18 +203,28 @@ export default function LeadsPage() {
         </table>
       </TableContainer>
 
-      <p className="text-sm text-gray-500">
-        {pagination.total} lead{pagination.total !== 1 ? 's' : ''} found
-      </p>
+      <div className='flex items-center justify-between'>
+        <p className="text-sm text-gray-500">
+          {pagination.total} lead{pagination.total !== 1 ? 's' : ''} found
+        </p>
 
-      {pagination.totalPages > 1 && (
-        <PaginationControls
-          page={pagination.page}
-          totalPages={pagination.totalPages}
-          params={currentParams}
-          onPageChange={(p) => onStateChange({ ...currentParams, page: p })}
-        />
-      )}
+        {pagination.totalPages > 1 && (
+          <PaginationControls
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            params={currentParams}
+            onPageChange={(p) => onStateChange({ ...currentParams, page: p })}
+          />
+        )}
+      </div>
     </div>
+    {leadId && (
+      <LeadDetailDrawer
+        leadId={leadId}
+        onClose={() => setSearchParams(prev => { prev.delete('leadId'); return prev })}
+      />
+    )}
+    {createOpen && <CreateLeadModal onClose={() => setCreateOpen(false)} />}
+    </>
   )
 }

@@ -1,16 +1,18 @@
+import { useState } from 'react'
 import { createColumnHelper, type ColumnDef } from '@tanstack/react-table'
 import type { Lead, LeadType } from '@/types'
 import { StatusCell } from '@/components/data-table/column-renderers/StatusCell'
 import { BudgetCell } from '@/components/data-table/column-renderers/BudgetCell'
 import { VehicleCell } from '@/components/data-table/column-renderers/VehicleCell'
 import { DateCell } from '@/components/data-table/column-renderers/DateCell'
+import { Pencil, Trash2 } from 'lucide-react'
 
 const col = createColumnHelper<Lead>()
 
-const LEAD_TYPE_DISPLAY: Record<LeadType, { emoji: string; label: string }> = {
-  cold: { emoji: '🧊', label: 'Cold' },
-  warm: { emoji: '🌤', label: 'Warm' },
-  hot: { emoji: '🔥', label: 'Hot' },
+const LEAD_TYPE_STYLES: Record<LeadType, { bg: string; text: string; label: string }> = {
+  cold: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Cold' },
+  warm: { bg: 'bg-amber-100', text: 'text-amber-700', label: 'Warm' },
+  hot: { bg: 'bg-red-100', text: 'text-red-700', label: 'Hot' },
 }
 
 const SOURCE_LABELS: Record<string, string> = {
@@ -66,8 +68,12 @@ const statusColumn = col.accessor('status', {
 const typeColumn = col.accessor('leadType', {
   header: 'Type',
   cell: (info) => {
-    const { emoji, label } = LEAD_TYPE_DISPLAY[info.getValue()]
-    return <span>{emoji} {label}</span>
+    const style = LEAD_TYPE_STYLES[info.getValue()]
+    return (
+      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${style.bg} ${style.text}`}>
+        {style.label}
+      </span>
+    )
   },
   size: 140,
   enableSorting: true,
@@ -169,12 +175,11 @@ const clientTypeColumn = col.display({
   id: 'clientProfile.type',
   header: 'Client Type',
   cell: (info) => {
-    const type = info.row.original.clientProfile.type
+    const type = info.row.original.clientProfile?.type
+    if (!type) return <span className="text-gray-400">—</span>
     return (
       <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-        type === 'individual'
-          ? 'bg-sky-100 text-sky-800'
-          : 'bg-amber-100 text-amber-800'
+        type === 'individual' ? 'bg-sky-100 text-sky-800' : 'bg-amber-100 text-amber-800'
       }`}>
         {type === 'individual' ? 'Individual' : 'Organization'}
       </span>
@@ -250,4 +255,75 @@ export const defaultColumnVisibility: Record<string, boolean> = {
   'address.country': false,
   updatedAt: false,
   assignedSalesRepId: false,
+}
+
+export function ActionsCell({
+  leadId,
+  onEdit,
+  onDelete,
+}: {
+  leadId: string
+  onEdit: (id: string) => void
+  onDelete: (id: string) => void
+}) {
+  const [confirmOpen, setConfirmOpen] = useState(false)
+
+  return (
+    <div className="flex items-center justify-center gap-1">
+      {confirmOpen ? (
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            aria-label="Delete"
+            className="px-1.5 py-0.5 rounded bg-red-600 text-white hover:bg-red-700 text-xs"
+            onClick={() => { setConfirmOpen(false); onDelete(leadId) }}
+          >
+            Delete
+          </button>
+          <button
+            type="button"
+            aria-label="Cancel"
+            className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 text-xs"
+            onClick={() => setConfirmOpen(false)}
+          >
+            Cancel
+          </button>
+        </div>
+      ) : (
+        <>
+          <button
+            type="button"
+            aria-label="Edit lead"
+            className="p-1 rounded text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+            onClick={() => onEdit(leadId)}
+          >
+            <Pencil className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            aria-label="Delete lead"
+            className="p-1 rounded text-gray-400 hover:text-red-600 hover:bg-red-50"
+            onClick={() => setConfirmOpen(true)}
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </>
+      )}
+    </div>
+  )
+}
+
+export function createActionsColumn(
+  onEdit: (leadId: string) => void,
+  onDelete: (leadId: string) => void,
+): ColumnDef<Lead, unknown> {
+  return col.display({
+    id: 'actions',
+    header: '',
+    cell: ({ row }) => <ActionsCell leadId={row.original.id} onEdit={onEdit} onDelete={onDelete} />,
+    size: 80,
+    enableResizing: false,
+    enableSorting: false,
+    enableHiding: false,
+  })
 }
