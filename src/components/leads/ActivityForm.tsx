@@ -61,7 +61,9 @@ export function ActivityForm({ leadId }: Props) {
           </label>
           <Select value={type} onValueChange={(v) => setType(v as ActivityType)}>
             <SelectTrigger id="activity-type-drawer" aria-label="Type" className="w-full text-sm">
-              <SelectValue />
+              <SelectValue>
+                {ACTIVITY_TYPES.find((t) => t.value === type)?.label}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               {ACTIVITY_TYPES.map((t) => (

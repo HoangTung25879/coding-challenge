@@ -1,7 +1,8 @@
 import { useCallback, useRef, useEffect, useState, useMemo, lazy, Suspense } from 'react';
+import type { SortingState } from '@tanstack/react-table';
 import { useSearchParams } from 'react-router-dom';
 import { useLeads } from '@/hooks/useLeads';
-import { useDataTable } from '@/hooks/useDataTable';
+import { useDataTable, type FilterState } from '@/hooks/useDataTable';
 import { useSavedView, type TableStateSnapshot } from '@/hooks/useSavedView';
 import { allColumns, defaultColumnVisibility, createActionsColumn } from './lead-columns';
 import { useDeleteLead } from '@/hooks/useDeleteLead';
@@ -36,6 +37,30 @@ export default function LeadsPage() {
 
   const { mutate: deleteLead } = useDeleteLead();
 
+  // Capture URL state once on mount — these seed useDataTable's initial state
+  const [initialFilters] = useState<FilterState>(() => ({
+    search: searchParams.get('search') ?? '',
+    source: searchParams.get('source') ?? '',
+    budgetMin: searchParams.get('budgetMin') ? Number(searchParams.get('budgetMin')) : undefined,
+    budgetMax: searchParams.get('budgetMax') ? Number(searchParams.get('budgetMax')) : undefined,
+    currency: searchParams.get('currency') ?? '',
+    timeline: searchParams.get('timeline') ?? '',
+    financing: searchParams.get('financing') ?? '',
+    leadType: searchParams.get('leadType') ?? '',
+    status: searchParams.get('status') ?? '',
+  }));
+  const [initialSorting] = useState<SortingState>(() => {
+    const sort = searchParams.get('sort');
+    const order = searchParams.get('order');
+    return sort ? [{ id: sort, desc: order === 'desc' }] : [];
+  });
+  const [initialPageSize] = useState(() => Number(searchParams.get('limit') ?? 10));
+  // True when the URL already carries filter/sort/page state (e.g. pasted link)
+  const hasUrlState =
+    Object.values(initialFilters).some((v) => v !== '' && v != null) ||
+    initialSorting.length > 0 ||
+    searchParams.get('page') !== null;
+
   const columns = useMemo(
     () => [
       ...allColumns,
@@ -63,6 +88,7 @@ export default function LeadsPage() {
     timeline: searchParams.get('timeline') ?? undefined,
     financing: searchParams.get('financing') ?? undefined,
     leadType: searchParams.get('leadType') ?? undefined,
+    status: searchParams.get('status') ?? undefined,
     sort: searchParams.get('sort') ?? undefined,
     order: (searchParams.get('order') as 'asc' | 'desc') ?? undefined,
   };
@@ -84,6 +110,7 @@ export default function LeadsPage() {
         if (params.timeline) qs.set('timeline', params.timeline);
         if (params.financing) qs.set('financing', params.financing);
         if (params.leadType) qs.set('leadType', params.leadType);
+        if (params.status) qs.set('status', params.status);
         if (params.sort) qs.set('sort', params.sort);
         if (params.order) qs.set('order', params.order);
         // Preserve leadId across table state changes (filter/sort/page)
@@ -104,6 +131,9 @@ export default function LeadsPage() {
     error: error as Error | null,
     onStateChange,
     initialColumnVisibility: defaultColumnVisibility,
+    initialFilters,
+    initialSorting,
+    initialPageSize,
   });
 
   const currentSnapshot: TableStateSnapshot = {
@@ -116,12 +146,13 @@ export default function LeadsPage() {
 
   const savedView = useSavedView(currentSnapshot);
 
-  // On mount, restore saved view if one exists
+  // On mount, restore saved view only if the URL carries no filter/sort/page state.
+  // URL params (e.g. a copied/shared link) always take priority over the saved view.
   const hasRestoredRef = useRef(false);
   useEffect(() => {
     if (hasRestoredRef.current) return;
     hasRestoredRef.current = true;
-    if (savedView.savedSnapshot) {
+    if (!hasUrlState && savedView.savedSnapshot) {
       const s = savedView.savedSnapshot;
       dt.setFilters(s.filters);
       dt.setSorting(s.sorting);

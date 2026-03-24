@@ -43,6 +43,9 @@ type UseDataTableInput = {
   error: Error | null;
   onStateChange: (params: LeadsParams) => void;
   initialColumnVisibility?: VisibilityState;
+  initialFilters?: FilterState;
+  initialSorting?: SortingState;
+  initialPageSize?: number;
 };
 
 export type UseDataTableReturn = {
@@ -74,10 +77,13 @@ export function useDataTable({
   error,
   onStateChange,
   initialColumnVisibility = {},
+  initialFilters = INITIAL_FILTERS,
+  initialSorting = [],
+  initialPageSize,
 }: UseDataTableInput): UseDataTableReturn {
-  const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [pageSize, setPageSizeState] = useState(pagination.limit || 10);
+  const [filters, setFilters] = useState<FilterState>(initialFilters);
+  const [sorting, setSorting] = useState<SortingState>(initialSorting);
+  const [pageSize, setPageSizeState] = useState(initialPageSize ?? pagination.limit ?? 10);
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>(initialColumnVisibility);
   const [stickyColumns, setStickyColumns] = useState<string[]>(['actions']);

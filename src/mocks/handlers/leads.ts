@@ -180,7 +180,6 @@ export const leadHandlers = [
       id: _id,
       createdAt: _ca,
       updatedAt: _ua,
-      vehiclesOfInterest: _v,
       ...writablePatch
     } = patch;
 

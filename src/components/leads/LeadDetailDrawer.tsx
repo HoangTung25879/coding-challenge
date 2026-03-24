@@ -166,7 +166,7 @@ export function LeadDetailDrawer({ leadId, onClose }: Props) {
   const activities = activitiesData?.data ?? [];
 
   const { mutate: markActivity } = useUpdateActivity(leadId);
-  const [activitySort, setActivitySort] = useState<'createdAt' | 'startAt'>('createdAt');
+  const [activitySort, setActivitySort] = useState<'createdAt' | 'scheduledAt'>('createdAt');
   const [activitySortDir, setActivitySortDir] = useState<'desc' | 'asc'>('desc');
   const [activityModal, setActivityModal] = useState<{ open: boolean; activityId?: string }>({
     open: false,
@@ -189,7 +189,7 @@ export function LeadDetailDrawer({ leadId, onClose }: Props) {
 
   const sortedActivities = [...activities].sort((a, b) => {
     const dir = activitySortDir === 'desc' ? -1 : 1;
-    if (activitySort === 'startAt') {
+    if (activitySort === 'scheduledAt') {
       if (!a.scheduledAt && !b.scheduledAt) return 0;
       if (!a.scheduledAt) return 1;
       if (!b.scheduledAt) return -1;
@@ -615,17 +615,17 @@ export function LeadDetailDrawer({ leadId, onClose }: Props) {
                   <Select
                     value={activitySort}
                     onValueChange={(v) => {
-                      if (v) setActivitySort(v as 'createdAt' | 'startAt');
+                      if (v) setActivitySort(v as 'createdAt' | 'scheduledAt');
                     }}
                   >
                     <SelectTrigger size="sm" className="h-7 gap-1 text-xs">
                       <SelectValue>
-                        {activitySort === 'createdAt' ? 'Created' : 'Start date'}
+                        {activitySort === 'createdAt' ? 'Created At' : 'Scheduled At'}
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="createdAt">Created</SelectItem>
-                      <SelectItem value="startAt">Start date</SelectItem>
+                      <SelectItem value="createdAt">Created At</SelectItem>
+                      <SelectItem value="scheduledAt">Scheduled At</SelectItem>
                     </SelectContent>
                   </Select>
                   <button
@@ -924,11 +924,10 @@ function ActivityCard({
 
   return (
     <div
-      className={`rounded-lg border bg-white p-3 transition-colors ${
-        isCompleted
-          ? 'cursor-default border-gray-100 opacity-75'
-          : 'cursor-pointer border-gray-200 hover:border-blue-200 hover:bg-blue-50/30'
-      }`}
+      className={`rounded-lg border bg-white p-3 transition-colors ${isCompleted
+        ? 'cursor-default border-gray-100 opacity-75'
+        : 'cursor-pointer border-gray-200 hover:border-blue-200 hover:bg-blue-50/30'
+        }`}
       onClick={onClick}
     >
       <div className="flex items-start gap-2">

@@ -14,6 +14,29 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 
+const LEAD_TYPE_OPTIONS = [
+  { value: 'cold', label: 'Cold' },
+  { value: 'warm', label: 'Warm' },
+  { value: 'hot', label: 'Hot' },
+] as const;
+
+const SOURCE_OPTIONS = [
+  { value: 'website', label: 'Website' },
+  { value: 'referral', label: 'Referral' },
+  { value: 'walk-in', label: 'Walk-in' },
+  { value: 'phone', label: 'Phone' },
+  { value: 'social-media', label: 'Social Media' },
+  { value: 'dealer-event', label: 'Dealer Event' },
+  { value: 'other', label: 'Other' },
+] as const;
+
+const STATUS_OPTIONS = [
+  { value: 'new', label: 'New' },
+  { value: 'contacted', label: 'Contacted' },
+  { value: 'qualified', label: 'Qualified' },
+  { value: 'unqualified', label: 'Unqualified' },
+] as const;
+
 const nonEmptyEnum = <T extends [string, ...string[]]>(values: T, message: string) =>
   z.preprocess((v) => (v === '' ? undefined : v), z.enum(values, { error: message }));
 
@@ -156,12 +179,16 @@ export function CreateLeadModal({ onClose }: Props) {
                     disabled={isPending}
                   >
                     <SelectTrigger id="leadType" aria-label="Lead Type" className="w-full">
-                      <SelectValue placeholder="Select..." />
+                      <SelectValue placeholder="Select...">
+                        {LEAD_TYPE_OPTIONS.find((o) => o.value === field.value)?.label}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="cold">Cold</SelectItem>
-                      <SelectItem value="warm">Warm</SelectItem>
-                      <SelectItem value="hot">Hot</SelectItem>
+                      {LEAD_TYPE_OPTIONS.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 )}
@@ -187,16 +214,16 @@ export function CreateLeadModal({ onClose }: Props) {
                     disabled={isPending}
                   >
                     <SelectTrigger id="source" aria-label="Source" className="w-full">
-                      <SelectValue placeholder="Select..." />
+                      <SelectValue placeholder="Select...">
+                        {SOURCE_OPTIONS.find((o) => o.value === field.value)?.label}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="website">Website</SelectItem>
-                      <SelectItem value="referral">Referral</SelectItem>
-                      <SelectItem value="walk-in">Walk-in</SelectItem>
-                      <SelectItem value="phone">Phone</SelectItem>
-                      <SelectItem value="social-media">Social Media</SelectItem>
-                      <SelectItem value="dealer-event">Dealer Event</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      {SOURCE_OPTIONS.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 )}
@@ -222,13 +249,16 @@ export function CreateLeadModal({ onClose }: Props) {
                     disabled={isPending}
                   >
                     <SelectTrigger id="status" aria-label="Status" className="w-full">
-                      <SelectValue placeholder="Select..." />
+                      <SelectValue placeholder="Select...">
+                        {STATUS_OPTIONS.find((o) => o.value === field.value)?.label}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="new">New</SelectItem>
-                      <SelectItem value="contacted">Contacted</SelectItem>
-                      <SelectItem value="qualified">Qualified</SelectItem>
-                      <SelectItem value="unqualified">Unqualified</SelectItem>
+                      {STATUS_OPTIONS.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 )}

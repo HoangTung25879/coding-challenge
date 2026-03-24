@@ -5,7 +5,6 @@ import { leadHandlers } from '@/mocks/handlers/leads';
 import { leadsStore } from '@/mocks/data/leads';
 
 const server = setupServer(...leadHandlers);
-const initialLength = leadsStore.length;
 const initialSnapshots = leadsStore.map((l) => ({ ...l }));
 
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));

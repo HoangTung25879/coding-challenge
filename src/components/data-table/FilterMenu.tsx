@@ -182,11 +182,10 @@ export function FilterMenu({ filters, setFilter }: Props) {
             type="button"
             aria-haspopup="menu"
             aria-label="Filter leads"
-            className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-sm font-medium transition-colors ${
-              activeCount > 0
-                ? 'border-blue-300 bg-blue-50 text-blue-700 hover:bg-blue-100'
-                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-            } focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none`}
+            className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-sm font-medium transition-colors ${activeCount > 0
+              ? 'border-blue-300 bg-blue-50 text-blue-700 hover:bg-blue-100'
+              : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+              } focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none`}
           >
             <Filter className="h-4 w-4" />
             Filter
@@ -246,11 +245,10 @@ export function FilterMenu({ filters, setFilter }: Props) {
                           role="menuitemradio"
                           aria-checked={isSelected}
                           onClick={() => handleSelectOption(section.key, option.value)}
-                          className={`flex w-full items-center gap-2 px-3 py-1.5 pl-10 text-sm ${
-                            isSelected
-                              ? 'bg-blue-50 font-medium text-blue-700'
-                              : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                          className={`flex w-full items-center gap-2 px-3 py-1.5 pl-10 text-sm ${isSelected
+                            ? 'bg-blue-50 font-medium text-blue-700'
+                            : 'text-gray-600 hover:bg-gray-50'
+                            }`}
                         >
                           {isSelected && <Check className="h-3.5 w-3.5" />}
                           <span className={isSelected ? '' : 'pl-5.5'}>
@@ -312,16 +310,20 @@ export function FilterMenu({ filters, setFilter }: Props) {
                 <div>
                   <p className="mb-1.5 text-xs font-medium text-gray-500">Currency</p>
                   <Select
-                    value={filters.currency || '__any__'}
+                    value={filters.currency || 'Any currency'}
                     onValueChange={(v) =>
                       setFilter('currency', v === null || v === '__any__' ? '' : v)
                     }
                   >
                     <SelectTrigger className="h-8 w-full text-sm">
-                      <SelectValue />
+                      <SelectValue>
+                        {filters.currency
+                          ? CURRENCY_OPTIONS.find((o) => o.value === filters.currency)?.label
+                          : 'Any currency'}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="__any__">Any currency</SelectItem>
+                      <SelectItem value="Any currency">Any currency</SelectItem>
                       {CURRENCY_OPTIONS.map((opt) => (
                         <SelectItem key={opt.value} value={opt.value}>
                           {opt.label}

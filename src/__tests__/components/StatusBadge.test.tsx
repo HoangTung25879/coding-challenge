@@ -20,6 +20,6 @@ describe('StatusBadge', () => {
   it('applies a colour class based on status', () => {
     const { container } = render(<StatusBadge status="qualified" />);
     const badge = container.firstChild as HTMLElement;
-    expect(badge.className).toMatch(/purple/);
+    expect(badge.className).toMatch(/emerald/);
   });
 });

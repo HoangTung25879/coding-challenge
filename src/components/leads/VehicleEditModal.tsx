@@ -32,22 +32,37 @@ const detailSchema = z.object({
 type DetailForm = z.infer<typeof detailSchema>;
 type CatalogItem = (typeof vehicleCatalog)[number];
 
-const CONDITION_LABELS: Record<string, string> = {
-  new: 'New',
-  used: 'Used',
-  'certified-pre-owned': 'Certified Pre-Owned',
-};
-const FUEL_TYPE_LABELS: Record<string, string> = {
-  petrol: 'Petrol',
-  diesel: 'Diesel',
-  electric: 'Electric',
-  hybrid: 'Hybrid',
-};
-const TRANSMISSION_LABELS: Record<string, string> = {
-  manual: 'Manual',
-  automatic: 'Automatic',
-  cvt: 'CVT',
-};
+const CONDITION_OPTIONS = [
+  { value: 'new', label: 'New' },
+  { value: 'used', label: 'Used' },
+  { value: 'certified-pre-owned', label: 'Certified Pre-Owned' },
+] as const;
+
+const FUEL_TYPE_OPTIONS = [
+  { value: 'petrol', label: 'Petrol' },
+  { value: 'diesel', label: 'Diesel' },
+  { value: 'electric', label: 'Electric' },
+  { value: 'hybrid', label: 'Hybrid' },
+] as const;
+
+const TRANSMISSION_OPTIONS = [
+  { value: 'automatic', label: 'Automatic' },
+  { value: 'manual', label: 'Manual' },
+  { value: 'cvt', label: 'CVT' },
+] as const;
+
+const INTEREST_LEVEL_OPTIONS = [
+  { value: '1', label: '1 — Curious' },
+  { value: '2', label: '2 — Interested' },
+  { value: '3', label: '3 — Considering' },
+  { value: '4', label: '4 — Very Interested' },
+  { value: '5', label: '5 — Ready to Buy' },
+] as const;
+
+const ODOMETER_UNIT_OPTIONS = [
+  { value: 'km', label: 'km' },
+  { value: 'miles', label: 'miles' },
+] as const;
 
 type Props = {
   leadId: string;
@@ -287,12 +302,16 @@ export function VehicleEditModal({ leadId, currentVehicles, vehicle, onClose }: 
                         disabled={isPending}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue>{CONDITION_LABELS[field.value] ?? field.value}</SelectValue>
+                          <SelectValue>
+                            {CONDITION_OPTIONS.find((o) => o.value === field.value)?.label}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="new">New</SelectItem>
-                          <SelectItem value="used">Used</SelectItem>
-                          <SelectItem value="certified-pre-owned">Certified Pre-Owned</SelectItem>
+                          {CONDITION_OPTIONS.map((opt) => (
+                            <SelectItem key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     )}
@@ -314,14 +333,16 @@ export function VehicleEditModal({ leadId, currentVehicles, vehicle, onClose }: 
                         disabled={isPending}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue />
+                          <SelectValue>
+                            {INTEREST_LEVEL_OPTIONS.find((o) => o.value === String(field.value))?.label}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="1">1 — Curious</SelectItem>
-                          <SelectItem value="2">2 — Interested</SelectItem>
-                          <SelectItem value="3">3 — Considering</SelectItem>
-                          <SelectItem value="4">4 — Very Interested</SelectItem>
-                          <SelectItem value="5">5 — Ready to Buy</SelectItem>
+                          {INTEREST_LEVEL_OPTIONS.map((opt) => (
+                            <SelectItem key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     )}
@@ -357,13 +378,16 @@ export function VehicleEditModal({ leadId, currentVehicles, vehicle, onClose }: 
                         disabled={isPending}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue>{FUEL_TYPE_LABELS[field.value] ?? field.value}</SelectValue>
+                          <SelectValue>
+                            {FUEL_TYPE_OPTIONS.find((o) => o.value === field.value)?.label}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="petrol">Petrol</SelectItem>
-                          <SelectItem value="diesel">Diesel</SelectItem>
-                          <SelectItem value="electric">Electric</SelectItem>
-                          <SelectItem value="hybrid">Hybrid</SelectItem>
+                          {FUEL_TYPE_OPTIONS.map((opt) => (
+                            <SelectItem key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     )}
@@ -386,13 +410,15 @@ export function VehicleEditModal({ leadId, currentVehicles, vehicle, onClose }: 
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue>
-                            {TRANSMISSION_LABELS[field.value] ?? field.value}
+                            {TRANSMISSION_OPTIONS.find((o) => o.value === field.value)?.label}
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="automatic">Automatic</SelectItem>
-                          <SelectItem value="manual">Manual</SelectItem>
-                          <SelectItem value="cvt">CVT</SelectItem>
+                          {TRANSMISSION_OPTIONS.map((opt) => (
+                            <SelectItem key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     )}
@@ -424,8 +450,11 @@ export function VehicleEditModal({ leadId, currentVehicles, vehicle, onClose }: 
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="km">km</SelectItem>
-                            <SelectItem value="miles">miles</SelectItem>
+                            {ODOMETER_UNIT_OPTIONS.map((opt) => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {opt.label}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       )}

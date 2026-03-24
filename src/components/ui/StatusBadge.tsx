@@ -2,9 +2,9 @@ import type { LeadStatus } from '@/types';
 import { Badge, type BadgeVariant } from './Badge';
 
 const STATUS_CONFIG: Record<LeadStatus, { label: string; variant: BadgeVariant }> = {
-  new: { label: 'New', variant: 'blue' },
-  contacted: { label: 'Contacted', variant: 'yellow' },
-  qualified: { label: 'Qualified', variant: 'purple' },
+  new: { label: 'New', variant: 'gray' },
+  contacted: { label: 'Contacted', variant: 'blue' },
+  qualified: { label: 'Qualified', variant: 'emerald' },
   unqualified: { label: 'Unqualified', variant: 'red' },
 };
 

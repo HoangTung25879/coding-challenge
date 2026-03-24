@@ -95,25 +95,25 @@ describe('PATCH /api/leads/:id', () => {
     expect(res.status).toBe(404);
   });
 
-  it('silently ignores read-only fields (id, createdAt, vehiclesOfInterest)', async () => {
+  it('silently ignores read-only fields (id, createdAt) but allows vehiclesOfInterest', async () => {
     const original = leadsStore[0];
     const originalId = original.id;
     const originalCreatedAt = original.createdAt;
-    const originalVehicles = [...original.vehiclesOfInterest];
+    const newVehicles = [
+      { id: 'injected', name: 'Fake', brand: 'X', model: 'Y', condition: 'new' },
+    ];
     const res = await fetch(`${BASE}/api/leads/${originalId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id: 'hacked',
         createdAt: '1970-01-01',
-        vehiclesOfInterest: [
-          { id: 'injected', name: 'Fake', brand: 'X', model: 'Y', condition: 'new' },
-        ],
+        vehiclesOfInterest: newVehicles,
       }),
     });
     const lead = await res.json();
     expect(lead.id).toBe(originalId);
     expect(lead.createdAt).toBe(originalCreatedAt);
-    expect(lead.vehiclesOfInterest).toEqual(originalVehicles);
+    expect(lead.vehiclesOfInterest).toEqual(newVehicles);
   });
 });

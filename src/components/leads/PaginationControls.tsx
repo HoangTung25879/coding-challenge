@@ -31,11 +31,12 @@ export function PaginationControls({ page, totalPages, params, onPageChange }: P
   return (
     <nav aria-label="Pagination" className="flex items-center justify-center gap-3">
       <Button
-        variant="secondary"
-        size="lg"
+        variant="outline"
+        size="icon-lg"
         onClick={() => onPageChange(page - 1)}
         disabled={page <= 1}
         aria-label="Previous page"
+        className="disabled:opacity-30 active:scale-95"
       >
         <ChevronLeftIcon className="h-4 w-4" />
       </Button>
@@ -47,11 +48,12 @@ export function PaginationControls({ page, totalPages, params, onPageChange }: P
         of {totalPages}
       </span>
       <Button
-        variant="secondary"
-        size="lg"
+        variant="outline"
+        size="icon-lg"
         onClick={() => onPageChange(page + 1)}
         disabled={page >= totalPages}
         aria-label="Next page"
+        className="disabled:opacity-30 active:scale-95"
       >
         <ChevronRightIcon className="h-4 w-4" />
       </Button>

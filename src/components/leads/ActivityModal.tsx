@@ -17,14 +17,14 @@ import {
 import { DateTimePicker } from '@/components/ui/DateTimePicker';
 import type { Activity } from '@/types';
 
-const TYPE_LABELS: Record<string, string> = {
-  call: 'Call',
-  email: 'Email',
-  text: 'Text',
-  appointment: 'Appointment',
-  note: 'Note',
-  'walk-in': 'Walk-in',
-};
+const TYPE_OPTIONS = [
+  { value: 'call', label: 'Call' },
+  { value: 'email', label: 'Email' },
+  { value: 'text', label: 'Text' },
+  { value: 'appointment', label: 'Appointment' },
+  { value: 'note', label: 'Note' },
+  { value: 'walk-in', label: 'Walk-in' },
+] as const;
 
 const schema = z.object({
   type: z.enum(['call', 'email', 'text', 'appointment', 'note', 'walk-in']),
@@ -125,15 +125,16 @@ export function ActivityModal({ leadId, activity, onClose }: Props) {
                   disabled={isPending || isCompleted}
                 >
                   <SelectTrigger id="act-type" aria-label="Type" className="w-full">
-                    <SelectValue>{TYPE_LABELS[field.value] ?? field.value}</SelectValue>
+                    <SelectValue>
+                      {TYPE_OPTIONS.find((o) => o.value === field.value)?.label}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="call">Call</SelectItem>
-                    <SelectItem value="email">Email</SelectItem>
-                    <SelectItem value="text">Text</SelectItem>
-                    <SelectItem value="appointment">Appointment</SelectItem>
-                    <SelectItem value="note">Note</SelectItem>
-                    <SelectItem value="walk-in">Walk-in</SelectItem>
+                    {TYPE_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               )}

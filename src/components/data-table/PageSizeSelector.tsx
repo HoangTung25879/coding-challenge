@@ -16,8 +16,8 @@ type Props = {
 export function PageSizeSelector({ pageSize, onChange }: Props) {
   return (
     <Select value={String(pageSize)} onValueChange={(v) => onChange(Number(v))}>
-      <SelectTrigger aria-label="Rows per page" size="sm" className="text-sm">
-        <SelectValue />
+      <SelectTrigger aria-label="Rows per page" size="default" className="text-sm bg-white">
+        <SelectValue /> rows
       </SelectTrigger>
       <SelectContent>
         {PAGE_SIZES.map((size) => (

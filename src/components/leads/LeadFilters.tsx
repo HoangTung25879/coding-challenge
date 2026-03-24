@@ -44,7 +44,11 @@ export function LeadFilters() {
           onValueChange={(v) => handleChange('source', v === null || v === ALL_SOURCES ? '' : v)}
         >
           <SelectTrigger id="source-filter" aria-label="Source" className="h-8 min-w-36 text-sm">
-            <SelectValue />
+            <SelectValue>
+              {searchParams.get('source')
+                ? SOURCE_OPTIONS.find((o) => o.value === searchParams.get('source'))?.label
+                : 'All sources'}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={ALL_SOURCES}>All sources</SelectItem>

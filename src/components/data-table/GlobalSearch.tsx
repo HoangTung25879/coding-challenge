@@ -32,6 +32,7 @@ export function GlobalSearch({ value, onChange, debounceMs = 300 }: Props) {
   return (
     <div className="w-full max-w-xs">
       <Input
+        className='bg-white'
         type="text"
         role="searchbox"
         aria-label="Search leads"

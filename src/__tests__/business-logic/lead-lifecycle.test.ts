@@ -13,7 +13,7 @@
  * end-to-end, independent of UI concerns.
  */
 import { setupServer } from 'msw/node';
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { leadHandlers } from '@/mocks/handlers/leads';
 import { activityHandlers } from '@/mocks/handlers/activities';
 import { leadsStore } from '@/mocks/data/leads';
@@ -45,13 +45,15 @@ afterEach(() => {
 
 const BASE = 'http://localhost';
 
-async function createLead(overrides: Partial<{
-  fullName: string;
-  email: string;
-  source: string;
-  leadType: string;
-  status: string;
-}> = {}): Promise<Lead> {
+async function createLead(
+  overrides: Partial<{
+    fullName: string;
+    email: string;
+    source: string;
+    leadType: string;
+    status: string;
+  }> = {}
+): Promise<Lead> {
   const res = await fetch(`${BASE}/api/leads`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -235,8 +237,18 @@ describe('Activity logging', () => {
 
   it('multiple activities can be logged for the same lead', async () => {
     const lead = await createLead();
-    await logActivity(lead.id, { type: 'call', subject: 'First call', note: 'No answer', createdBy: 'rep-001' });
-    await logActivity(lead.id, { type: 'email', subject: 'Follow-up email', note: 'Sent brochure', createdBy: 'rep-001' });
+    await logActivity(lead.id, {
+      type: 'call',
+      subject: 'First call',
+      note: 'No answer',
+      createdBy: 'rep-001',
+    });
+    await logActivity(lead.id, {
+      type: 'email',
+      subject: 'Follow-up email',
+      note: 'Sent brochure',
+      createdBy: 'rep-001',
+    });
 
     const res = await fetch(`${BASE}/api/leads/${lead.id}/activities`);
     const body = await res.json();
@@ -262,7 +274,12 @@ describe('Activity logging', () => {
     const types = ['call', 'email', 'text', 'appointment', 'note', 'walk-in'] as const;
 
     for (const type of types) {
-      const activity = await logActivity(lead.id, { type, subject: `${type} subject`, note: `${type} note`, createdBy: 'rep-001' });
+      const activity = await logActivity(lead.id, {
+        type,
+        subject: `${type} subject`,
+        note: `${type} note`,
+        createdBy: 'rep-001',
+      });
       expect(activity.type).toBe(type);
     }
   });
@@ -312,7 +329,12 @@ describe('Activity completion', () => {
 
   it('completing does not change leadId or type', async () => {
     const lead = await createLead();
-    const activity = await logActivity(lead.id, { type: 'email', subject: 'Quote', note: 'Sent PDF', createdBy: 'rep-001' });
+    const activity = await logActivity(lead.id, {
+      type: 'email',
+      subject: 'Quote',
+      note: 'Sent PDF',
+      createdBy: 'rep-001',
+    });
 
     const completed = await completeActivity(lead.id, activity.id);
     expect(completed.leadId).toBe(lead.id);
@@ -339,7 +361,11 @@ describe('Activity completion', () => {
 describe('Full lead lifecycle', () => {
   it('covers the complete salesperson workflow end-to-end', async () => {
     // Step 1: New lead arrives
-    const lead = await createLead({ fullName: 'Full Lifecycle Lead', email: 'full@example.com', leadType: 'warm' });
+    const lead = await createLead({
+      fullName: 'Full Lifecycle Lead',
+      email: 'full@example.com',
+      leadType: 'warm',
+    });
     expect(lead.status).toBe('new');
 
     // Step 2: Salesperson contacts the lead
@@ -377,7 +403,9 @@ describe('Full lead lifecycle', () => {
     const myActivities: Activity[] = feed.data.filter((a: Activity) => a.leadId === lead.id);
     expect(myActivities.length).toBeGreaterThanOrEqual(2);
     expect(myActivities.some((a) => a.id === callActivity.id && a.completedAt !== null)).toBe(true);
-    expect(myActivities.some((a) => a.id === emailActivity.id && a.completedAt === null)).toBe(true);
+    expect(myActivities.some((a) => a.id === emailActivity.id && a.completedAt === null)).toBe(
+      true
+    );
 
     // Step 7: Delete the lead (e.g., duplicate record)
     const deleteRes = await fetch(`${BASE}/api/leads/${lead.id}`, { method: 'DELETE' });

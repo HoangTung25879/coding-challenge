@@ -2,7 +2,11 @@
 
 **Project:** Sales Lead Management Tool (Scenario C — Keyloop Coding Challenge)
 **Date:** 2026-03-24
-**Author:** Engineering (with GenAI assistance — see §7)
+**Author:** Engineering (with GenAI assistance — see §11)
+
+---
+
+**Tech stacks**: React 19, Vite, Tailwind, ShadcnUI, Tanstack Table, Tanstack Virtual, Tanstack Query, Zod + ReactHookForm, pino, Vitest + React Testing Library
 
 ---
 
@@ -110,10 +114,22 @@ All types live in `src/types/index.ts` — the single source of truth shared by 
 The full `Lead` record is only fetched when a salesperson opens the detail drawer. The inbox uses the lighter `LeadSummary` projection to keep list responses fast.
 
 ```typescript
-type LeadSource = 'website' | 'referral' | 'walk-in' | 'phone' | 'social-media' | 'dealer-event' | 'other';
+type LeadSource =
+  | 'website'
+  | 'referral'
+  | 'walk-in'
+  | 'phone'
+  | 'social-media'
+  | 'dealer-event'
+  | 'other';
 type LeadType = 'cold' | 'warm' | 'hot';
 type LeadStatus = 'new' | 'contacted' | 'qualified' | 'unqualified';
-type PurchaseTimeline = 'immediate' | 'within-1-month' | 'within-3-months' | 'within-6-months' | 'exploring';
+type PurchaseTimeline =
+  | 'immediate'
+  | 'within-1-month'
+  | 'within-3-months'
+  | 'within-6-months'
+  | 'exploring';
 
 type Address = {
   street: string;
@@ -189,14 +205,14 @@ type ActivityType = 'call' | 'email' | 'text' | 'appointment' | 'note' | 'walk-i
 
 type Activity = {
   id: string;
-  leadId: string;            // FK → Lead.id
+  leadId: string; // FK → Lead.id
   type: ActivityType;
   subject: string;
   note: string;
   scheduledAt?: string | null; // optional future date/time, ISO 8601
-  createdAt: string;           // ISO 8601
-  createdBy: string;           // sales rep identifier
-  completedAt: string | null;  // null = pending · ISO string = completed
+  createdAt: string; // ISO 8601
+  createdBy: string; // sales rep identifier
+  completedAt: string | null; // null = pending · ISO string = completed
 };
 ```
 
@@ -226,72 +242,492 @@ type VehicleInterest = {
 
 ---
 
-## 4. Data Flow
+## 4. API Contract
 
-### 4a. Lead Inbox (read path)
+All requests go through `src/lib/api.ts`. MSW intercepts `*/api/*` in both browser and test environments. Every mutating handler adds a 100 ms artificial delay to simulate network latency.
 
-```
-User lands on LeadsPage
-  → useDataTable builds { search, filters, sort, page } params
-  → useLeads(params) issues React Query fetch
-    → fetchLeads(params) → GET /api/leads?search=…&status=…&page=…
-      → MSW handler filters + sorts + paginates leadsStore[]
-      → returns { data: LeadSummary[], pagination: Pagination }
-    → React Query caches response (staleTime: 30 s)
-  → VirtualizedTableBody renders only visible rows
-```
+### 4a. Leads
 
-### 4b. Lead Detail View (read path)
+#### `GET /api/leads`
 
-```
-User clicks a table row
-  → LeadsPage sets selectedLeadId
-  → LeadDetailDrawer mounts
-    → useLead(id)        → GET /api/leads/:id          (full Lead record)
-    → useActivities(id)  → GET /api/leads/:id/activities
-  → ActivityFeed renders activities sorted by createdAt ASC
-```
+Returns a paginated, filtered, sorted list of `Lead` records.
 
-### 4c. Activity Logging (write path)
+**Query parameters**
 
-```
-Salesperson clicks "Log Activity"
-  → ActivityModal opens
-  → Salesperson fills form (type, subject, note, optional scheduledAt)
-  → Submit triggers useLogActivity.mutate(payload)
-    → postActivity(leadId, payload) → POST /api/leads/:id/activities
-      → MSW validates payload (Zod)
-      → pushes new Activity to activitiesStore
-      → returns Activity { id, leadId, type, subject, … }
-    → React Query invalidates ['activities', leadId]
-  → ActivityFeed re-fetches and renders the new entry
-  → Optimistic UI shown immediately; rolled back automatically on error
-```
+| Parameter   | Type     | Default     | Description                                              |
+| ----------- | -------- | ----------- | -------------------------------------------------------- |
+| `page`      | `number` | `1`         | 1-based page index                                       |
+| `limit`     | `number` | `10`        | Page size                                                |
+| `search`    | `string` | —           | Full-text match on `fullName`, `email`, `phone`, `notes` |
+| `source`    | `string` | —           | Exact match on `LeadSource` enum                         |
+| `budgetMin` | `number` | —           | Filters `lead.budget.max >= budgetMin`                   |
+| `budgetMax` | `number` | —           | Filters `lead.budget.max <= budgetMax`                   |
+| `currency`  | `string` | —           | Exact match on `lead.budget.currency`                    |
+| `timeline`  | `string` | —           | Exact match on `PurchaseTimeline` enum                   |
+| `financing` | `string` | —           | Exact match on `financingPreference`                     |
+| `leadType`  | `string` | —           | Exact match on `LeadType` enum                           |
+| `status`    | `string` | —           | Exact match on `LeadStatus` enum                         |
+| `sort`      | `string` | `createdAt` | Field path to sort by (lodash `get`-compatible)          |
+| `order`     | `string` | `desc`      | `asc` or `desc`                                          |
 
-### 4d. Lead Mutations (inline edit / create / delete)
+**Success response — `200 OK`**
 
-```
-Inline field blur  → useUpdateLead.mutate({ id, field, value })
-                     → PATCH /api/leads/:id  →  invalidates ['lead', id] + ['leads']
-
-Create Lead submit → useCreateLead.mutate(payload)
-                     → POST /api/leads       →  invalidates ['leads']
-
-Delete confirm     → useDeleteLead.mutate(id)
-                     → DELETE /api/leads/:id →  invalidates ['leads'], closes drawer
-```
-
-### 4e. View Persistence
-
-```
-useSavedView reads/writes TableStateSnapshot → localStorage key 'leadflow-saved-view'
-Snapshot = { filters, sort, columnVisibility, pagination }
-Automatically restored on every page load.
+```json
+{
+  "data": [Lead, ...],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 87,
+    "totalPages": 9
+  }
+}
 ```
 
 ---
 
-## 5. Technology Choices
+#### `GET /api/leads/:id`
+
+Returns the full `Lead` record for the given ID.
+
+| Status | Body                            |
+| ------ | ------------------------------- |
+| `200`  | `Lead`                          |
+| `404`  | `{ "error": "Lead not found" }` |
+
+---
+
+#### `POST /api/leads`
+
+Creates a new lead. The handler validates the required fields via Zod before inserting.
+
+**Request body (required fields)**
+
+```json
+{
+  "fullName": "string (min 1)",
+  "email": "string (valid email)",
+  "phone": "string (optional)",
+  "source": "website | referral | walk-in | phone | social-media | dealer-event | other",
+  "leadType": "cold | warm | hot",
+  "status": "new | contacted | qualified | unqualified"
+}
+```
+
+| Status | Body                                             |
+| ------ | ------------------------------------------------ |
+| `201`  | Full `Lead` record                               |
+| `400`  | `{ "error": "Validation failed", "issues": [] }` |
+
+> Unset fields (`address`, `vehiclesOfInterest`, `budget`, etc.) are populated with safe empty defaults by the handler.
+
+---
+
+#### `PATCH /api/leads/:id`
+
+Partial update. Accepts any subset of writable `Lead` fields. Read-only fields (`id`, `createdAt`, `updatedAt`, `vehiclesOfInterest`) are stripped silently. `updatedAt` is set to the current timestamp.
+
+| Status | Body                            |
+| ------ | ------------------------------- |
+| `200`  | Updated `Lead`                  |
+| `404`  | `{ "error": "Lead not found" }` |
+
+---
+
+#### `DELETE /api/leads/:id`
+
+Removes the lead from the in-memory store.
+
+| Status | Body                            |
+| ------ | ------------------------------- |
+| `204`  | _(empty)_                       |
+| `404`  | `{ "error": "Lead not found" }` |
+
+---
+
+### 4b. Activities
+
+#### `GET /api/leads/:id/activities`
+
+Returns all activities for a lead, sorted chronologically (`createdAt ASC`).
+
+**Success response — `200 OK`**
+
+```json
+{ "data": [Activity, ...] }
+```
+
+---
+
+#### `POST /api/leads/:id/activities`
+
+Logs a new activity against a lead. `leadId` is injected from the URL — it must not be sent in the body.
+
+**Request body**
+
+```json
+{
+  "type": "call | email | text | appointment | note | walk-in",
+  "subject": "string (min 1)",
+  "note": "string (min 1)",
+  "createdBy": "string (min 1)",
+  "scheduledAt": "ISO 8601 string (optional)"
+}
+```
+
+| Status | Body                                              |
+| ------ | ------------------------------------------------- |
+| `201`  | Full `Activity` record (`completedAt: null`)      |
+| `400`  | `{ "error": "Validation failed", "details": [] }` |
+| `404`  | `{ "error": "Lead not found" }`                   |
+
+---
+
+#### `PATCH /api/leads/:leadId/activities/:activityId`
+
+Partial update for an existing activity. Read-only fields (`id`, `leadId`, `createdAt`, `createdBy`) are stripped. Used primarily to set `completedAt` when marking an activity done.
+
+| Status | Body                                |
+| ------ | ----------------------------------- |
+| `200`  | Updated `Activity`                  |
+| `404`  | `{ "error": "Activity not found" }` |
+
+---
+
+## 5. Data Flow
+
+### 5a. Lead Inbox (read path)
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  User lands on LeadsPage                                            │
+└──────────────────────────────┬──────────────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  useDataTable                                                       │
+│  Builds LeadsParams from { search, filters, sort, page, limit }    │
+└──────────────────────────────┬──────────────────────────────────────┘
+                               │ LeadsParams
+                               ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  useLeads(params) — React Query                                     │
+│  queryKey: ['leads', params]  ·  staleTime: 30 s                   │
+│  placeholderData: keepPreviousData (no loading flash on page turn)  │
+└──────────────────────────────┬──────────────────────────────────────┘
+                               │ fetchLeads(params)
+                               ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  GET /api/leads?search=…&status=…&page=…                           │
+│  MSW: filter → sort → paginate leadsStore[]                        │
+│  Response: { data: Lead[], pagination: PaginationMeta }            │
+└──────────────────────────────┬──────────────────────────────────────┘
+                               │ cached response
+                               ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  VirtualizedTableBody                                               │
+│  Renders only visible rows via @tanstack/react-virtual             │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### 5b. Lead Detail View (read path)
+
+```
+┌────────────────────────────────────────────────────────────────────┐
+│  User clicks a table row                                           │
+│  LeadsPage: setSelectedLeadId(id)                                  │
+└──────────────┬─────────────────────────────────────────────────────┘
+               │
+               ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  LeadDetailDrawer mounts                                                     │
+│                                                                              │
+│  useLead(id)       ──► GET /api/leads/:id        → full Lead record          │
+│  useActivities(id) ──► GET /api/leads/:id/activities → Activity[]            │
+│                                                                              │
+│  ActivityFeed renders activities sorted by createdAt ASC                    │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 5c. Activity Logging (write path — optimistic)
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  Salesperson clicks "Log Activity" → ActivityModal opens                    │
+└──────────────────────────────────────┬───────────────────────────────────────┘
+                                       │ form submit
+                                       ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  useLogActivity.mutate({ leadId, type, subject, note, scheduledAt? })       │
+│                                                                              │
+│  onMutate  ──► cancel in-flight ['activities', leadId] queries              │
+│            ──► snapshot current cache                                       │
+│            ──► append optimistic Activity (id: "optimistic-…")              │
+│                                                                              │
+│  mutationFn ──► POST /api/leads/:id/activities                              │
+│               MSW: Zod validate → push to activitiesStore → 201 Activity   │
+│                                                                              │
+│  onError   ──► restore snapshot (automatic rollback)                        │
+│  onSettled ──► invalidateQueries(['activities', leadId])                    │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 5d. Lead Mutations (inline edit / create / delete)
+
+```
+Inline field blur
+  useUpdateLead.mutate({ id, patch })
+    ├─ onMutate  ──► optimistically update ['lead', id] + all ['leads'] pages
+    ├─ mutationFn ──► PATCH /api/leads/:id
+    ├─ onError   ──► restore both snapshots
+    └─ onSettled ──► invalidate ['lead', id] + ['leads']
+
+Create Lead submit
+  useCreateLead.mutate(payload)
+    ├─ mutationFn ──► POST /api/leads
+    └─ onSuccess  ──► invalidate ['leads']
+
+Delete confirm
+  useDeleteLead.mutate(id)
+    ├─ mutationFn ──► DELETE /api/leads/:id
+    └─ onSuccess  ──► invalidate ['leads']  (drawer closes in component)
+```
+
+### 5e. View Persistence
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  useSavedView(currentState: TableStateSnapshot)                             │
+│                                                                              │
+│  On mount    ──► read localStorage['leadflow:savedView'] → initial state    │
+│  save(state) ──► JSON.stringify → localStorage write → setSavedSnapshot    │
+│  reset()     ──► localStorage.removeItem → setSavedSnapshot(null)          │
+│  isModified  ──► deep-equal(currentState, savedSnapshot ?? defaults)       │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 6. Hooks
+
+All hooks live in `src/hooks/`. Query hooks use `@tanstack/react-query`; mutation hooks implement optimistic updates with snapshot rollback.
+
+---
+
+### `useDataTable`
+
+**Input**
+
+| Prop                      | Type                            | Description                                             |
+| ------------------------- | ------------------------------- | ------------------------------------------------------- |
+| `columns`                 | `ColumnDef<Lead, unknown>[]`    | TanStack Table column definitions                       |
+| `data`                    | `Lead[]`                        | Current page of lead records                            |
+| `pagination`              | `PaginationMeta`                | `{ page, limit, total, totalPages }` from last API call |
+| `isLoading / isError`     | `boolean`                       | Forwarded from `useLeads`                               |
+| `error`                   | `Error \| null`                 | Forwarded from `useLeads`                               |
+| `onStateChange`           | `(params: LeadsParams) => void` | Callback fired whenever filter / sort / page changes    |
+| `initialColumnVisibility` | `VisibilityState`               | Optional column visibility map to hydrate on mount      |
+
+**Returns** (`UseDataTableReturn`)
+
+| Key                   | Type                               | Description                                              |
+| --------------------- | ---------------------------------- | -------------------------------------------------------- |
+| `table`               | `Table<Lead>`                      | TanStack Table instance (pass to `TableBody`, headers)   |
+| `filters`             | `FilterState`                      | Current filter values                                    |
+| `setFilter`           | `(key, value) => void`             | Update a single filter field and trigger `onStateChange` |
+| `setFilters`          | `(filters: FilterState) => void`   | Replace all filters at once                              |
+| `clearFilters`        | `() => void`                       | Reset to `INITIAL_FILTERS`                               |
+| `sorting`             | `SortingState`                     | Active sort column and direction                         |
+| `setSorting`          | `(s: SortingState) => void`        | Update sort and trigger `onStateChange`                  |
+| `pageIndex`           | `number`                           | 0-based current page index                               |
+| `pageSize`            | `number`                           | Current page size                                        |
+| `setPageSize`         | `(size: number) => void`           | Update page size and trigger `onStateChange`             |
+| `columnVisibility`    | `VisibilityState`                  | Hidden/visible column map                                |
+| `setColumnVisibility` | `(state: VisibilityState) => void` | Toggle column visibility (not persisted in saved view)   |
+| `stickyColumns`       | `string[]`                         | Column IDs pinned to the right (default: `['actions']`)  |
+
+**Key behaviours**
+
+- All filter, sort, and page mutations call `onStateChange` synchronously, which the parent passes to `useLeads` to trigger a React Query refetch.
+- Uses TanStack Table in **manual** mode (`manualSorting`, `manualFiltering`, `manualPagination`) — the server owns all data operations.
+- `pageIndex` is converted from 1-based server pagination to 0-based TanStack Table convention.
+
+---
+
+### `useLeads`
+
+**Input:** `params: LeadsParams` — the full query parameter object built by `useDataTable`.
+
+**Returns:** `UseQueryResult<{ data: Lead[]; pagination: PaginationMeta }>`
+
+**Key behaviours**
+
+- Query key: `['leads', params]` — any param change triggers a new fetch.
+- `keepPreviousData` (`placeholderData`) keeps the previous page visible while the next page loads, preventing empty-table flicker during pagination.
+
+---
+
+### `useLead`
+
+**Input:** `id: string`
+
+**Returns:** `UseQueryResult<Lead>`
+
+**Key behaviours**
+
+- Query key: `['lead', id]`
+- `enabled: !!id` — skips the fetch if no ID is selected (drawer closed).
+
+---
+
+### `useActivities`
+
+**Input:** `leadId: string`
+
+**Returns:** `UseQueryResult<{ data: Activity[] }>`
+
+**Key behaviours**
+
+- Query key: `['activities', leadId]`
+- `enabled: !!leadId` — only fetches when a lead is open in the drawer.
+- MSW returns activities sorted `createdAt ASC`; `ActivityFeed` renders in that order.
+
+---
+
+### `useLogActivity`
+
+**Input to `.mutate()`:** `{ leadId, type, subject, note, createdBy, scheduledAt? }`
+
+**Returns:** `UseMutationResult<Activity, Error, LogActivityArgs>`
+
+**Key behaviours (optimistic write)**
+
+1. `onMutate` — cancels in-flight activity queries, snapshots the cache, and appends an optimistic `Activity` with `id: "optimistic-<timestamp>"`.
+2. `mutationFn` — `POST /api/leads/:id/activities`
+3. `onError` — restores the snapshot, removing the optimistic entry.
+4. `onSettled` — invalidates `['activities', leadId]` regardless of outcome so the server's confirmed record replaces the optimistic one.
+
+---
+
+### `useUpdateLead`
+
+**Input to `.mutate()`:** `{ id: string; patch: Partial<Lead> }`
+
+**Returns:** `UseMutationResult<Lead, Error, UpdateLeadArgs>`
+
+**Key behaviours (optimistic write)**
+
+1. `onMutate` — snapshots both `['lead', id]` and all `['leads']` paginated entries; immediately applies `patch` to both caches.
+2. `mutationFn` — `PATCH /api/leads/:id`
+3. `onError` — restores both snapshots atomically.
+4. `onSettled` — invalidates `['lead', id]` and `['leads']` to sync confirmed server data.
+
+---
+
+### `useCreateLead`
+
+**Input to `.mutate()`:** `CreateLeadBody` — `{ fullName, email, phone?, source, leadType, status }`
+
+**Returns:** `UseMutationResult<Lead, Error, CreateLeadBody>`
+
+**Key behaviours**
+
+- `mutationFn` — `POST /api/leads`
+- `onSuccess` — invalidates `['leads']` so the new entry appears in the inbox.
+- No optimistic update (new leads have an unknown ID at mutation time).
+
+---
+
+### `useDeleteLead`
+
+**Input to `.mutate()`:** `id: string`
+
+**Returns:** `UseMutationResult<void, Error, string>`
+
+**Key behaviours**
+
+- `mutationFn` — `DELETE /api/leads/:id`
+- `onSuccess` — invalidates `['leads']`; the component that triggers this is responsible for closing the drawer.
+
+---
+
+### `useUpdateActivity`
+
+**Input:** `leadId: string` (hook constructor), `.mutate({ activityId, patch: Partial<Activity> })`
+
+**Returns:** `UseMutationResult<Activity, Error, UpdateActivityArgs>`
+
+**Key behaviours (optimistic write)**
+
+1. `onMutate` — snapshots `['activities', leadId]` and applies the patch optimistically.
+2. `mutationFn` — `PATCH /api/leads/:leadId/activities/:activityId`
+3. `onError` — restores the snapshot.
+4. `onSettled` — invalidates `['activities', leadId]`.
+
+- Primary use case: setting `completedAt` to mark an activity as done.
+
+---
+
+### `useSavedView`
+
+**Input:** `currentState: TableStateSnapshot` — `{ filters, sorting, columnVisibility, stickyColumns, pageSize }`
+
+**Returns**
+
+| Key             | Type                                  | Description                                                  |
+| --------------- | ------------------------------------- | ------------------------------------------------------------ |
+| `savedSnapshot` | `TableStateSnapshot \| null`          | The persisted snapshot, or `null` if none saved              |
+| `isModified`    | `boolean`                             | Deep-equal check between `currentState` and `savedSnapshot`  |
+| `hasSavedView`  | `boolean`                             | `true` when a snapshot exists in localStorage                |
+| `save`          | `(state: TableStateSnapshot) => void` | Persists state to `localStorage['leadflow:savedView']`       |
+| `reset`         | `() => void`                          | Removes the saved snapshot and reverts `isModified` baseline |
+| `defaults`      | `TableStateSnapshot`                  | The hard-coded default state used when no snapshot exists    |
+
+**Key behaviours**
+
+- Reads `localStorage` lazily on first render via the `useState` initialiser — no `useEffect`.
+- `isModified` uses Lodash `isEqual` for deep comparison; drives the "unsaved changes" indicator in the toolbar.
+- localStorage key: `leadflow:savedView`.
+
+---
+
+## 7. Accessibility
+
+### Semantic HTML
+
+- Table uses `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>` — not divs
+- Sort headers: `aria-sort="ascending|descending|none"` on `<th>`, sortable columns contain a `<button>` inside `<th>`
+- Column resize handles: `role="separator"`, `aria-orientation="vertical"`, keyboard-draggable via arrow keys
+
+### ARIA Roles
+
+- Global search: `role="searchbox"`, `aria-label="Search leads"`
+- Range slider: `aria-valuemin`, `aria-valuemax`, `aria-valuenow`
+- Filter controls: `<label>` + `<input>` properly associated
+- Loading: `aria-busy="true"` on table body, shimmer rows use `aria-hidden="true"`
+- Pagination: `aria-label="Pagination"`, current page uses `aria-current="page"`
+- Sticky column: `aria-label` indicates pinned state
+
+### Keyboard Navigation
+
+- Tab moves between interactive elements (sort buttons, filter inputs, pagination)
+- Enter/Space activates sort, toggles visibility
+- Arrow keys adjust column resize handles and range slider
+- Escape closes dropdown menus (column visibility, filter menus)
+
+---
+
+## 8. Performance
+
+- **Virtualization (TanStack Virtual):** Only renders visible rows + overscan buffer (~5 rows above/below). Table container has a fixed height with vertical scroll. Row height estimated at a fixed value for consistent virtual sizing.
+- **Debounced search:** 300ms debounce via lodash-es `debounce` on global search input before triggering API call. `debounced.cancel()` called in `useEffect` cleanup to prevent stale calls after unmount or when the external `value` prop changes.
+- **Stable references:** Column definitions defined outside the component (or `useMemo`). `onStateChange` callback wrapped in `useCallback`.
+- **Resize without re-render:** Column resize uses CSS variable updates during the drag — commits to React state on drag end only.
+- **Prefetch:** Pagination prefetches adjacent pages via `queryClient.prefetchQuery()` (carried over from Phase 1).
+- **Parallel queries:** `useLead` + `useActivities` queries on Lead Detail fire in parallel — eliminates sequential waterfall.
+- **Code splitting:** Vite's code-splitting per route keeps initial bundle small.
+
+## 9. Technology Choices
 
 | Technology                         | Justification                                                                                                                                                                                                                                              |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -310,9 +746,9 @@ Automatically restored on every page load.
 
 ---
 
-## 6. Observability Strategy
+## 10. Observability Strategy
 
-### 6a. Structured Logging — pino
+### 10a. Structured Logging — pino
 
 `src/lib/logger.ts` exports a singleton pino instance configured for the browser (`browser: { asObject: true }`). Log level is driven by the `VITE_LOG_LEVEL` environment variable (default: `"info"`).
 
@@ -331,7 +767,7 @@ logger.warn({ method: 'POST', path: '/api/leads', issues, status: 422 }, 'valida
 
 Consistent field names across all handlers make log aggregation trivial once a real backend is wired in. Replacing the pino transport with a remote sink (Axiom, Datadog Logs, or a custom `/api/logs` endpoint) requires no application-code changes.
 
-### 6b. React Query DevTools
+### 10b. React Query DevTools
 
 `@tanstack/react-query-devtools` is mounted in development builds only (tree-shaken in production). It surfaces:
 
@@ -342,14 +778,14 @@ Consistent field names across all handlers make log aggregation trivial once a r
 
 This is the primary tool for diagnosing latency, stale-cache, and optimistic-update bugs during development.
 
-### 6c. Error Boundaries
+### 10c. Error Boundaries
 
 Each major panel (`LeadsPage`, `LeadDetailDrawer`) is wrapped in a React Error Boundary. Uncaught render errors are:
 
 1. Logged via `logger.error({ component, error })` with component context.
 2. Replaced with a contained fallback UI — a single panel failure cannot crash the whole application.
 
-### 6d. Performance Monitoring (production path)
+### 10d. Performance Monitoring (production path)
 
 The architecture is instrumented-ready for Web Vitals:
 
@@ -357,17 +793,17 @@ The architecture is instrumented-ready for Web Vitals:
 - A `reportWebVitals(metric => logger.info(metric))` call at `main.tsx` can push CLS/LCP/INP/FID/TTFB to any analytics endpoint without modifying component code.
 - `React.Profiler` wrappers can be added per-panel to measure render duration in staging.
 
-### 6e. Network Request Tracing
+### 10e. Network Request Tracing
 
 In development, MSW logs each intercepted request to the DevTools console with method, URL, status, and artificial latency. In a production deployment this layer is replaced by real server-side observability (OpenTelemetry traces on the API, Sentry breadcrumbs on the client).
 
 ---
 
-## 7. How GenAI Was Used in the Design Phase
+## 11. How GenAI Was Used in the Design Phase
 
 Claude (Anthropic) was used as an active design and implementation partner throughout this project via the Claude Code CLI. The collaboration followed a deliberate **Plan → Review → Act** cycle — code was never accepted without being read and understood first.
 
-### 7a. Contextual Prompting
+### 11a. Contextual Prompting
 
 Before planning design, Claude was given a defined role and a set of reference documents to anchor its output to the project's goals:
 
@@ -375,7 +811,7 @@ Before planning design, Claude was given a defined role and a set of reference d
 
 Alongside the role definition, existing skills were provided as context — `skills/frontend-architecture`.
 
-### 7b. Requirements Decomposition
+### 11b. Requirements Decomposition
 
 The initial task description was deliberately sparse. Before writing any code, I prompted Claude to surface unstated requirements:
 
@@ -383,7 +819,7 @@ The initial task description was deliberately sparse. Before writing any code, I
 
 This surfaced decisions that would otherwise have emerged late: the distinction between `LeadSummary` (list) and full `Lead` (detail), the `completedAt: string | null` pattern for activity completion, currency-aware budget range filtering, and whether `scheduledAt` on an activity should be optional. These became explicit constraints in `src/types/index.ts`.
 
-### 7c. Architecture Trade-off Analysis
+### 11c. Architecture Trade-off Analysis
 
 Key architectural decisions were made by asking Claude to compare options before committing:
 
@@ -391,19 +827,19 @@ Key architectural decisions were made by asking Claude to compare options before
 - **Filtering:** Client-side vs. server-side. Claude correctly identified that server-side was the right default even for a prototype, because it reflects production constraints and keeps MSW handler logic honest.
 - **View persistence:** `sessionStorage` vs. `localStorage` vs. URL params. URL params were rejected because they expose filter state (prospect data) in shareable links; `localStorage` was chosen for simplicity over a backend-persisted preference store.
 
-### 7d. Schema and Validation Design
+### 11d. Schema and Validation Design
 
 Claude generated first-pass Zod schemas for the MSW handlers given the TypeScript types. The drafts were ~80% correct. The remaining 20% required domain input: tightening string minimums (`.min(1)` on `fullName`), restricting enum values to the actual dealership workflow, and adding cross-field validation (e.g. `budgetMax >= budgetMin`).
 
-### 7e. Test Structure
+### 11e. Test Structure
 
 Claude scaffolded the initial `renderHook` + `act()` test structure for `useDataTable` and `useLogActivity`. The generated tests were functional but initially over-specified — asserting internal state rather than observable behaviour. Refactoring them to follow RTL's "test what the user sees" principle required understanding the _intent_ of the tests, not just their syntax.
 
-### 7f. Scope Control
+### 11f. Scope Control
 
 Claude occasionally proposed patterns suited to larger teams: a `useQueryErrorHandler` global boundary, a plugin-based MSW handler registry, per-column filter components registered via a lookup map. Each was evaluated against current scale and rejected when the added complexity had no present-day payoff.
 
-### 7g. Limitations
+### 11g. Limitations
 
 - Claude has no access to the running application. All UI/UX decisions (drawer vs. modal for lead detail, virtualisation threshold, mobile breakpoints) were made by the engineer based on browser testing.
 - Every piece of generated code was read, understood, and validated against the actual requirements before being committed. GenAI output was treated as a well-informed first draft, not ground truth.
