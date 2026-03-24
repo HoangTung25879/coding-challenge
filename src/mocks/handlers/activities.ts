@@ -62,6 +62,25 @@ export const activityHandlers = [
     logger.info({ method: 'POST', path: '/api/leads/:id/activities', leadId, type: parsed.data.type, status: 201 }, 'activity created')
     return HttpResponse.json(activity, { status: 201 })
   }),
+
+  http.patch('*/api/leads/:leadId/activities/:activityId', async ({ request, params }) => {
+    await delay(MOCK_DELAY_MS)
+    const { leadId, activityId } = params as { leadId: string; activityId: string }
+    const idx = activitiesStore.findIndex(a => a.id === activityId && a.leadId === leadId)
+    if (idx === -1) {
+      return HttpResponse.json({ error: 'Activity not found' }, { status: 404 })
+    }
+    let body: Record<string, unknown>
+    try {
+      body = await request.json() as Record<string, unknown>
+    } catch {
+      return HttpResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+    }
+    // Strip read-only fields
+    const { id: _id, leadId: _lid, createdAt: _ca, createdBy: _cb, ...writable } = body
+    activitiesStore[idx] = { ...activitiesStore[idx], ...writable }
+    return HttpResponse.json(activitiesStore[idx])
+  }),
 ]
 
 function delay(ms: number): Promise<void> {

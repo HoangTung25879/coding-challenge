@@ -1,6 +1,7 @@
 // src/mocks/handlers/leads.ts
 import { http, HttpResponse } from 'msw'
 import { get } from 'lodash-es'
+import { z } from 'zod'
 import { leadsStore } from '@/mocks/data/leads'
 import { logger } from '@/lib/logger'
 import type { Lead } from '@/types'
@@ -18,6 +19,7 @@ export const leadHandlers = [
     const source = url.searchParams.get('source')
     const budgetMin = url.searchParams.get('budgetMin')
     const budgetMax = url.searchParams.get('budgetMax')
+    const currency = url.searchParams.get('currency')
     const timeline = url.searchParams.get('timeline')
     const financing = url.searchParams.get('financing')
     const leadType = url.searchParams.get('leadType')
@@ -50,6 +52,7 @@ export const leadHandlers = [
       filtered = filtered.filter(l => l.budget.max <= max)
     }
 
+    if (currency) filtered = filtered.filter(l => l.budget.currency === currency)
     if (timeline) filtered = filtered.filter(l => l.purchaseTimeline === timeline)
     if (financing) filtered = filtered.filter(l => l.financingPreference === financing)
     if (leadType) filtered = filtered.filter(l => l.leadType === leadType)
@@ -90,6 +93,86 @@ export const leadHandlers = [
     }
     logger.info({ method: 'GET', path: '/api/leads/:id', id: params.id, status: 200 }, 'lead fetched')
     return HttpResponse.json(lead)
+  }),
+
+  http.post('*/api/leads', async ({ request }) => {
+    await delay(MOCK_DELAY_MS)
+    const body = await request.json() as Record<string, unknown>
+
+    const schema = z.object({
+      fullName: z.string().min(1),
+      email: z.string().email(),
+      phone: z.string().optional(),
+      status: z.enum(['new', 'contacted', 'qualified', 'lost', 'won']),
+      source: z.enum(['website', 'referral', 'walk-in', 'phone', 'social-media', 'dealer-event', 'other']),
+      leadType: z.enum(['cold', 'warm', 'hot']),
+    })
+
+    const parsed = schema.safeParse(body)
+    if (!parsed.success) {
+      return HttpResponse.json({ error: 'Validation failed', issues: parsed.error.issues }, { status: 400 })
+    }
+
+    const now = new Date().toISOString()
+    const newLead: Lead = {
+      id: `lead-${Date.now()}`,
+      fullName: parsed.data.fullName,
+      email: parsed.data.email,
+      phone: parsed.data.phone ?? '',
+      bestTimeToContact: '',
+      address: { street: '', city: '', state: '', country: '', postalCode: '' },
+      leadType: parsed.data.leadType,
+      clientProfile: null,
+      source: parsed.data.source,
+      salesModel: 'direct',
+      preferredCommunication: [],
+      notes: '',
+      vehiclesOfInterest: [],
+      budget: { max: 0, monthlyPaymentTarget: 0, currency: 'USD' },
+      financingPreference: 'undecided',
+      purchaseTimeline: 'exploring',
+      status: parsed.data.status,
+      assignedSalesRepId: '',
+      createdAt: now,
+      updatedAt: now,
+    }
+
+    leadsStore.push(newLead)
+    logger.info({ method: 'POST', path: '/api/leads', id: newLead.id, status: 201 }, 'lead created')
+    return HttpResponse.json(newLead, { status: 201 })
+  }),
+
+  http.patch('*/api/leads/:id', async ({ params, request }) => {
+    await delay(MOCK_DELAY_MS)
+    const idx = leadsStore.findIndex(l => l.id === params.id)
+    if (idx === -1) {
+      return HttpResponse.json({ error: 'Lead not found' }, { status: 404 })
+    }
+
+    const patch = await request.json() as Record<string, unknown>
+
+    // Strip read-only / system fields silently
+    const { id: _id, createdAt: _ca, updatedAt: _ua, vehiclesOfInterest: _vi, ...writablePatch } = patch
+
+    leadsStore[idx] = {
+      ...leadsStore[idx],
+      ...writablePatch,
+      updatedAt: new Date().toISOString(),
+    } as Lead
+
+    logger.info({ method: 'PATCH', path: '/api/leads/:id', id: params.id, status: 200 }, 'lead updated')
+    return HttpResponse.json(leadsStore[idx])
+  }),
+
+  http.delete('*/api/leads/:id', async ({ params }) => {
+    await delay(MOCK_DELAY_MS)
+    const id = params.id as string
+    const idx = leadsStore.findIndex(l => l.id === id)
+    if (idx === -1) {
+      return HttpResponse.json({ error: 'Lead not found' }, { status: 404 })
+    }
+    leadsStore.splice(idx, 1)
+    return new HttpResponse(null, { status: 204 })
   }),
 ]
 
