@@ -2,8 +2,7 @@ import { useState } from 'react'
 import type { FilterState } from '@/hooks/useDataTable'
 import { BudgetRangeSlider } from './BudgetRangeSlider'
 import { Dropdown } from '@/components/ui/Dropdown'
-import { Badge, type BadgeVariant } from '@/components/ui/Badge'
-import { Filter, ChevronDown, X, Check, Circle, Globe, Calendar, Banknote, User, DollarSign, type LucideIcon } from 'lucide-react'
+import { Filter, ChevronDown, X, Check, Circle, Globe, Calendar, Banknote, User, DollarSign, Tag, type LucideIcon } from 'lucide-react'
 
 type Props = {
   filters: FilterState
@@ -18,14 +17,6 @@ type FilterSection = {
   icon: LucideIcon
   options: FilterOption[]
 }
-
-const STATUS_OPTIONS: FilterOption[] = [
-  { value: 'new', label: 'New' },
-  { value: 'contacted', label: 'Contacted' },
-  { value: 'qualified', label: 'Qualified' },
-  { value: 'lost', label: 'Lost' },
-  { value: 'won', label: 'Won' },
-]
 
 const SOURCE_OPTIONS: FilterOption[] = [
   { value: 'website', label: 'Website' },
@@ -58,18 +49,24 @@ const LEAD_TYPE_OPTIONS: FilterOption[] = [
   { value: 'hot', label: 'Hot' },
 ]
 
-const STATUS_BADGE_VARIANTS: Record<string, BadgeVariant> = {
-  new: 'blue',
-  contacted: 'yellow',
-  qualified: 'purple',
-  lost: 'red',
-  won: 'emerald',
-}
-
 const LEAD_TYPE_BADGE_STYLES: Record<string, { bg: string; text: string }> = {
   cold: { bg: 'bg-blue-100', text: 'text-blue-700' },
   warm: { bg: 'bg-amber-100', text: 'text-amber-700' },
   hot: { bg: 'bg-red-100', text: 'text-red-700' },
+}
+
+const STATUS_OPTIONS: FilterOption[] = [
+  { value: 'new', label: 'New' },
+  { value: 'contacted', label: 'Contacted' },
+  { value: 'qualified', label: 'Qualified' },
+  { value: 'unqualified', label: 'Unqualified' },
+]
+
+const STATUS_BADGE_STYLES: Record<string, { dot: string; text: string }> = {
+  new: { dot: 'bg-gray-400', text: 'text-gray-600' },
+  contacted: { dot: 'bg-blue-500', text: 'text-blue-700' },
+  qualified: { dot: 'bg-green-500', text: 'text-green-700' },
+  unqualified: { dot: 'bg-red-500', text: 'text-red-700' },
 }
 
 const CURRENCY_OPTIONS: FilterOption[] = [
@@ -112,6 +109,12 @@ const FILTER_SECTIONS: FilterSection[] = [
     icon: User,
     options: LEAD_TYPE_OPTIONS,
   },
+  {
+    key: 'status',
+    label: 'Status',
+    icon: Tag,
+    options: STATUS_OPTIONS,
+  },
 ]
 
 function getFilterValue(filters: FilterState, key: string): string {
@@ -124,6 +127,7 @@ function getActiveFilterCount(filters: FilterState): number {
   if (filters.timeline) count++
   if (filters.financing) count++
   if (filters.leadType) count++
+  if (filters.status) count++
   if (filters.budgetMin != null) count++
   if (filters.budgetMax != null) count++
   if (filters.currency) count++
@@ -209,8 +213,8 @@ export function FilterMenu({ filters, setFilter }: Props) {
                 <div className="pb-1">
                   {section.options.map((option) => {
                     const isSelected = currentValue === option.value
-                    const statusVariant = section.key === 'status' ? STATUS_BADGE_VARIANTS[option.value] : undefined
-                    const typeStyle = section.key === 'leadType' ? LEAD_TYPE_BADGE_STYLES[option.value] : undefined
+                    const leadTypeStyle = section.key === 'leadType' ? LEAD_TYPE_BADGE_STYLES[option.value] : undefined
+                    const statusStyle = section.key === 'status' ? STATUS_BADGE_STYLES[option.value] : undefined
                     return (
                       <button
                         key={option.value}
@@ -228,10 +232,13 @@ export function FilterMenu({ filters, setFilter }: Props) {
                           <Check className="h-3.5 w-3.5" />
                         )}
                         <span className={isSelected ? '' : 'pl-5.5'}>
-                          {statusVariant ? (
-                            <Badge variant={statusVariant}>{option.label}</Badge>
-                          ) : typeStyle ? (
-                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${typeStyle.bg} ${typeStyle.text}`}>
+                          {leadTypeStyle ? (
+                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${leadTypeStyle.bg} ${leadTypeStyle.text}`}>
+                              {option.label}
+                            </span>
+                          ) : statusStyle ? (
+                            <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${statusStyle.text}`}>
+                              <span className={`h-2 w-2 rounded-full flex-shrink-0 ${statusStyle.dot}`} />
                               {option.label}
                             </span>
                           ) : (

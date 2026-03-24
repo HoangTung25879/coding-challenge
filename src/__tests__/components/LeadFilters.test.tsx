@@ -13,16 +13,9 @@ function renderWithRouter(ui: React.ReactElement, { search = '' } = {}) {
 }
 
 describe('LeadFilters', () => {
-  it('renders status and source dropdowns', () => {
+  it('renders source dropdown', () => {
     renderWithRouter(<LeadFilters />)
-    expect(screen.getByRole('combobox', { name: /status/i })).toBeInTheDocument()
     expect(screen.getByRole('combobox', { name: /source/i })).toBeInTheDocument()
-  })
-
-  it('shows "All statuses" as default selected option', () => {
-    renderWithRouter(<LeadFilters />)
-    const select = screen.getByRole('combobox', { name: /status/i }) as HTMLSelectElement
-    expect(select.value).toBe('')
   })
 
   it('includes "other" in source options', () => {

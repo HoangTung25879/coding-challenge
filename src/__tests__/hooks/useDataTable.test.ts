@@ -7,7 +7,7 @@ import type { Lead } from '@/types'
 const col = createColumnHelper<Lead>()
 const columns: ColumnDef<Lead, unknown>[] = [
   col.accessor('fullName', { header: 'Name' }),
-  col.accessor('status', { header: 'Status' }),
+  col.accessor('source', { header: 'Source' }),
   col.accessor('email', { header: 'Email' }),
 ] as ColumnDef<Lead, unknown>[]
 
@@ -28,7 +28,6 @@ const mockLead: Lead = {
   budget: { max: 50000, monthlyPaymentTarget: 800, currency: 'USD' },
   financingPreference: 'cash',
   purchaseTimeline: 'within-3-months',
-  status: 'new',
   assignedSalesRepId: 'rep-001',
   createdAt: '2026-01-01T00:00:00Z',
   updatedAt: '2026-01-01T00:00:00Z',
@@ -136,11 +135,11 @@ describe('useDataTable', () => {
     const { result } = setup({ onStateChange })
 
     act(() => {
-      result.current.table.setSorting([{ id: 'status', desc: true }])
+      result.current.table.setSorting([{ id: 'source', desc: true }])
     })
 
     expect(onStateChange).toHaveBeenCalledWith(
-      expect.objectContaining({ sort: 'status', order: 'desc' }),
+      expect.objectContaining({ sort: 'source', order: 'desc' }),
     )
   })
 
@@ -155,12 +154,12 @@ describe('useDataTable', () => {
   it('sticky column state', () => {
     const { result } = setup()
 
-    // Default sticky is fullName (left) and actions (right)
-    expect(result.current.stickyColumns).toEqual(['fullName', 'actions'])
+    // Default sticky is actions (right)
+    expect(result.current.stickyColumns).toEqual(['actions'])
 
-    act(() => result.current.setStickyColumns(['status']))
+    act(() => result.current.setStickyColumns(['source']))
 
-    expect(result.current.stickyColumns).toEqual(['status'])
+    expect(result.current.stickyColumns).toEqual(['source'])
   })
 
   it('setPageSize updates page size and calls onStateChange', () => {

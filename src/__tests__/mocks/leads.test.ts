@@ -25,12 +25,6 @@ describe('GET /api/leads', () => {
     expect(body.pagination.total).toBe(leadsStore.length)
   })
 
-  it('filters by status', async () => {
-    const res = await fetch(`${BASE}/api/leads?status=qualified`)
-    const body = await res.json()
-    expect(body.data.every((l: { status: string }) => l.status === 'qualified')).toBe(true)
-  })
-
   it('filters by source', async () => {
     const res = await fetch(`${BASE}/api/leads?source=website`)
     const body = await res.json()
@@ -43,7 +37,6 @@ describe('GET /api/leads', () => {
     const lead = body.data[0]
     expect(lead).toHaveProperty('id')
     expect(lead).toHaveProperty('fullName')
-    expect(lead).toHaveProperty('status')
     expect(lead).toHaveProperty('vehiclesOfInterest')
     expect(lead).toHaveProperty('budget')
     expect(lead).toHaveProperty('email')

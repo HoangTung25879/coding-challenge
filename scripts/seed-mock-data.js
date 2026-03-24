@@ -23,7 +23,6 @@ faker.seed(42);
 const LEAD_COUNT = 126;
 const SALES_REPS = ["salesperson-1", "salesperson-2"];
 
-const LEAD_STATUSES = ["new", "contacted", "qualified", "lost", "won"];
 const LEAD_SOURCES = [
   "website",
   "referral",
@@ -34,6 +33,7 @@ const LEAD_SOURCES = [
   "other",
 ];
 const LEAD_TYPES = ["cold", "warm", "hot"];
+const LEAD_STATUSES = ["new", "contacted", "qualified", "unqualified"];
 const PURCHASE_TIMELINES = [
   "immediate",
   "within-1-month",
@@ -270,7 +270,7 @@ function generateVehicle(index) {
 // ── Generate a lead ──────────────────────────────────────────────────
 
 function generateLead(index) {
-  const id = `lead-${padId(index)}`;
+  const id = faker.string.uuid();
   const isOrg = faker.datatype.boolean(0.35);
   const currency = pick(CURRENCIES);
   const maxBudget = faker.number.int({ min: 25000, max: 600000 });
@@ -330,6 +330,7 @@ function generateLead(index) {
       postalCode: faker.location.zipCode(),
     },
     leadType: pick(LEAD_TYPES),
+    status: pick(LEAD_STATUSES),
     clientProfile,
     source: pick(LEAD_SOURCES),
     salesModel: pick(SALES_MODELS),
@@ -348,7 +349,6 @@ function generateLead(index) {
     },
     financingPreference: pick(FINANCING_PREFS),
     purchaseTimeline: pick(PURCHASE_TIMELINES),
-    status: pick(LEAD_STATUSES),
     assignedSalesRepId: pick(SALES_REPS),
     createdAt,
     updatedAt,
@@ -398,14 +398,23 @@ function generateActivities(leads) {
   const activities = [];
   let actIndex = 1;
 
-  for (const lead of leads) {
-    // lead-022 gets zero activities for test edge case
-    if (lead.id === "lead-022") continue;
+  for (let li = 0; li < leads.length; li++) {
+    const lead = leads[li];
+    // index 21 (22nd lead) gets zero activities for test edge case
+    if (li === 21) continue;
 
     const count = faker.number.int({ min: 1, max: 3 });
     for (let i = 0; i < count; i++) {
       const type = pick(ACTIVITY_TYPES);
       const subject = pick(ACTIVITY_SUBJECTS[type]);
+
+      const createdAt = faker.date
+        .between({ from: lead.createdAt, to: "2026-03-21T23:59:59.000Z" })
+        .toISOString()
+      const isCompleted = faker.datatype.boolean(0.3)
+      const completedAt = isCompleted
+        ? faker.date.between({ from: createdAt, to: "2026-03-22T23:59:59.000Z" }).toISOString()
+        : null
 
       activities.push({
         id: `act-${padId(actIndex++)}`,
@@ -413,10 +422,9 @@ function generateActivities(leads) {
         type,
         subject,
         note: faker.lorem.sentences({ min: 1, max: 2 }),
-        createdAt: faker.date
-          .between({ from: lead.createdAt, to: "2026-03-21T23:59:59.000Z" })
-          .toISOString(),
+        createdAt,
         createdBy: pick(SALES_REPS),
+        completedAt,
       });
     }
   }

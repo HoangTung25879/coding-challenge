@@ -56,7 +56,7 @@ export function InlineEditField<T>({
 
   if (!isEditing) {
     return (
-      <div className="flex items-center gap-2 group min-h-[28px]">
+      <div className="flex items-center gap-2 group min-h-[28px] hover:bg-gray-50">
         <span className="text-sm text-gray-900">{display}</span>
         <button
           type="button"
@@ -90,7 +90,7 @@ export function InlineEditField<T>({
           aria-label="Cancel"
           onClick={onCancel}
           disabled={isSaving}
-          className="p-1 rounded text-gray-400 hover:bg-gray-100 disabled:opacity-50"
+          className="p-1 rounded text-red-600 hover:bg-gray-100 disabled:opacity-50"
         >
           <X className="h-4 w-4" />
         </button>

@@ -30,9 +30,9 @@ describe('POST /api/leads', () => {
       body: JSON.stringify({
         fullName: 'Test User',
         email: 'test@example.com',
-        status: 'new',
         source: 'website',
         leadType: 'cold',
+        status: 'new',
       }),
     })
     expect(res.status).toBe(201)
@@ -61,9 +61,9 @@ describe('POST /api/leads', () => {
       body: JSON.stringify({
         fullName: 'Persisted Lead',
         email: 'persist@example.com',
-        status: 'new',
         source: 'referral',
         leadType: 'warm',
+        status: 'contacted',
       }),
     })
     const listRes = await fetch(`${BASE}/api/leads?search=Persisted+Lead`)
@@ -78,19 +78,19 @@ describe('PATCH /api/leads/:id', () => {
     const res = await fetch(`${BASE}/api/leads/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: 'qualified' }),
+      body: JSON.stringify({ source: 'referral' }),
     })
     expect(res.status).toBe(200)
     const lead = await res.json()
     expect(lead.id).toBe(id)
-    expect(lead.status).toBe('qualified')
+    expect(lead.source).toBe('referral')
   })
 
   it('returns 404 for unknown id', async () => {
     const res = await fetch(`${BASE}/api/leads/nonexistent`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: 'qualified' }),
+      body: JSON.stringify({ source: 'website' }),
     })
     expect(res.status).toBe(404)
   })
@@ -107,13 +107,11 @@ describe('PATCH /api/leads/:id', () => {
         id: 'hacked',
         createdAt: '1970-01-01',
         vehiclesOfInterest: [{ id: 'injected', name: 'Fake', brand: 'X', model: 'Y', condition: 'new' }],
-        status: 'new',
       }),
     })
     const lead = await res.json()
     expect(lead.id).toBe(originalId)
     expect(lead.createdAt).toBe(originalCreatedAt)
     expect(lead.vehiclesOfInterest).toEqual(originalVehicles)
-    expect(lead.status).toBe('new')
   })
 })

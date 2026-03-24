@@ -8,7 +8,10 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 
 const nonEmptyEnum = <T extends [string, ...string[]]>(values: T, message: string) =>
-  z.preprocess(v => (v === '' ? undefined : v), z.enum(values, { required_error: message }))
+  z.preprocess(
+    v => (v === '' ? undefined : v),
+    z.enum(values, { error: message })
+  )
 
 const schema = z.object({
   fullName: z.string().min(1, 'Full name is required'),
@@ -16,7 +19,7 @@ const schema = z.object({
   phone: z.string().optional(),
   leadType: nonEmptyEnum(['cold', 'warm', 'hot'] as const, 'Lead type is required'),
   source: nonEmptyEnum(['website', 'referral', 'walk-in', 'phone', 'social-media', 'dealer-event', 'other'] as const, 'Source is required'),
-  status: nonEmptyEnum(['new', 'contacted', 'qualified', 'lost', 'won'] as const, 'Status is required'),
+  status: nonEmptyEnum(['new', 'contacted', 'qualified', 'unqualified'] as const, 'Status is required'),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -111,7 +114,7 @@ export function CreateLeadModal({ onClose }: Props) {
             </div>
 
             {/* Status */}
-            <div className="sm:col-span-2">
+            <div>
               <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">Status <span className="text-red-500">*</span></label>
               <select id="status" aria-label="Status" {...register('status')} disabled={isPending}
                 className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -119,11 +122,11 @@ export function CreateLeadModal({ onClose }: Props) {
                 <option value="new">New</option>
                 <option value="contacted">Contacted</option>
                 <option value="qualified">Qualified</option>
-                <option value="lost">Lost</option>
-                <option value="won">Won</option>
+                <option value="unqualified">Unqualified</option>
               </select>
               {errors.status && <p role="alert" className="mt-1 text-xs text-red-600">{errors.status.message}</p>}
             </div>
+
           </div>
 
           {/* Footer */}

@@ -25,7 +25,6 @@ export function ColumnHeader({ header, isSticky, stickyOffset = 0 }: Props) {
       ? { position: 'sticky', right: 0, zIndex: 10 }
       : { position: 'sticky', left: stickyOffset, zIndex: 10 }
     : {}
-  console.log({ stickyStyles });
   return (
     <th
       className={`relative select-none whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-gray-500 ${isSticky ? 'bg-gray-50' : 'bg-gray-50'

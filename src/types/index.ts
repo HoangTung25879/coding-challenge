@@ -1,6 +1,5 @@
 // src/types/index.ts
 
-export type LeadStatus = 'new' | 'contacted' | 'qualified' | 'lost' | 'won'
 export type LeadSource =
   | 'website'
   | 'referral'
@@ -10,6 +9,7 @@ export type LeadSource =
   | 'dealer-event'
   | 'other'
 export type LeadType = 'cold' | 'warm' | 'hot'
+export type LeadStatus = 'new' | 'contacted' | 'qualified' | 'unqualified'
 export type ActivityType = 'call' | 'email' | 'text' | 'appointment' | 'note' | 'walk-in'
 export type PurchaseTimeline =
   | 'immediate'
@@ -67,6 +67,7 @@ export type Lead = {
   bestTimeToContact: string
   address: Address
   leadType: LeadType
+  status: LeadStatus
   clientProfile: IndividualContact | OrganizationContact | null
   source: LeadSource
   salesModel: 'direct' | 'indirect'
@@ -80,7 +81,6 @@ export type Lead = {
   }
   financingPreference: 'cash' | 'lease' | 'loan' | 'undecided'
   purchaseTimeline: PurchaseTimeline
-  status: LeadStatus
   assignedSalesRepId: string
   createdAt: string
   updatedAt: string
@@ -91,10 +91,10 @@ export type LeadSummary = {
   fullName: string
   email: string
   phone: string
-  status: LeadStatus
   source: LeadSource
   primaryVehicleInterest: string
   leadType: LeadType
+  status: LeadStatus
   createdAt: string
   updatedAt: string
 }

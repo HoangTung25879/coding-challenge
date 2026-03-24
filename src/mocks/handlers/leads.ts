@@ -15,7 +15,6 @@ export const leadHandlers = [
     const page = Math.max(1, Number(url.searchParams.get('page') ?? 1))
     const limit = Math.max(1, Number(url.searchParams.get('limit') ?? 10))
     const search = url.searchParams.get('search')
-    const status = url.searchParams.get('status')
     const source = url.searchParams.get('source')
     const budgetMin = url.searchParams.get('budgetMin')
     const budgetMax = url.searchParams.get('budgetMax')
@@ -23,6 +22,7 @@ export const leadHandlers = [
     const timeline = url.searchParams.get('timeline')
     const financing = url.searchParams.get('financing')
     const leadType = url.searchParams.get('leadType')
+    const status = url.searchParams.get('status')
     const sort = url.searchParams.get('sort') ?? 'createdAt'
     const order = url.searchParams.get('order') ?? 'desc'
 
@@ -39,7 +39,6 @@ export const leadHandlers = [
       )
     }
 
-    if (status) filtered = filtered.filter(l => l.status === status)
     if (source) filtered = filtered.filter(l => l.source === source)
 
     // Budget range
@@ -56,6 +55,7 @@ export const leadHandlers = [
     if (timeline) filtered = filtered.filter(l => l.purchaseTimeline === timeline)
     if (financing) filtered = filtered.filter(l => l.financingPreference === financing)
     if (leadType) filtered = filtered.filter(l => l.leadType === leadType)
+    if (status) filtered = filtered.filter(l => l.status === status)
 
     // Sort
     filtered = [...filtered].sort((a, b) => {
@@ -103,9 +103,9 @@ export const leadHandlers = [
       fullName: z.string().min(1),
       email: z.string().email(),
       phone: z.string().optional(),
-      status: z.enum(['new', 'contacted', 'qualified', 'lost', 'won']),
       source: z.enum(['website', 'referral', 'walk-in', 'phone', 'social-media', 'dealer-event', 'other']),
       leadType: z.enum(['cold', 'warm', 'hot']),
+      status: z.enum(['new', 'contacted', 'qualified', 'unqualified']),
     })
 
     const parsed = schema.safeParse(body)
@@ -122,6 +122,7 @@ export const leadHandlers = [
       bestTimeToContact: '',
       address: { street: '', city: '', state: '', country: '', postalCode: '' },
       leadType: parsed.data.leadType,
+      status: parsed.data.status,
       clientProfile: null,
       source: parsed.data.source,
       salesModel: 'direct',
@@ -131,7 +132,6 @@ export const leadHandlers = [
       budget: { max: 0, monthlyPaymentTarget: 0, currency: 'USD' },
       financingPreference: 'undecided',
       purchaseTimeline: 'exploring',
-      status: parsed.data.status,
       assignedSalesRepId: '',
       createdAt: now,
       updatedAt: now,

@@ -15,7 +15,7 @@ const defaults: TableStateSnapshot = {
   },
   sorting: [],
   columnVisibility: {},
-  stickyColumns: ['fullName'],
+  stickyColumns: ['actions'],
   pageSize: 10,
 }
 

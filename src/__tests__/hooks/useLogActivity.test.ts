@@ -3,6 +3,7 @@ import { describe, it, expect, beforeAll, afterAll, afterEach } from 'vitest'
 import { server } from '@/mocks/node'
 import { useLogActivity } from '@/hooks/useLogActivity'
 import { activitiesStore } from '@/mocks/data/activities'
+import { leadsStore } from '@/mocks/data/leads'
 import { createWrapper } from './test-utils'
 
 const initialLength = activitiesStore.length
@@ -12,11 +13,12 @@ afterAll(() => server.close())
 
 describe('useLogActivity', () => {
   it('posts a new activity and resolves with created activity', async () => {
+    const leadId = leadsStore[0].id
     const { result } = renderHook(() => useLogActivity(), { wrapper: createWrapper() })
 
     await act(async () => {
       result.current.mutate({
-        leadId: 'lead-001',
+        leadId,
         type: 'call',
         subject: 'Hook test call',
         note: 'Testing the hook',
@@ -25,7 +27,7 @@ describe('useLogActivity', () => {
     })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data?.leadId).toBe('lead-001')
+    expect(result.current.data?.leadId).toBe(leadId)
     expect(result.current.data?.type).toBe('call')
   })
 })

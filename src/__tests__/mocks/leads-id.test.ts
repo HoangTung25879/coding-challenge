@@ -2,6 +2,7 @@
 import { setupServer } from 'msw/node'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { leadHandlers } from '@/mocks/handlers/leads'
+import { leadsStore } from '@/mocks/data/leads'
 
 const server = setupServer(...leadHandlers)
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
@@ -12,10 +13,11 @@ const BASE = 'http://localhost'
 
 describe('GET /api/leads/:id', () => {
   it('returns a full Lead (bare object, no envelope)', async () => {
-    const res = await fetch(`${BASE}/api/leads/lead-001`)
+    const id = leadsStore[0].id
+    const res = await fetch(`${BASE}/api/leads/${id}`)
     expect(res.status).toBe(200)
     const body = await res.json()
-    expect(body.id).toBe('lead-001')
+    expect(body.id).toBe(id)
     expect(body).toHaveProperty('vehiclesOfInterest')
     expect(body).toHaveProperty('budget')
     expect(body).toHaveProperty('clientProfile')

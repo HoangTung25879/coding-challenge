@@ -88,17 +88,17 @@ describe('GET /api/leads — enum filters', () => {
 })
 
 describe('GET /api/leads — combined filters', () => {
-  it('combines status + source filters', async () => {
-    const body = await fetchLeads({ status: 'qualified', source: 'website' })
-    expect(body.data.every(l => l.status === 'qualified' && l.source === 'website')).toBe(true)
-    const expected = leadsStore.filter(l => l.status === 'qualified' && l.source === 'website').length
+  it('combines leadType + source filters', async () => {
+    const body = await fetchLeads({ leadType: 'hot', source: 'website' })
+    expect(body.data.every(l => l.leadType === 'hot' && l.source === 'website')).toBe(true)
+    const expected = leadsStore.filter(l => l.leadType === 'hot' && l.source === 'website').length
     expect(body.pagination.total).toBe(expected)
   })
 
-  it('combines search + status filter', async () => {
-    const body = await fetchLeads({ search: 'a', status: 'new' })
+  it('combines search + source filter', async () => {
+    const body = await fetchLeads({ search: 'a', source: 'website' })
     expect(body.data.every(l =>
-      l.status === 'new' &&
+      l.source === 'website' &&
       (l.fullName.toLowerCase().includes('a') ||
        l.email.toLowerCase().includes('a') ||
        l.phone.toLowerCase().includes('a') ||

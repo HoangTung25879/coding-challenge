@@ -19,6 +19,7 @@ export type FilterState = {
   timeline: string;
   financing: string;
   leadType: string;
+  status: string;
 };
 
 const INITIAL_FILTERS: FilterState = {
@@ -30,6 +31,7 @@ const INITIAL_FILTERS: FilterState = {
   timeline: "",
   financing: "",
   leadType: "",
+  status: "",
 };
 
 type UseDataTableInput = {

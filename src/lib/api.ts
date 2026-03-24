@@ -1,5 +1,5 @@
 // src/lib/api.ts
-import type { CollectionResponse, Lead, LeadStatus, LeadSource, LeadType, Activity, PaginationMeta } from '@/types'
+import type { CollectionResponse, Lead, LeadSource, LeadStatus, LeadType, Activity, PaginationMeta } from '@/types'
 
 const BASE_URL = (import.meta.env?.VITE_API_URL as string) ?? ''
 
@@ -16,7 +16,6 @@ export type LeadsParams = {
   page?: number
   limit?: number
   search?: string
-  status?: string
   source?: string
   budgetMin?: number
   budgetMax?: number
@@ -24,6 +23,7 @@ export type LeadsParams = {
   timeline?: string
   financing?: string
   leadType?: string
+  status?: string
   sort?: string
   order?: 'asc' | 'desc'
 }
@@ -37,7 +37,6 @@ export function fetchLeads(params: LeadsParams = {}): Promise<LeadsResponse> {
   if (params.page) qs.set('page', String(params.page))
   if (params.limit) qs.set('limit', String(params.limit))
   if (params.search) qs.set('search', params.search)
-  if (params.status) qs.set('status', params.status)
   if (params.source) qs.set('source', params.source)
   if (params.budgetMin != null) qs.set('budgetMin', String(params.budgetMin))
   if (params.budgetMax != null) qs.set('budgetMax', String(params.budgetMax))
@@ -45,6 +44,7 @@ export function fetchLeads(params: LeadsParams = {}): Promise<LeadsResponse> {
   if (params.timeline) qs.set('timeline', params.timeline)
   if (params.financing) qs.set('financing', params.financing)
   if (params.leadType) qs.set('leadType', params.leadType)
+  if (params.status) qs.set('status', params.status)
   if (params.sort) qs.set('sort', params.sort)
   if (params.order) qs.set('order', params.order)
   const query = qs.toString()
@@ -78,9 +78,9 @@ export type CreateLeadBody = {
   fullName: string
   email: string
   phone?: string
-  status: LeadStatus
   source: LeadSource
   leadType: LeadType
+  status: LeadStatus
 }
 
 export function createLead(body: CreateLeadBody): Promise<Lead> {

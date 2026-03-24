@@ -132,99 +132,100 @@ export default function LeadsPage() {
     onStateChange({ page: 1, limit: d.pageSize })
   }
 
+  console.log({ stickyColumns: dt.stickyColumns });
   const pagination = data?.pagination ?? DEFAULT_PAGINATION
 
   return (
     <>
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">Leads Inbox</h2>
-        <Button
-          variant="primary"
-          size="md"
-          onClick={() => setCreateOpen(true)}
-          disabled={!!leadId}
-          aria-label="Create Lead"
-        >
-          + Create Lead
-        </Button>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-gray-900">Leads Inbox</h2>
+          <Button
+            variant="primary"
+            size="md"
+            onClick={() => setCreateOpen(true)}
+            disabled={!!leadId}
+            aria-label="Create Lead"
+          >
+            + Create Lead
+          </Button>
+        </div>
+
+        <TableToolbar
+          table={dt.table}
+          filters={dt.filters}
+          setFilter={dt.setFilter}
+          pageSize={dt.pageSize}
+          onPageSizeChange={dt.setPageSize}
+          isModified={savedView.isModified}
+          hasSavedView={savedView.hasSavedView}
+          onSave={handleSave}
+          onReset={handleReset}
+        />
+
+        <ActiveFilterChips
+          filters={dt.filters}
+          onRemove={(key) => dt.setFilter(key, key === 'budgetMin' || key === 'budgetMax' ? undefined : '')}
+        />
+
+        <TableContainer ref={tableContainerRef} isRefetching={isFetching && !isLoading}>
+          <table style={{ tableLayout: 'fixed', width: dt.table.getTotalSize() }}>
+            <TableHeader
+              table={dt.table}
+              stickyColumns={dt.stickyColumns}
+            />
+            <VirtualizedTableBody
+              table={dt.table}
+              stickyColumns={dt.stickyColumns}
+              isLoading={dt.isLoading}
+              isError={dt.isError}
+              error={dt.error}
+              pageSize={dt.pageSize}
+              parentRef={tableContainerRef}
+              onRetry={() => refetch()}
+              onClearFilters={dt.clearFilters}
+            />
+          </table>
+        </TableContainer>
+
+        <div className='flex items-center justify-between'>
+          <p className="text-sm text-gray-500">
+            {pagination.total} lead{pagination.total !== 1 ? 's' : ''} found
+          </p>
+
+          {pagination.totalPages > 1 && (
+            <PaginationControls
+              page={pagination.page}
+              totalPages={pagination.totalPages}
+              params={currentParams}
+              onPageChange={(p) => onStateChange({ ...currentParams, page: p })}
+            />
+          )}
+        </div>
       </div>
-
-      <TableToolbar
-        table={dt.table}
-        filters={dt.filters}
-        setFilter={dt.setFilter}
-        pageSize={dt.pageSize}
-        onPageSizeChange={dt.setPageSize}
-        isModified={savedView.isModified}
-        hasSavedView={savedView.hasSavedView}
-        onSave={handleSave}
-        onReset={handleReset}
-      />
-
-      <ActiveFilterChips
-        filters={dt.filters}
-        onRemove={(key) => dt.setFilter(key, key === 'budgetMin' || key === 'budgetMax' ? undefined : '')}
-      />
-
-      <TableContainer ref={tableContainerRef} isRefetching={isFetching && !isLoading}>
-        <table style={{ tableLayout: 'fixed', width: dt.table.getTotalSize() }}>
-          <TableHeader
-            table={dt.table}
-            stickyColumns={dt.stickyColumns}
-          />
-          <VirtualizedTableBody
-            table={dt.table}
-            stickyColumns={dt.stickyColumns}
-            isLoading={dt.isLoading}
-            isError={dt.isError}
-            error={dt.error}
-            pageSize={dt.pageSize}
-            parentRef={tableContainerRef}
-            onRetry={() => refetch()}
-            onClearFilters={dt.clearFilters}
-          />
-        </table>
-      </TableContainer>
-
-      <div className='flex items-center justify-between'>
-        <p className="text-sm text-gray-500">
-          {pagination.total} lead{pagination.total !== 1 ? 's' : ''} found
-        </p>
-
-        {pagination.totalPages > 1 && (
-          <PaginationControls
-            page={pagination.page}
-            totalPages={pagination.totalPages}
-            params={currentParams}
-            onPageChange={(p) => onStateChange({ ...currentParams, page: p })}
-          />
-        )}
-      </div>
-    </div>
-    {leadId && (
-      <LeadDetailDrawer
-        leadId={leadId}
-        onClose={() => setSearchParams(prev => { prev.delete('leadId'); return prev })}
-      />
-    )}
-    {createOpen && <CreateLeadModal onClose={() => setCreateOpen(false)} />}
-    {deleteConfirmId && (
-      <DeleteConfirmModal
-        onConfirm={() => {
-          deleteLead(deleteConfirmId, {
-            onSuccess: () => {
-              const current = new URLSearchParams(window.location.search)
-              if (current.get('leadId') === deleteConfirmId) {
-                setSearchParams(prev => { prev.delete('leadId'); return prev })
-              }
-            },
-          })
-          setDeleteConfirmId(null)
-        }}
-        onCancel={() => setDeleteConfirmId(null)}
-      />
-    )}
+      {leadId && (
+        <LeadDetailDrawer
+          leadId={leadId}
+          onClose={() => setSearchParams(prev => { prev.delete('leadId'); return prev })}
+        />
+      )}
+      {createOpen && <CreateLeadModal onClose={() => setCreateOpen(false)} />}
+      {deleteConfirmId && (
+        <DeleteConfirmModal
+          onConfirm={() => {
+            deleteLead(deleteConfirmId, {
+              onSuccess: () => {
+                const current = new URLSearchParams(window.location.search)
+                if (current.get('leadId') === deleteConfirmId) {
+                  setSearchParams(prev => { prev.delete('leadId'); return prev })
+                }
+              },
+            })
+            setDeleteConfirmId(null)
+          }}
+          onCancel={() => setDeleteConfirmId(null)}
+        />
+      )}
     </>
   )
 }

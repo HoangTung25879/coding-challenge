@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { X, AlertCircle, ChevronDown, ChevronRight, CheckCircle2, Phone, Mail, MessageSquare, Calendar, FileText, User } from 'lucide-react'
+import { X, AlertCircle, CheckCircle2, Phone, Mail, MessageSquare, Calendar, FileText, User } from 'lucide-react'
 import { useLead } from '@/hooks/useLead'
 import { useActivities } from '@/hooks/useActivities'
 import { useUpdateLead } from '@/hooks/useUpdateLead'
@@ -9,6 +9,25 @@ import { useUpdateActivity } from '@/hooks/useUpdateActivity'
 import { ActivityModal } from './ActivityModal'
 import { Button } from '@/components/ui/Button'
 import type { Lead, Activity } from '@/types'
+
+const OPTION_LABELS: Record<string, string> = {
+  // Lead type
+  cold: 'Cold', warm: 'Warm', hot: 'Hot',
+  // Status
+  new: 'New', contacted: 'Contacted', qualified: 'Qualified', unqualified: 'Unqualified',
+  // Source
+  website: 'Website', referral: 'Referral', 'walk-in': 'Walk-in', phone: 'Phone',
+  'social-media': 'Social Media', 'dealer-event': 'Dealer Event', other: 'Other',
+  // Sales model
+  direct: 'Direct', indirect: 'Indirect',
+  // Financing
+  cash: 'Cash', lease: 'Lease', loan: 'Loan', undecided: 'Undecided',
+  // Timeline
+  immediate: 'Immediate', 'within-1-month': 'Within 1 Month',
+  'within-3-months': 'Within 3 Months', 'within-6-months': 'Within 6 Months', exploring: 'Exploring',
+  // Communication
+  call: 'Call', text: 'Text', email: 'Email', 'in-person': 'In-person',
+}
 
 type Props = {
   leadId: string
@@ -78,11 +97,10 @@ export function LeadDetailDrawer({ leadId, onClose }: Props) {
   const modalActivity = activityModal.activityId
     ? activities.find(a => a.id === activityModal.activityId)
     : undefined
-  const [activitiesOpen, setActivitiesOpen] = useState(true)
-  const [historyOpen, setHistoryOpen] = useState(true)
 
-  const pendingActivities = activities.filter(a => a.completedAt === null)
-  const completedActivities = activities.filter(a => a.completedAt !== null)
+  const sortedActivities = [...activities].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  )
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
@@ -138,17 +156,17 @@ export function LeadDetailDrawer({ leadId, onClose }: Props) {
               </Section>
 
               <Section title="Lead Info">
-                <SelectField label="Status" fieldKey="status" value={lead.status}
-                  options={['new','contacted','qualified','lost','won']}
-                  active={activeField} onEdit={requestEdit} onCancel={cancelEdit} onSave={makeOnSave('status')} />
                 <SelectField label="Lead Type" fieldKey="leadType" value={lead.leadType}
-                  options={['cold','warm','hot']}
+                  options={['cold', 'warm', 'hot']}
                   active={activeField} onEdit={requestEdit} onCancel={cancelEdit} onSave={makeOnSave('leadType')} />
+                <SelectField label="Status" fieldKey="status" value={lead.status}
+                  options={['new', 'contacted', 'qualified', 'unqualified']}
+                  active={activeField} onEdit={requestEdit} onCancel={cancelEdit} onSave={makeOnSave('status')} />
                 <SelectField label="Source" fieldKey="source" value={lead.source}
-                  options={['website','referral','walk-in','phone','social-media','dealer-event','other']}
+                  options={['website', 'referral', 'walk-in', 'phone', 'social-media', 'dealer-event', 'other']}
                   active={activeField} onEdit={requestEdit} onCancel={cancelEdit} onSave={makeOnSave('source')} />
                 <SelectField label="Sales Model" fieldKey="salesModel" value={lead.salesModel}
-                  options={['direct','indirect']}
+                  options={['direct', 'indirect']}
                   active={activeField} onEdit={requestEdit} onCancel={cancelEdit} onSave={makeOnSave('salesModel')} />
                 <Field label="Assigned Sales Rep" fieldKey="assignedSalesRepId" value={lead.assignedSalesRepId ?? ''}
                   active={activeField} onEdit={requestEdit} onCancel={cancelEdit} onSave={makeOnSave('assignedSalesRepId')} />
@@ -156,31 +174,34 @@ export function LeadDetailDrawer({ leadId, onClose }: Props) {
 
               <Section title="Preferences">
                 <SelectField label="Financing" fieldKey="financingPreference" value={lead.financingPreference}
-                  options={['cash','lease','loan','undecided']}
+                  options={['cash', 'lease', 'loan', 'undecided']}
                   active={activeField} onEdit={requestEdit} onCancel={cancelEdit} onSave={makeOnSave('financingPreference')} />
                 <SelectField label="Purchase Timeline" fieldKey="purchaseTimeline" value={lead.purchaseTimeline}
-                  options={['immediate','within-1-month','within-3-months','within-6-months','exploring']}
+                  options={['immediate', 'within-1-month', 'within-3-months', 'within-6-months', 'exploring']}
                   active={activeField} onEdit={requestEdit} onCancel={cancelEdit} onSave={makeOnSave('purchaseTimeline')} />
-                <InlineEditField<string[]>
-                  label="Preferred Communication"
-                  value={lead.preferredCommunication}
-                  displayValue={lead.preferredCommunication.join(', ') || undefined}
-                  isEditing={activeField === 'preferredCommunication'}
-                  onEditRequest={() => requestEdit('preferredCommunication')}
-                  onCancel={cancelEdit}
-                  renderInput={({ value: val, onChange }) => (
-                    <div className="flex flex-wrap gap-2">
-                      {(['call','text','email','in-person'] as const).map(opt => (
-                        <label key={opt} className="flex items-center gap-1 text-sm cursor-pointer">
-                          <input type="checkbox" checked={val.includes(opt)}
-                            onChange={e => onChange(e.target.checked ? [...val, opt] : val.filter(v => v !== opt))} />
-                          {opt}
-                        </label>
-                      ))}
-                    </div>
-                  )}
-                  onSave={makeOnSave('preferredCommunication')}
-                />
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-1">Preferred Communication</p>
+                  <InlineEditField<string[]>
+                    label="Preferred Communication"
+                    value={lead.preferredCommunication}
+                    displayValue={lead.preferredCommunication.map(c => OPTION_LABELS[c] ?? c).join(', ') || undefined}
+                    isEditing={activeField === 'preferredCommunication'}
+                    onEditRequest={() => requestEdit('preferredCommunication')}
+                    onCancel={cancelEdit}
+                    renderInput={({ value: val, onChange }) => (
+                      <div className="flex flex-wrap gap-2">
+                        {(['call', 'text', 'email', 'in-person'] as const).map(opt => (
+                          <label key={opt} className="flex items-center gap-1 text-sm cursor-pointer">
+                            <input type="checkbox" checked={val.includes(opt)}
+                              onChange={e => onChange(e.target.checked ? [...val, opt] : val.filter(v => v !== opt))} />
+                            {OPTION_LABELS[opt]}
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                    onSave={makeOnSave('preferredCommunication')}
+                  />
+                </div>
                 <div>
                   <p className="text-xs font-medium text-gray-500 mb-1">Notes</p>
                   <InlineEditField<string>
@@ -261,84 +282,24 @@ export function LeadDetailDrawer({ leadId, onClose }: Props) {
                 </button>
               </div>
 
-              {/* Scrollable sections */}
-              <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4">
-                {/* Activities section */}
-                <div>
-                  <button
-                    type="button"
-                    className="flex items-center gap-1 w-full text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 hover:text-gray-700"
-                    onClick={() => setActivitiesOpen(o => !o)}
-                    aria-expanded={activitiesOpen}
-                  >
-                    {activitiesOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
-                    Activities
-                  </button>
-                  {activitiesOpen && (
-                    activitiesLoading ? (
-                      <div className="space-y-2">
-                        {[1, 2].map(i => <div key={i} className="h-20 bg-gray-100 rounded-lg animate-pulse" />)}
-                      </div>
-                    ) : pendingActivities.length === 0 ? (
-                      <p className="text-sm text-gray-400 italic">No pending activities.</p>
-                    ) : (
-                      <div className="space-y-2">
-                        {pendingActivities.map(a => (
-                          <ActivityCard
-                            key={a.id}
-                            activity={a}
-                            onMarkDone={() => markActivity({ activityId: a.id, patch: { completedAt: new Date().toISOString() } })}
-                            onClick={() => setActivityModal({ open: true, activityId: a.id })}
-                          />
-                        ))}
-                      </div>
-                    )
-                  )}
-                </div>
-
-                {/* History section */}
-                <div>
-                  <button
-                    type="button"
-                    className="flex items-center gap-1 w-full text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 hover:text-gray-700"
-                    onClick={() => setHistoryOpen(o => !o)}
-                    aria-expanded={historyOpen}
-                  >
-                    {historyOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
-                    History
-                  </button>
-                  {historyOpen && (
-                    activitiesLoading ? (
-                      <div className="space-y-2">
-                        {[1, 2].map(i => <div key={i} className="h-12 bg-gray-100 rounded animate-pulse" />)}
-                      </div>
-                    ) : completedActivities.length === 0 ? (
-                      <p className="text-sm text-gray-400 italic">No completed activities.</p>
-                    ) : (
-                      <div className="relative pl-4 border-l-2 border-gray-200 space-y-3">
-                        {completedActivities.map(a => (
-                          <button
-                            key={a.id}
-                            type="button"
-                            className="w-full text-left group"
-                            onClick={() => setActivityModal({ open: true, activityId: a.id })}
-                          >
-                            <div className="flex items-start gap-2">
-                              <ActivityIcon type={a.type} className="mt-0.5 shrink-0 h-3.5 w-3.5" />
-                              <div className="min-w-0">
-                                <p className="text-xs font-medium text-gray-700 group-hover:text-blue-600 truncate">{a.subject}</p>
-                                <p className="text-xs text-gray-400 line-clamp-1">{a.note}</p>
-                                <p className="text-xs text-gray-400 mt-0.5">
-                                  {a.completedAt ? formatDistanceToNow(new Date(a.completedAt), { addSuffix: true }) : ''}
-                                </p>
-                              </div>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    )
-                  )}
-                </div>
+              {/* Chronological activity log */}
+              <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
+                {activitiesLoading ? (
+                  <>
+                    {[1, 2, 3].map(i => <div key={i} className="h-20 bg-gray-100 rounded-lg animate-pulse" />)}
+                  </>
+                ) : sortedActivities.length === 0 ? (
+                  <p className="text-sm text-gray-400 italic text-center py-8">No activities yet.</p>
+                ) : (
+                  sortedActivities.map(a => (
+                    <ActivityCard
+                      key={a.id}
+                      activity={a}
+                      onMarkDone={() => markActivity({ activityId: a.id, patch: { completedAt: new Date().toISOString() } })}
+                      onClick={() => setActivityModal({ open: true, activityId: a.id })}
+                    />
+                  ))
+                )}
               </div>
             </div>
           </div>
@@ -374,7 +335,7 @@ type FieldRowProps = {
 
 function Field({ label, fieldKey, value, active, onEdit, onCancel, onSave }: FieldRowProps & { value: string; onSave: (v: string) => Promise<void> }) {
   return (
-    <div>
+    <div className="rounded-md px-2 py-1 -mx-2 hover:bg-gray-50 transition-colors">
       <p className="text-xs font-medium text-gray-500 mb-0.5">{label}</p>
       <InlineEditField<string>
         label={label}
@@ -394,18 +355,19 @@ function Field({ label, fieldKey, value, active, onEdit, onCancel, onSave }: Fie
 
 function SelectField({ label, fieldKey, value, options, active, onEdit, onCancel, onSave }: FieldRowProps & { value: string; options: string[]; onSave: (v: string) => Promise<void> }) {
   return (
-    <div>
+    <div className="rounded-md px-2 py-1 -mx-2 hover:bg-gray-50 transition-colors">
       <p className="text-xs font-medium text-gray-500 mb-0.5">{label}</p>
       <InlineEditField<string>
         label={label}
         value={value}
+        displayValue={OPTION_LABELS[value] ?? value}
         isEditing={active === fieldKey}
         onEditRequest={() => onEdit(fieldKey)}
         onCancel={onCancel}
         renderInput={({ value: v, onChange }) => (
           <select value={v} onChange={e => onChange(e.target.value)}
             className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            {options.map(o => <option key={o} value={o}>{o}</option>)}
+            {options.map(o => <option key={o} value={o}>{OPTION_LABELS[o] ?? o}</option>)}
           </select>
         )}
         onSave={onSave}
@@ -416,7 +378,7 @@ function SelectField({ label, fieldKey, value, options, active, onEdit, onCancel
 
 function NumberField({ label, fieldKey, value, active, onEdit, onCancel, onSave }: FieldRowProps & { value: number; onSave: (v: number) => Promise<void> }) {
   return (
-    <div>
+    <div className="rounded-md px-2 py-1 -mx-2 hover:bg-gray-50 transition-colors">
       <p className="text-xs font-medium text-gray-500 mb-0.5">{label}</p>
       <InlineEditField<number>
         label={label}
@@ -484,14 +446,21 @@ function ActivityCard({
             <p className="text-xs text-gray-400">
               {formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true })}
             </p>
-            <button
-              type="button"
-              className="flex items-center gap-1 text-xs text-gray-500 hover:text-green-600 px-1.5 py-0.5 rounded hover:bg-green-50"
-              onClick={e => { e.stopPropagation(); onMarkDone() }}
-            >
-              <CheckCircle2 className="h-3.5 w-3.5" />
-              Mark done
-            </button>
+            {activity.completedAt ? (
+              <span className="flex items-center gap-1 text-xs text-green-600 px-1.5 py-0.5">
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                Done
+              </span>
+            ) : (
+              <button
+                type="button"
+                className="flex items-center gap-1 text-xs text-gray-500 hover:text-green-600 px-1.5 py-0.5 rounded hover:bg-green-50"
+                onClick={e => { e.stopPropagation(); onMarkDone() }}
+              >
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                Mark done
+              </button>
+            )}
           </div>
         </div>
       </div>

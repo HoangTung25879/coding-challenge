@@ -10,7 +10,7 @@ export const TableContainer = forwardRef<HTMLDivElement, Props>(
     return (
       <div
         ref={ref}
-        className="relative overflow-auto rounded-lg border border-gray-200 bg-white"
+        className="relative overflow-auto overscroll-none rounded-lg border border-gray-200 bg-white"
         style={{ height: 'calc(37px + 10 * 44px + 17px)' }}
       >
         {isRefetching && (

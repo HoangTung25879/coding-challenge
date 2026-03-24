@@ -1,5 +1,5 @@
 import { createColumnHelper, type ColumnDef } from '@tanstack/react-table'
-import type { Lead, LeadType } from '@/types'
+import type { Lead, LeadStatus, LeadType } from '@/types'
 import { BudgetCell } from '@/components/data-table/column-renderers/BudgetCell'
 import { VehicleCell } from '@/components/data-table/column-renderers/VehicleCell'
 import { DateCell } from '@/components/data-table/column-renderers/DateCell'
@@ -11,6 +11,13 @@ const LEAD_TYPE_STYLES: Record<LeadType, { bg: string; text: string; label: stri
   cold: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Cold' },
   warm: { bg: 'bg-amber-100', text: 'text-amber-700', label: 'Warm' },
   hot: { bg: 'bg-red-100', text: 'text-red-700', label: 'Hot' },
+}
+
+const STATUS_STYLES: Record<LeadStatus, { dot: string; text: string; label: string }> = {
+  new: { dot: 'bg-gray-400', text: 'text-gray-600', label: 'New' },
+  contacted: { dot: 'bg-blue-500', text: 'text-blue-700', label: 'Contacted' },
+  qualified: { dot: 'bg-green-500', text: 'text-green-700', label: 'Qualified' },
+  unqualified: { dot: 'bg-red-500', text: 'text-red-700', label: 'Unqualified' },
 }
 
 const SOURCE_LABELS: Record<string, string> = {
@@ -37,6 +44,22 @@ const FINANCING_LABELS: Record<string, string> = {
   loan: 'Loan',
   undecided: 'Undecided',
 }
+
+const statusColumn = col.accessor('status', {
+  header: 'Status',
+  cell: (info) => {
+    const style = STATUS_STYLES[info.getValue()]
+    return (
+      <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${style.text}`}>
+        <span className={`h-2 w-2 rounded-full flex-shrink-0 ${style.dot}`} />
+        {style.label}
+      </span>
+    )
+  },
+  size: 130,
+  enableSorting: true,
+  enableResizing: true,
+})
 
 // --- Default visible columns (10) ---
 
@@ -213,6 +236,7 @@ const assignedRepColumn = col.accessor('assignedSalesRepId', {
 export const defaultVisibleColumns = [
   nameColumn,
   typeColumn,
+  statusColumn,
   emailColumn,
   phoneColumn,
   vehicleColumn,
@@ -281,7 +305,7 @@ export function createActionsColumn(
 ): ColumnDef<Lead, unknown> {
   return col.display({
     id: 'actions',
-    header: '',
+    header: 'Actions',
     cell: ({ row }) => <ActionsCell leadId={row.original.id} onEdit={onEdit} onDelete={onDelete} />,
     size: 80,
     enableResizing: false,
