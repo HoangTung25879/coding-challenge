@@ -6,7 +6,7 @@ import { leadsStore } from '@/mocks/data/leads';
 import { logger } from '@/lib/logger';
 import type { Lead } from '@/types';
 
-const MOCK_DELAY_MS = 60;
+const MOCK_DELAY_MS = 100;
 
 export const leadHandlers = [
   http.get('*/api/leads', async ({ request }) => {

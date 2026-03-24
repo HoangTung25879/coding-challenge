@@ -147,7 +147,6 @@ export default function LeadsPage() {
     onStateChange({ page: 1, limit: d.pageSize });
   }
 
-  console.log({ stickyColumns: dt.stickyColumns });
   const pagination = data?.pagination ?? DEFAULT_PAGINATION;
 
   return (
