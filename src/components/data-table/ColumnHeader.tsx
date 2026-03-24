@@ -20,15 +20,18 @@ export function ColumnHeader({ header, isSticky, stickyOffset = 0, onToggleStick
       ? 'descending' as const
       : 'none' as const
 
+  const isRightSticky = header.column.id === 'actions'
   const stickyStyles: React.CSSProperties = isSticky
-    ? { position: 'sticky', left: stickyOffset, zIndex: 10 }
+    ? isRightSticky
+      ? { position: 'sticky', right: 0, zIndex: 10 }
+      : { position: 'sticky', left: stickyOffset, zIndex: 10 }
     : {}
 
   return (
     <th
       className={`relative select-none whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-gray-500 ${
         isSticky ? 'bg-gray-50' : 'bg-gray-50'
-      }`}
+      }${isRightSticky && isSticky ? ' border-l border-gray-200' : ''}`}
       style={{
         width: header.getSize(),
         ...stickyStyles,

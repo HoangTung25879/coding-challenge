@@ -21,15 +21,18 @@ export function TableCell({ cell, isSticky, stickyOffset = 0 }: Props) {
     }
   })
 
+  const isRightSticky = cell.column.id === 'actions'
   const stickyStyles: React.CSSProperties = isSticky
-    ? { position: 'sticky', left: stickyOffset, zIndex: 5 }
+    ? isRightSticky
+      ? { position: 'sticky', right: 0, zIndex: 5 }
+      : { position: 'sticky', left: stickyOffset, zIndex: 5 }
     : {}
 
   const rendered = flexRender(cell.column.columnDef.cell, cell.getContext())
 
   return (
     <td
-      className={`px-3 py-2 text-sm text-gray-900 ${isSticky ? 'bg-white' : ''}`}
+      className={`overflow-hidden px-3 py-2 text-sm text-gray-900 ${isSticky ? 'bg-white' : ''}${isRightSticky && isSticky ? ' border-l border-gray-200' : ''}`}
       style={{
         width: cell.column.getSize(),
         maxWidth: cell.column.getSize(),

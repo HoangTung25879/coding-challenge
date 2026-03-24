@@ -11,7 +11,7 @@ type Props = {
 
 export function ColumnVisibilityToggle({ table }: Props) {
   const [open, setOpen] = useState(false)
-  const allColumns = table.getAllLeafColumns()
+  const allColumns = table.getAllLeafColumns().filter(col => col.getCanHide())
 
   return (
     <Dropdown
