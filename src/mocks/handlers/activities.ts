@@ -54,6 +54,7 @@ export const activityHandlers = [
       leadId,                          // injected from URL — not from body
       ...parsed.data,
       createdAt: new Date().toISOString(),
+      completedAt: null,
     }
 
     activitiesStore.push(activity)

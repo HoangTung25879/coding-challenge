@@ -24,6 +24,7 @@ export function useLogActivity() {
         ...body,
         type: body.type as Activity['type'],
         createdAt: new Date().toISOString(),
+        completedAt: null,
       }
 
       queryClient.setQueryData<CollectionResponse<Activity>>(['activities', leadId], old => ({

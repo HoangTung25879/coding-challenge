@@ -67,7 +67,7 @@ export type Lead = {
   bestTimeToContact: string
   address: Address
   leadType: LeadType
-  clientProfile: IndividualContact | OrganizationContact
+  clientProfile: IndividualContact | OrganizationContact | null
   source: LeadSource
   salesModel: 'direct' | 'indirect'
   preferredCommunication: ('call' | 'text' | 'email' | 'in-person')[]
@@ -107,6 +107,7 @@ export type Activity = {
   note: string
   createdAt: string
   createdBy: string
+  completedAt: string | null   // null = pending, ISO string = done
 }
 
 export type PaginationMeta = {
