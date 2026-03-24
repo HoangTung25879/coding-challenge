@@ -2,7 +2,9 @@
 
 **Scenario C** of the Keyloop Coding Challenge. A lightweight Sales Lead Management SPA for vehicle dealership salespeople — built with React 19, TypeScript, Vite, Tailwind CSS v4, and MSW.
 
----
+## Youtube Video Demo: https://youtu.be/Gmo1me_tbUI
+
+## System Design Document: [FE_SYSTEM_DESIGN.md](frontend-system-design.md)
 
 ## Prerequisites
 
