@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { FilterState } from '@/hooks/useDataTable'
 import { BudgetRangeSlider } from './BudgetRangeSlider'
 import { Dropdown } from '@/components/ui/Dropdown'
+import { Badge, type BadgeVariant } from '@/components/ui/Badge'
 import { Filter, ChevronDown, X, Check, Circle, Globe, Calendar, Banknote, User, DollarSign, type LucideIcon } from 'lucide-react'
 
 type Props = {
@@ -57,17 +58,36 @@ const LEAD_TYPE_OPTIONS: FilterOption[] = [
   { value: 'hot', label: 'Hot' },
 ]
 
+const STATUS_BADGE_VARIANTS: Record<string, BadgeVariant> = {
+  new: 'blue',
+  contacted: 'yellow',
+  qualified: 'purple',
+  lost: 'red',
+  won: 'emerald',
+}
+
+const LEAD_TYPE_BADGE_STYLES: Record<string, { bg: string; text: string }> = {
+  cold: { bg: 'bg-blue-100', text: 'text-blue-700' },
+  warm: { bg: 'bg-amber-100', text: 'text-amber-700' },
+  hot: { bg: 'bg-red-100', text: 'text-red-700' },
+}
+
+const CURRENCY_OPTIONS: FilterOption[] = [
+  { value: 'USD', label: 'USD ($)' },
+  { value: 'EUR', label: 'EUR (€)' },
+  { value: 'GBP', label: 'GBP (£)' },
+  { value: 'JPY', label: 'JPY (¥)' },
+  { value: 'AUD', label: 'AUD (A$)' },
+  { value: 'BRL', label: 'BRL (R$)' },
+  { value: 'SGD', label: 'SGD (S$)' },
+  { value: 'ZAR', label: 'ZAR (R)' },
+]
+
 const BUDGET_MIN = 0
 const BUDGET_MAX = 600000
 const BUDGET_STEP = 10000
 
 const FILTER_SECTIONS: FilterSection[] = [
-  {
-    key: 'status',
-    label: 'Status',
-    icon: Circle,
-    options: STATUS_OPTIONS,
-  },
   {
     key: 'source',
     label: 'Source',
@@ -100,13 +120,13 @@ function getFilterValue(filters: FilterState, key: string): string {
 
 function getActiveFilterCount(filters: FilterState): number {
   let count = 0
-  if (filters.status) count++
   if (filters.source) count++
   if (filters.timeline) count++
   if (filters.financing) count++
   if (filters.leadType) count++
   if (filters.budgetMin != null) count++
   if (filters.budgetMax != null) count++
+  if (filters.currency) count++
   return count
 }
 
@@ -127,6 +147,7 @@ export function FilterMenu({ filters, setFilter }: Props) {
     FILTER_SECTIONS.forEach((s) => setFilter(s.key, ''))
     setFilter('budgetMin', undefined)
     setFilter('budgetMax', undefined)
+    setFilter('currency', '')
     setIsOpen(false)
   }
 
@@ -188,6 +209,8 @@ export function FilterMenu({ filters, setFilter }: Props) {
                 <div className="pb-1">
                   {section.options.map((option) => {
                     const isSelected = currentValue === option.value
+                    const statusVariant = section.key === 'status' ? STATUS_BADGE_VARIANTS[option.value] : undefined
+                    const typeStyle = section.key === 'leadType' ? LEAD_TYPE_BADGE_STYLES[option.value] : undefined
                     return (
                       <button
                         key={option.value}
@@ -204,7 +227,17 @@ export function FilterMenu({ filters, setFilter }: Props) {
                         {isSelected && (
                           <Check className="h-3.5 w-3.5" />
                         )}
-                        <span className={isSelected ? '' : 'pl-5.5'}>{option.label}</span>
+                        <span className={isSelected ? '' : 'pl-5.5'}>
+                          {statusVariant ? (
+                            <Badge variant={statusVariant}>{option.label}</Badge>
+                          ) : typeStyle ? (
+                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${typeStyle.bg} ${typeStyle.text}`}>
+                              {option.label}
+                            </span>
+                          ) : (
+                            option.label
+                          )}
+                        </span>
                       </button>
                     )
                   })}
@@ -224,27 +257,43 @@ export function FilterMenu({ filters, setFilter }: Props) {
           >
             <span className="text-gray-400"><DollarSign className="h-4 w-4" /></span>
             <span className="flex-1 text-left">Budget</span>
-            {(filters.budgetMin != null || filters.budgetMax != null) && (
+            {(filters.budgetMin != null || filters.budgetMax != null || filters.currency) && (
               <span className="rounded bg-blue-100 px-1.5 py-0.5 text-xs font-medium text-blue-700">
-                ${budgetMinVal.toLocaleString()}–${budgetMaxVal.toLocaleString()}
+                {filters.currency || '$'}{budgetMinVal.toLocaleString()}–{budgetMaxVal.toLocaleString()}
               </span>
             )}
             <span className={`text-gray-400 transition-transform ${expandedKey === 'budget' ? 'rotate-180' : ''}`}>
-              <Icon name="chevron-down" />
+              <ChevronDown className="h-4 w-4" />
             </span>
           </button>
 
           {expandedKey === 'budget' && (
-            <div className="px-3 py-2 pl-10">
-              <BudgetRangeSlider
-                min={BUDGET_MIN}
-                max={BUDGET_MAX}
-                step={BUDGET_STEP}
-                valueMin={budgetMinVal}
-                valueMax={budgetMaxVal}
-                onMinChange={(v) => setFilter('budgetMin', v)}
-                onMaxChange={(v) => setFilter('budgetMax', v)}
-              />
+            <div className="px-3 py-2 pl-10 space-y-3">
+              <div>
+                <p className="mb-1.5 text-xs font-medium text-gray-500">Currency</p>
+                <select
+                  value={filters.currency || ''}
+                  onChange={(e) => setFilter('currency', e.target.value)}
+                  className="w-full rounded-md border border-gray-300 bg-white px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Any currency</option>
+                  {CURRENCY_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <p className="mb-1.5 text-xs font-medium text-gray-500">Range</p>
+                <BudgetRangeSlider
+                  min={BUDGET_MIN}
+                  max={BUDGET_MAX}
+                  step={BUDGET_STEP}
+                  valueMin={budgetMinVal}
+                  valueMax={budgetMaxVal}
+                  onMinChange={(v) => setFilter('budgetMin', v)}
+                  onMaxChange={(v) => setFilter('budgetMax', v)}
+                />
+              </div>
             </div>
           )}
         </div>

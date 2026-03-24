@@ -66,11 +66,11 @@ describe('useDataTable', () => {
     const onStateChange = vi.fn()
     const { result } = setup({ onStateChange })
 
-    act(() => result.current.setFilter('status', 'qualified'))
+    act(() => result.current.setFilter('source', 'website'))
 
-    expect(result.current.filters.status).toBe('qualified')
+    expect(result.current.filters.source).toBe('website')
     expect(onStateChange).toHaveBeenCalledWith(
-      expect.objectContaining({ status: 'qualified', page: 1, limit: 10 }),
+      expect.objectContaining({ source: 'website', page: 1, limit: 10 }),
     )
   })
 
@@ -102,18 +102,18 @@ describe('useDataTable', () => {
     const onStateChange = vi.fn()
     const { result } = setup({ onStateChange })
 
-    act(() => result.current.setFilter('status', 'qualified'))
+    act(() => result.current.setFilter('source', 'website'))
     act(() => result.current.setFilter('search', 'test'))
     act(() => result.current.clearFilters())
 
     expect(result.current.filters.search).toBe('')
-    expect(result.current.filters.status).toBe('')
+    expect(result.current.filters.source).toBe('')
     expect(onStateChange).toHaveBeenLastCalledWith(
       expect.objectContaining({ page: 1, limit: 10 }),
     )
     // Should not contain filter keys when cleared
     const lastCall = onStateChange.mock.calls[onStateChange.mock.calls.length - 1][0]
-    expect(lastCall.status).toBeUndefined()
+    expect(lastCall.source).toBeUndefined()
     expect(lastCall.search).toBeUndefined()
   })
 
@@ -155,8 +155,8 @@ describe('useDataTable', () => {
   it('sticky column state', () => {
     const { result } = setup()
 
-    // Default sticky is fullName
-    expect(result.current.stickyColumns).toEqual(['fullName'])
+    // Default sticky is fullName (left) and actions (right)
+    expect(result.current.stickyColumns).toEqual(['fullName', 'actions'])
 
     act(() => result.current.setStickyColumns(['status']))
 

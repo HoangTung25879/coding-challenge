@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import {
   createColumnHelper,
   useReactTable,
@@ -38,7 +37,7 @@ const mockLead: Lead = {
   updatedAt: '2026-01-01T00:00:00Z',
 }
 
-function TestTable({ onToggleSticky }: { onToggleSticky?: (id: string) => void }) {
+function TestTable() {
   const table = useReactTable({
     data: [mockLead],
     columns,
@@ -57,7 +56,6 @@ function TestTable({ onToggleSticky }: { onToggleSticky?: (id: string) => void }
               key={header.id}
               header={header}
               isSticky={header.column.id === 'fullName'}
-              onToggleSticky={onToggleSticky}
             />
           ))}
         </tr>
@@ -84,16 +82,6 @@ describe('ColumnHeader', () => {
     const separators = screen.getAllByRole('separator')
     expect(separators.length).toBeGreaterThan(0)
     expect(separators[0]).toHaveAttribute('aria-orientation', 'vertical')
-  })
-
-  it('calls onToggleSticky when pin button clicked', async () => {
-    const user = userEvent.setup()
-    const onToggleSticky = vi.fn()
-    render(<TestTable onToggleSticky={onToggleSticky} />)
-
-    const pinButtons = screen.getAllByTitle(/pin/i)
-    await user.click(pinButtons[0])
-    expect(onToggleSticky).toHaveBeenCalledWith('fullName')
   })
 
   it('applies sticky positioning to sticky column', () => {

@@ -5,8 +5,13 @@ import { createWrapper } from './test-utils'
 import { server } from '@/mocks/node'
 import { activitiesStore } from '@/mocks/data/activities'
 
+const originalCompletedAt = activitiesStore[0].completedAt
+
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
-afterEach(() => server.resetHandlers())
+afterEach(() => {
+  server.resetHandlers()
+  activitiesStore[0].completedAt = originalCompletedAt
+})
 afterAll(() => server.close())
 
 describe('useUpdateActivity', () => {

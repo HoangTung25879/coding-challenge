@@ -7,7 +7,6 @@ type Props = {
 }
 
 const FILTER_LABELS: Record<string, string> = {
-  status: 'Status',
   source: 'Source',
   timeline: 'Timeline',
   financing: 'Financing',
@@ -17,7 +16,6 @@ const FILTER_LABELS: Record<string, string> = {
 }
 
 const VALUE_LABELS: Record<string, Record<string, string>> = {
-  status: { new: 'New', contacted: 'Contacted', qualified: 'Qualified', lost: 'Lost', won: 'Won' },
   source: { website: 'Website', referral: 'Referral', 'walk-in': 'Walk-in', phone: 'Phone', 'social-media': 'Social Media', 'dealer-event': 'Dealer Event', other: 'Other' },
   timeline: { immediate: 'Immediate', 'within-1-month': 'Within 1 Month', 'within-3-months': 'Within 3 Months', 'within-6-months': 'Within 6 Months', exploring: 'Exploring' },
   financing: { cash: 'Cash', lease: 'Lease', loan: 'Loan', undecided: 'Undecided' },
@@ -29,7 +27,7 @@ type ActiveFilter = { key: string; label: string; value: string }
 function getActiveFilters(filters: FilterState): ActiveFilter[] {
   const active: ActiveFilter[] = []
 
-  for (const key of ['status', 'source', 'timeline', 'financing', 'leadType'] as const) {
+  for (const key of ['source', 'timeline', 'financing', 'leadType'] as const) {
     const val = filters[key]
     if (val) {
       active.push({

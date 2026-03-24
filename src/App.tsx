@@ -2,7 +2,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import LeadsPage from '@/pages/LeadsPage'
-import LeadDetailPage from '@/pages/LeadDetailPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,11 +23,11 @@ export default function App() {
             </div>
             <h1 className="text-xl font-semibold text-gray-900">LeadFlow</h1>
           </header>
-          <main className="max-w-6xl mx-auto px-6 py-8">
+          <main className="max-w-6xl mx-auto px-6 py-4">
             <Routes>
               <Route path="/" element={<Navigate to="/leads" replace />} />
               <Route path="/leads" element={<LeadsPage />} />
-              <Route path="/leads/:id" element={<LeadDetailPage />} />
+              <Route path="/leads/*" element={<Navigate to="/leads" replace />} />
             </Routes>
           </main>
         </div>

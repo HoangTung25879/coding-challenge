@@ -6,6 +6,7 @@ import { FilterMenu } from './FilterMenu'
 import { ColumnVisibilityToggle } from './ColumnVisibilityToggle'
 import { PageSizeSelector } from './PageSizeSelector'
 import { Button } from '@/components/ui/Button'
+import { Bookmark } from 'lucide-react'
 
 type Props = {
   table: Table<Lead>
@@ -38,18 +39,19 @@ export function TableToolbar({
       />
       <FilterMenu filters={filters} setFilter={setFilter} />
       <div className="ml-auto flex items-center gap-3">
-        {(isModified || hasSavedView) && onReset && (
+        {hasSavedView && !isModified && (
+          <span className="inline-flex items-center gap-1 rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 border border-green-200">
+            <Bookmark className="h-3.5 w-3.5" />
+            Saved view
+          </span>
+        )}
+        {hasSavedView && onReset && (
           <Button variant="ghost" size="md" onClick={onReset}>
             Reset
           </Button>
         )}
-        {onSave && (
-          <Button
-            variant="primary"
-            size="md"
-            onClick={onSave}
-            disabled={!isModified}
-          >
+        {isModified && onSave && (
+          <Button variant="primary" size="md" onClick={onSave}>
             Save View
           </Button>
         )}

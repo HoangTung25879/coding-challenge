@@ -11,7 +11,7 @@ export const TableContainer = forwardRef<HTMLDivElement, Props>(
       <div
         ref={ref}
         className="relative overflow-auto rounded-lg border border-gray-200 bg-white"
-        style={{ maxHeight: '70vh' }}
+        style={{ height: 'calc(37px + 10 * 44px + 17px)' }}
       >
         {isRefetching && (
           <div className="absolute inset-x-0 top-0 z-20 h-0.5 overflow-hidden">

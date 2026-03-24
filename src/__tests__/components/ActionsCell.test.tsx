@@ -18,29 +18,11 @@ describe('ActionsCell', () => {
     expect(onEdit).toHaveBeenCalledWith('lead-001')
   })
 
-  it('shows confirmation buttons after Delete is clicked', async () => {
-    const user = userEvent.setup()
-    render(<ActionsCell leadId="lead-001" onEdit={vi.fn()} onDelete={vi.fn()} />)
-    await user.click(screen.getByRole('button', { name: /delete lead/i }))
-    expect(screen.getByRole('button', { name: /^delete$/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
-  })
-
-  it('calls onDelete with leadId on confirm', async () => {
+  it('calls onDelete with leadId when Delete is clicked', async () => {
     const user = userEvent.setup()
     const onDelete = vi.fn()
     render(<ActionsCell leadId="lead-001" onEdit={vi.fn()} onDelete={onDelete} />)
     await user.click(screen.getByRole('button', { name: /delete lead/i }))
-    await user.click(screen.getByRole('button', { name: /^delete$/i }))
     expect(onDelete).toHaveBeenCalledWith('lead-001')
-  })
-
-  it('cancels confirmation when Cancel is clicked', async () => {
-    const user = userEvent.setup()
-    render(<ActionsCell leadId="lead-001" onEdit={vi.fn()} onDelete={vi.fn()} />)
-    await user.click(screen.getByRole('button', { name: /delete lead/i }))
-    await user.click(screen.getByRole('button', { name: /cancel/i }))
-    // Back to original state
-    expect(screen.getByRole('button', { name: /delete lead/i })).toBeInTheDocument()
   })
 })

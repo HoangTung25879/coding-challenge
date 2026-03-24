@@ -12,6 +12,7 @@ import { VirtualizedTableBody } from '@/components/data-table/VirtualizedTableBo
 import { PaginationControls } from '@/components/leads/PaginationControls'
 import { ActiveFilterChips } from '@/components/data-table/ActiveFilterChips'
 import { CreateLeadModal } from '@/components/leads/CreateLeadModal'
+import { DeleteConfirmModal } from '@/components/leads/DeleteConfirmModal'
 import { Button } from '@/components/ui/Button'
 import { LeadDetailDrawer } from '@/components/leads/LeadDetailDrawer'
 import type { LeadsParams } from '@/lib/api'
@@ -22,6 +23,7 @@ export default function LeadsPage() {
   const tableContainerRef = useRef<HTMLDivElement>(null)
   const [searchParams, setSearchParams] = useSearchParams()
   const [createOpen, setCreateOpen] = useState(false)
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
   const leadId = searchParams.get('leadId')
 
   const { mutate: deleteLead } = useDeleteLead()
@@ -30,24 +32,15 @@ export default function LeadsPage() {
     ...allColumns,
     createActionsColumn(
       (id) => setSearchParams(prev => { prev.set('leadId', id); return prev }),
-      (id) => {
-        deleteLead(id, {
-          onSuccess: () => {
-            const current = new URLSearchParams(window.location.search)
-            if (current.get('leadId') === id) {
-              setSearchParams(prev => { prev.delete('leadId'); return prev })
-            }
-          },
-        })
-      },
+      (id) => setDeleteConfirmId(id),
     ),
-  ], [setSearchParams, deleteLead])
+  ], [setSearchParams])
 
   const currentParams: LeadsParams = {
     page: Math.max(1, Number(searchParams.get('page') ?? 1)),
     limit: Number(searchParams.get('limit') ?? 10),
     search: searchParams.get('search') ?? undefined,
-    status: searchParams.get('status') ?? undefined,
+
     source: searchParams.get('source') ?? undefined,
     budgetMin: searchParams.get('budgetMin') ? Number(searchParams.get('budgetMin')) : undefined,
     budgetMax: searchParams.get('budgetMax') ? Number(searchParams.get('budgetMax')) : undefined,
@@ -68,7 +61,7 @@ export default function LeadsPage() {
         if (params.page && params.page > 1) qs.set('page', String(params.page))
         if (params.limit && params.limit !== 10) qs.set('limit', String(params.limit))
         if (params.search) qs.set('search', params.search)
-        if (params.status) qs.set('status', params.status)
+
         if (params.source) qs.set('source', params.source)
         if (params.budgetMin != null) qs.set('budgetMin', String(params.budgetMin))
         if (params.budgetMax != null) qs.set('budgetMax', String(params.budgetMax))
@@ -139,14 +132,6 @@ export default function LeadsPage() {
     onStateChange({ page: 1, limit: d.pageSize })
   }
 
-  function handleToggleSticky(columnId: string) {
-    dt.setStickyColumns(
-      dt.stickyColumns.includes(columnId)
-        ? dt.stickyColumns.filter((id) => id !== columnId)
-        : [...dt.stickyColumns, columnId],
-    )
-  }
-
   const pagination = data?.pagination ?? DEFAULT_PAGINATION
 
   return (
@@ -183,11 +168,10 @@ export default function LeadsPage() {
       />
 
       <TableContainer ref={tableContainerRef} isRefetching={isFetching && !isLoading}>
-        <table className="w-full" style={{ tableLayout: 'fixed', minWidth: dt.table.getTotalSize() }}>
+        <table style={{ tableLayout: 'fixed', width: dt.table.getTotalSize() }}>
           <TableHeader
             table={dt.table}
             stickyColumns={dt.stickyColumns}
-            onToggleSticky={handleToggleSticky}
           />
           <VirtualizedTableBody
             table={dt.table}
@@ -225,6 +209,22 @@ export default function LeadsPage() {
       />
     )}
     {createOpen && <CreateLeadModal onClose={() => setCreateOpen(false)} />}
+    {deleteConfirmId && (
+      <DeleteConfirmModal
+        onConfirm={() => {
+          deleteLead(deleteConfirmId, {
+            onSuccess: () => {
+              const current = new URLSearchParams(window.location.search)
+              if (current.get('leadId') === deleteConfirmId) {
+                setSearchParams(prev => { prev.delete('leadId'); return prev })
+              }
+            },
+          })
+          setDeleteConfirmId(null)
+        }}
+        onCancel={() => setDeleteConfirmId(null)}
+      />
+    )}
     </>
   )
 }

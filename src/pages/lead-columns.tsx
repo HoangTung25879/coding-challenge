@@ -1,7 +1,5 @@
-import { useState } from 'react'
 import { createColumnHelper, type ColumnDef } from '@tanstack/react-table'
 import type { Lead, LeadType } from '@/types'
-import { StatusCell } from '@/components/data-table/column-renderers/StatusCell'
 import { BudgetCell } from '@/components/data-table/column-renderers/BudgetCell'
 import { VehicleCell } from '@/components/data-table/column-renderers/VehicleCell'
 import { DateCell } from '@/components/data-table/column-renderers/DateCell'
@@ -45,22 +43,13 @@ const FINANCING_LABELS: Record<string, string> = {
 const nameColumn = col.accessor('fullName', {
   header: 'Name',
   cell: (info) => (
-    <a
-      href={`/leads/${info.row.original.id}`}
-      className="font-medium text-blue-600 hover:text-blue-800 hover:underline"
+    <div
+      className="font-medium text-blue-600"
     >
       {info.getValue()}
-    </a>
+    </div>
   ),
   size: 180,
-  enableSorting: true,
-  enableResizing: true,
-})
-
-const statusColumn = col.accessor('status', {
-  header: 'Status',
-  cell: (info) => <StatusCell status={info.getValue()} />,
-  size: 120,
   enableSorting: true,
   enableResizing: true,
 })
@@ -178,9 +167,8 @@ const clientTypeColumn = col.display({
     const type = info.row.original.clientProfile?.type
     if (!type) return <span className="text-gray-400">—</span>
     return (
-      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-        type === 'individual' ? 'bg-sky-100 text-sky-800' : 'bg-amber-100 text-amber-800'
-      }`}>
+      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${type === 'individual' ? 'bg-sky-100 text-sky-800' : 'bg-amber-100 text-amber-800'
+        }`}>
         {type === 'individual' ? 'Individual' : 'Organization'}
       </span>
     )
@@ -224,7 +212,6 @@ const assignedRepColumn = col.accessor('assignedSalesRepId', {
 
 export const defaultVisibleColumns = [
   nameColumn,
-  statusColumn,
   typeColumn,
   emailColumn,
   phoneColumn,
@@ -266,49 +253,24 @@ export function ActionsCell({
   onEdit: (id: string) => void
   onDelete: (id: string) => void
 }) {
-  const [confirmOpen, setConfirmOpen] = useState(false)
-
   return (
     <div className="flex items-center justify-center gap-1">
-      {confirmOpen ? (
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            aria-label="Delete"
-            className="px-1.5 py-0.5 rounded bg-red-600 text-white hover:bg-red-700 text-xs"
-            onClick={() => { setConfirmOpen(false); onDelete(leadId) }}
-          >
-            Delete
-          </button>
-          <button
-            type="button"
-            aria-label="Cancel"
-            className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 text-xs"
-            onClick={() => setConfirmOpen(false)}
-          >
-            Cancel
-          </button>
-        </div>
-      ) : (
-        <>
-          <button
-            type="button"
-            aria-label="Edit lead"
-            className="p-1 rounded text-gray-400 hover:text-blue-600 hover:bg-blue-50"
-            onClick={() => onEdit(leadId)}
-          >
-            <Pencil className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            aria-label="Delete lead"
-            className="p-1 rounded text-gray-400 hover:text-red-600 hover:bg-red-50"
-            onClick={() => setConfirmOpen(true)}
-          >
-            <Trash2 className="h-4 w-4" />
-          </button>
-        </>
-      )}
+      <button
+        type="button"
+        aria-label="Edit lead"
+        className="p-1 rounded text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+        onClick={() => onEdit(leadId)}
+      >
+        <Pencil className="h-4 w-4" />
+      </button>
+      <button
+        type="button"
+        aria-label="Delete lead"
+        className="p-1 rounded text-gray-400 hover:text-red-600 hover:bg-red-50"
+        onClick={() => onDelete(leadId)}
+      >
+        <Trash2 className="h-4 w-4" />
+      </button>
     </div>
   )
 }

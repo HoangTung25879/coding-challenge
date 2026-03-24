@@ -5,10 +5,10 @@ import { useSavedView, type TableStateSnapshot } from '@/hooks/useSavedView'
 const defaults: TableStateSnapshot = {
   filters: {
     search: '',
-    status: '',
     source: '',
     budgetMin: undefined,
     budgetMax: undefined,
+    currency: '',
     timeline: '',
     financing: '',
     leadType: '',
@@ -21,7 +21,7 @@ const defaults: TableStateSnapshot = {
 
 const modified: TableStateSnapshot = {
   ...defaults,
-  filters: { ...defaults.filters, status: 'qualified' },
+  filters: { ...defaults.filters, source: 'website' },
   sorting: [{ id: 'fullName', desc: false }],
   pageSize: 25,
 }

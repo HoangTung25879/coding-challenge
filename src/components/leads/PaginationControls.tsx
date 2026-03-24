@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { fetchLeads, type LeadsParams } from '@/lib/api'
 import { Button } from '@/components/ui/Button'
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 
 type Props = {
   page: number
@@ -28,7 +29,7 @@ export function PaginationControls({ page, totalPages, params, onPageChange }: P
   }, [page, totalPages, params, queryClient])
 
   return (
-    <nav aria-label="Pagination" className="flex items-center gap-3 justify-center mt-6">
+    <nav aria-label="Pagination" className="flex items-center gap-3 justify-center">
       <Button
         variant="secondary"
         size="lg"
@@ -36,7 +37,7 @@ export function PaginationControls({ page, totalPages, params, onPageChange }: P
         disabled={page <= 1}
         aria-label="Previous page"
       >
-        Previous
+        <ChevronLeftIcon className="w-4 h-4" />
       </Button>
       <span className="text-sm text-gray-600">
         Page <span aria-current="page" className="font-medium">{page}</span> of {totalPages}
@@ -48,7 +49,7 @@ export function PaginationControls({ page, totalPages, params, onPageChange }: P
         disabled={page >= totalPages}
         aria-label="Next page"
       >
-        Next
+        <ChevronRightIcon className="w-4 h-4" />
       </Button>
     </nav>
   )

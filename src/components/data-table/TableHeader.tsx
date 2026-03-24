@@ -5,10 +5,9 @@ import { ColumnHeader } from './ColumnHeader'
 type Props = {
   table: Table<Lead>
   stickyColumns: string[]
-  onToggleSticky: (columnId: string) => void
 }
 
-export function TableHeader({ table, stickyColumns, onToggleSticky }: Props) {
+export function TableHeader({ table, stickyColumns }: Props) {
   return (
     <>
       <colgroup>
@@ -16,7 +15,7 @@ export function TableHeader({ table, stickyColumns, onToggleSticky }: Props) {
           <col key={column.id} style={{ width: column.getSize() }} />
         ))}
       </colgroup>
-      <thead>
+      <thead className="sticky top-0 z-10 bg-white">
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => {
@@ -26,7 +25,6 @@ export function TableHeader({ table, stickyColumns, onToggleSticky }: Props) {
                   key={header.id}
                   header={header}
                   isSticky={isSticky}
-                  onToggleSticky={onToggleSticky}
                 />
               )
             })}

@@ -5,6 +5,7 @@ import { GlobalSearch } from '@/components/data-table/GlobalSearch'
 import { FilterMenu } from '@/components/data-table/FilterMenu'
 import { ColumnVisibilityToggle } from '@/components/data-table/ColumnVisibilityToggle'
 import { PageSizeSelector } from '@/components/data-table/PageSizeSelector'
+import { TableToolbar } from '@/components/data-table/TableToolbar'
 import type { FilterState } from '@/hooks/useDataTable'
 import {
   createColumnHelper,
@@ -15,10 +16,10 @@ import type { Lead } from '@/types'
 
 const defaultFilters: FilterState = {
   search: '',
-  status: '',
   source: '',
   budgetMin: undefined,
   budgetMax: undefined,
+  currency: '',
   timeline: '',
   financing: '',
   leadType: '',
@@ -60,7 +61,6 @@ describe('FilterMenu', () => {
 
     await user.click(screen.getByLabelText('Filter leads'))
     expect(screen.getByRole('menu')).toBeInTheDocument()
-    expect(screen.getByText('Status')).toBeInTheDocument()
     expect(screen.getByText('Source')).toBeInTheDocument()
     expect(screen.getByText('Timeline')).toBeInTheDocument()
     expect(screen.getByText('Financing')).toBeInTheDocument()
@@ -74,13 +74,13 @@ describe('FilterMenu', () => {
     render(<FilterMenu filters={defaultFilters} setFilter={setFilter} />)
 
     await user.click(screen.getByLabelText('Filter leads'))
-    await user.click(screen.getByText('Status'))
-    await user.click(screen.getByText('Qualified'))
-    expect(setFilter).toHaveBeenCalledWith('status', 'qualified')
+    await user.click(screen.getByText('Source'))
+    await user.click(screen.getByText('Website'))
+    expect(setFilter).toHaveBeenCalledWith('source', 'website')
   })
 
   it('shows active filter count badge', () => {
-    const activeFilters = { ...defaultFilters, status: 'new', source: 'website' }
+    const activeFilters = { ...defaultFilters, source: 'website', leadType: 'hot' }
     render(<FilterMenu filters={activeFilters} setFilter={vi.fn()} />)
     expect(screen.getByText('2')).toBeInTheDocument()
   })
@@ -139,5 +139,35 @@ describe('PageSizeSelector', () => {
     render(<PageSizeSelector pageSize={50} onChange={vi.fn()} />)
     const select = screen.getByLabelText('Rows per page') as HTMLSelectElement
     expect(select.value).toBe('50')
+  })
+})
+
+// Minimal table stub — TableToolbar only calls table.getAllColumns() for ColumnVisibilityToggle
+function makeStubTable() {
+  return {
+    getAllColumns: () => [],
+    getAllLeafColumns: () => [],
+    getState: () => ({ columnVisibility: {} }),
+  } as unknown as import('@tanstack/react-table').Table<import('@/types').Lead>
+}
+
+describe('TableToolbar integration', () => {
+  const defaultFilters: FilterState = {
+    search: '', source: '',
+    budgetMin: undefined, budgetMax: undefined,
+    currency: '', timeline: '', financing: '', leadType: '',
+  }
+
+  it('never renders a Create Lead button (button moved to header)', () => {
+    render(
+      <TableToolbar
+        table={makeStubTable()}
+        filters={defaultFilters}
+        setFilter={vi.fn()}
+        pageSize={10}
+        onPageSizeChange={vi.fn()}
+      />
+    )
+    expect(screen.queryByRole('button', { name: /create lead/i })).not.toBeInTheDocument()
   })
 })
